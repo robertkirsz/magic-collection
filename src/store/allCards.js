@@ -1,3 +1,10 @@
+// --- Database ---
+import { cardsDatabase, saveCardsDatabase, fetchCards } from '../database'
+// --- Classes ---
+import { Card } from '../classes'
+// --- Actions ---
+import { openModal } from './layout'
+// --- Helpers ---
 import _reduce from 'lodash/reduce'
 import _forEach from 'lodash/forEach'
 import _map from 'lodash/map'
@@ -5,11 +12,8 @@ import _reject from 'lodash/reject'
 import _filter from 'lodash/filter'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
-import moment from 'moment'
-import { Card } from 'classes'
-import { cardsDatabase, saveCardsDatabase, fetchCards } from 'database'
-import { formattedError } from 'utils'
-import { openModal } from 'store/layout'
+import isAfter from 'date-fns/is_after'
+import { formattedError } from '../utils'
 
 // ------------------------------------
 // Actions
@@ -24,35 +28,41 @@ export const getCards = () => {
     // Dispatch action so we can show spinner
     dispatch(sendRequest())
     // Send API request
-    fetchCards()
-      .then(response => dispatch(responseSuccess(response.data)))
-      .catch(error => {
-        const errorMessage = formattedError(error)
-        dispatch(responseError(errorMessage))
-        dispatch(openModal('error', { message: errorMessage }))
-      })
+    fetchCards().then(response => dispatch(responseSuccess(response.data))).catch(error => {
+      const errorMessage = formattedError(error)
+      dispatch(responseError(errorMessage))
+      dispatch(openModal('error', { message: errorMessage }))
+    })
   }
 }
 export const filterAllCards = filterFunction => ({ type: 'FILTER_ALL_CARDS', filterFunction })
+
+export const actions = {
+  sendRequest,
+  responseSuccess,
+  responseError,
+  getCards,
+  filterAllCards
+}
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  ALL_CARDS_REQUEST: state => (
-    state.fetching
-      ? state
-      : { ...state, fetching: true, error: null }
-  ),
+  ALL_CARDS_REQUEST: state => (state.fetching ? state : { ...state, fetching: true, error: null }),
   ALL_CARDS_SUCCESS: (state, { allSets }) => {
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
     const cardSets = []
     // Compares release dates and chooses the latest one
-    const latestSet = _reduce(allSets, (result, value, key) => {
-      if (!result.releaseDate) return value
-      return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
-    }, {})
+    const latestSet = _reduce(
+      allSets,
+      (result, value, key) => {
+        if (!result.releaseDate) return value
+        return isAfter(value.releaseDate, result.releaseDate) ? value : result
+      },
+      {}
+    )
     // For each set...
     _forEach(allSets, set => {
       // Save its code inside its cards objects
@@ -74,7 +84,9 @@ const ACTION_HANDLERS = {
     _forEach(allCards, card => {
       uniqueCards[card.name] = {
         ...card,
-        variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : [new Card(card)]
+        variants: uniqueCards[card.name]
+          ? [...uniqueCards[card.name].variants, new Card(card)]
+          : [new Card(card)]
       }
     })
 
@@ -121,8 +133,5 @@ const initialState = {
   filteredCards: null
 }
 
-export default function allCards (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
-
-  return handler ? handler(state, action) : state
-}
+export default (state = initialState, action) =>
+  ACTION_HANDLERS[action.type] ? ACTION_HANDLERS[action.type](state, action) : state

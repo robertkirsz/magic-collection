@@ -1,9 +1,13 @@
+// --- Firebase ---
+import { updateCardInDatabase, loadCollection } from '../firebase'
+// --- Database ---
+import { cardsDatabase } from '../database'
+// --- Classes ---
+import { Card } from '../classes'
+// --- Helpers ---
 import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
-import { Card } from 'classes'
-import { updateCardInDatabase, loadCollection } from 'utils/firebase'
-import { cardsDatabase } from 'database'
 
 const debug = false
 
@@ -22,30 +26,44 @@ export const loadMyCards = () => {
 
     let retrievedCollection = []
 
-    await loadCollection()
-      .then(response => {
-        if (response.success) {
-          const collection = response.data
+    await loadCollection().then(response => {
+      if (response.success) {
+        const collection = response.data
 
-          retrievedCollection = _map(collection, (value, key) => {
-            const mainCard = new Card(_find(cardsDatabase, { id: key }))
-            mainCard.cardsInCollection = value.cardsInCollection
-            mainCard.variants = _map(value.variants, (value, key) => {
-              const variant = new Card(_find(mainCard.variants, { id: key }))
-              variant.cardsInCollection = value.cardsInCollection
-              return variant
-            })
-            return mainCard
+        retrievedCollection = _map(collection, (value, key) => {
+          const mainCard = new Card(_find(cardsDatabase, { id: key }))
+          mainCard.cardsInCollection = value.cardsInCollection
+          mainCard.variants = _map(value.variants, (value, key) => {
+            const variant = new Card(_find(mainCard.variants, { id: key }))
+            variant.cardsInCollection = value.cardsInCollection
+            return variant
           })
-        }
-      })
+          return mainCard
+        })
+      }
+    })
 
     dispatch(loadMyCardsSuccess(retrievedCollection))
   }
 }
 export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST', loading: true })
-export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards, loading: false })
+export const loadMyCardsSuccess = cards => ({
+  type: 'LOAD_MY_CARDS_SUCCESS',
+  cards,
+  loading: false
+})
 export const noCards = () => ({ type: 'NO_CARDS' })
+
+export const actions = {
+  addCard,
+  removeCard,
+  clearMyCards,
+  filterMyCards,
+  loadMyCards,
+  loadMyCardsRequest,
+  loadMyCardsSuccess,
+  noCards
+}
 
 // ------------------------------------
 // Action Handlers
@@ -59,7 +77,10 @@ const ACTION_HANDLERS = {
     // Copy card collection from store
     let cardsCollection = [...state.cards]
     // Check if this card already exists in collection
-    const cardsInCollection = _find(cardsCollection, cardFromCollection => cardFromCollection.name === cardCopy.name)
+    const cardsInCollection = _find(
+      cardsCollection,
+      cardFromCollection => cardFromCollection.name === cardCopy.name
+    )
     // If it does...
     if (cardsInCollection) {
       // Reassign it as a 'cardCopy'
@@ -68,10 +89,11 @@ const ACTION_HANDLERS = {
       const variantToUpdate = _find(cardCopy.variants, { id: variantCopy.id })
       // If it does...
       if (variantToUpdate) {
-        if (debug) console.log('%c   existing card - existing variant - incrementing', 'color: #A1C659;')
+        if (debug)
+          console.log('%c   existing card - existing variant - incrementing', 'color: #A1C659;')
         // Increment its count
         variantToUpdate.cardsInCollection++
-      // In other case...
+        // In other case...
       } else {
         if (debug) console.log('%c   existing card - new variant', 'color: #A1C659;')
         // Set variant's count to 1
@@ -82,7 +104,10 @@ const ACTION_HANDLERS = {
       // Increment main card's count
       cardCopy.cardsInCollection++
       // Get that card's index in the collection
-      const cardIndex = _findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
+      const cardIndex = _findIndex(
+        cardsCollection,
+        cardFromCollection => cardFromCollection.id === cardCopy.id
+      )
       // Use that index to insert the updated card into the collection
       cardsCollection = [
         ...cardsCollection.slice(0, cardIndex),
@@ -123,8 +148,14 @@ const ACTION_HANDLERS = {
     const cardCopy = _find(cardsCollection, { id: card.id }).copy()
     const variantCopy = _find(cardCopy.variants, { id: variant.id }).copy()
     // Find their respective indexes
-    const cardIndex = _findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
-    const variantIndex = _findIndex(cardCopy.variants, cardVariant => cardVariant.id === variantCopy.id)
+    const cardIndex = _findIndex(
+      cardsCollection,
+      cardFromCollection => cardFromCollection.id === cardCopy.id
+    )
+    const variantIndex = _findIndex(
+      cardCopy.variants,
+      cardVariant => cardVariant.id === variantCopy.id
+    )
 
     // If there is only one main card...
     if (cardCopy.cardsInCollection === 1) {
@@ -204,8 +235,5 @@ const initialState = {
   filteredCards: null
 }
 
-export default function myCardsReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
-
-  return handler ? handler(state, action) : state
-}
+export default (state = initialState, action) =>
+  ACTION_HANDLERS[action.type] ? ACTION_HANDLERS[action.type](state, action) : state
