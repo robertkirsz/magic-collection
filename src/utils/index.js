@@ -1,5 +1,9 @@
 import _includes from 'lodash/includes'
 
+const debug = process.env.NODE_ENV === 'development'
+
+export const log = msg => (debug ? console.log('%c' + msg, 'padding: 2px 6px; border-radius: 2px; background: #40A8FD; color: white;') : false)
+
 // Converts errors to more readable form
 export const formattedError = error => {
   if (error.response) {
