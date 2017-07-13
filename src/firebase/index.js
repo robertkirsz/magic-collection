@@ -1,15 +1,30 @@
 import firebase from 'firebase'
+// --- Helpers ---
 import _forEach from 'lodash/forEach'
 import _debounce from 'lodash/debounce'
 
 // Firebase configuration
-const config = {
-  apiKey: 'AIzaSyDwDacwAuGy4LxSOJnJKgVDOBSgHQm6PgU',
-  authDomain: 'mtg-collection-cd492.firebaseapp.com',
-  databaseURL: 'https://mtg-collection-cd492.firebaseio.com',
-  storageBucket: 'mtg-collection-cd492.appspot.com',
-  messagingSenderId: '378575387948'
+const productionConfig = {
+  apiKey: "AIzaSyBbVjhaPDhEuPlsLyUaZkZ6c7_wDPcdEo8",
+  authDomain: "magic-collection-8b310.firebaseapp.com",
+  databaseURL: "https://magic-collection-8b310.firebaseio.com",
+  projectId: "magic-collection-8b310",
+  storageBucket: "magic-collection-8b310.appspot.com",
+  messagingSenderId: "2571027304"
 }
+
+const developmentConfig = {
+  apiKey: "AIzaSyBi1hsBdyJgM9w2UW2pOOC-W9oUwOe7nRc",
+  authDomain: "magic-collection-dev.firebaseapp.com",
+  databaseURL: "https://magic-collection-dev.firebaseio.com",
+  projectId: "magic-collection-dev",
+  storageBucket: "magic-collection-dev.appspot.com",
+  messagingSenderId: "1073001376184"
+}
+
+const config = process.env.NODE_ENV === 'production'
+  ? productionConfig
+  : developmentConfig
 
 export const app = firebase.initializeApp(config)
 export const auth = firebase.auth()
