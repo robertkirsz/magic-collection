@@ -1,0 +1,37 @@
+{
+  "rules": {
+    "Admins": {
+      ".read": "auth.uid !== null",
+      ".write": false,
+    },
+    "Users": {
+      "$userId": {
+        ".read": "auth.uid === $userId",
+      	".write": "auth.uid === $userId",
+        ".validate": "newData.hasChildren(['uid', 'createdOn', 'lastLogin'])",
+        "uid":         { ".validate": "newData.isString()" },
+        "createdOn":   { ".validate": "newData.isNumber()" },
+        "lastLogin":   { ".validate": "newData.isNumber()" },
+        "displayName": { ".validate": "newData.isString()" },
+        "email":       { ".validate": "newData.isString()" },
+        "photoURL":    { ".validate": "newData.isString()" }
+      }
+    },
+    "Collections": {
+      "$collectionId": {
+        ".read": "auth.uid === $collectionId",
+      	".write": "auth.uid === $collectionId",
+        "$cardId": {
+          ".validate": "newData.hasChildren(['cardsInCollection'])",
+          "cardsInCollection": { ".validate": "newData.isNumber()" },
+          "variants": {
+            "$variantId": {
+            	".validate": "newData.hasChildren(['cardsInCollection'])",
+              "cardsInCollection": { ".validate": "newData.isNumber()" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
