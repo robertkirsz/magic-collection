@@ -1,0 +1,4 @@
+.all-cards-view {
+  @include flex(column);
+  flex: 1;
+}

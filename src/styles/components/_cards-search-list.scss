@@ -1,0 +1,65 @@
+.cards-search-list {
+  @include flex(row, wrap, flex-start, flex-start);
+  // TODO: this should extend .card styles, now it repeats those styles
+  &__show-more-button {
+    @extend %flex-center;
+    border: 2px dashed;
+    color: #bbb;
+    cursor: pointer;
+    transition: color 0.3s;
+    $cardsInRow: 2;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+    width: $width;
+    height: calc(#{$width} * #{$cardRatio});
+    max-width: $cardWidth;
+    max-height: $cardHeight;
+    margin: 0 5px 1vw 0;
+    border-radius: 4%;
+    &:hover { color: #555; }
+    @include MQ(S) {
+      $cardsInRow: 4;
+      $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+      width: $width;
+      height: calc(#{$width} * #{$cardRatio});
+      &.small {
+        width: calc(#{$width} * 0.6);
+        height: calc(#{$width} * #{$cardRatio} * 0.6);
+      }
+    }
+    @include MQ(M) {
+      $cardsInRow: 5;
+      $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+      width: $width;
+      height: calc(#{$width} * #{$cardRatio});
+      &.small {
+        width: calc(#{$width} * 0.6);
+        height: calc(#{$width} * #{$cardRatio} * 0.6);
+      }
+    }
+    @include MQ(L) {
+      $cardsInRow: 6;
+      $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+      width: $width;
+      height: calc(#{$width} * #{$cardRatio});
+      &.small {
+        width: calc(#{$width} * 0.6);
+        height: calc(#{$width} * #{$cardRatio} * 0.6);
+      }
+    }
+    @include MQ(XL) {
+      $cardsInRow: 7;
+      $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+      width: $width;
+      height: calc(#{$width} * #{$cardRatio});
+      &.small {
+        width: calc(#{$width} * 0.6);
+        height: calc(#{$width} * #{$cardRatio} * 0.6);
+      }
+    }
+    .fa { font-size: 4em; }
+    .cardsNumber {
+      font-size: 1.5em;
+      margin-top: 0.5em;
+    }
+  }
+}

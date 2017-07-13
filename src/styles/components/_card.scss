@@ -1,0 +1,205 @@
+// TODO: fix margin issue with edge elements
+
+.card {
+  $cardsInRow: 2;
+  $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+  position: relative;
+  width: $width;
+  height: calc(#{$width} * #{$cardRatio});
+  max-width: $cardWidth;
+  max-height: $cardHeight;
+  margin: 0 5px 1vw 0;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+  border-radius: 4%;
+  &:focus {
+    .atvImg-layers {
+      // TODO: fix that, it doesn't scale shine effect layer
+      transform: scale(1.05);
+    }
+  }
+  &__content {
+    height: 100%;
+    z-index: 2;
+    &:hover {
+      .card__add-remove-buttons { opacity: 1; }
+    }
+  }
+  &__set-icon {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    padding: 3px;
+    background: white;
+    border-radius: 20%;
+    font-size: 2.5em;
+    transform: translateX(-50%);
+  }
+  &__count {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    width: 1.4em;
+    height: 1.4em;
+    background: white;
+    border: 1px solid black;
+    border-radius: 0.3em;
+    color: black;
+    font-size: 1.3em;
+    line-height: 1.4em;
+    font-weight: 700;
+    text-align: center;
+  }
+  &__add-remove-buttons {
+    @include flex();
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    left: 15%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.1s;
+    button {
+      background: none;
+      border: none;
+      outline: none;
+      transition: transform 0.1s;
+      &:active { transform: scale(0.9); }
+      &.remove-button { margin-right: auto; }
+      &.add-button { margin-left: auto; }
+    }
+    .fa {
+      font-size: 2em;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    }
+  }
+  &__count-animation {
+    @include flex(column, nowrap, center, center);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: 2em;
+    font-weight: bold;
+    animation: fly 1s ease-out 1 forwards;
+    pointer-events: none;
+    &.card__count-animation--add { color: #8cf54c; }
+    &.card__count-animation--remove { color: #f14621; }
+  }
+  &__details-popup {
+    position: absolute;
+    width: 250px;
+    padding: 5px 8px;
+    background: white;
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 3px 10px rgba(black, 0.3);
+    pointer-events: none;
+    z-index: 1000;
+  }
+  @include MQ(S) {
+    $cardsInRow: 4;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+    width: $width;
+    height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6);
+      height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
+  }
+  @include MQ(M) {
+    $cardsInRow: 5;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+    width: $width;
+    height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6);
+      height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
+  }
+  @include MQ(L) {
+    $cardsInRow: 6;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+    width: $width;
+    height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6);
+      height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
+  }
+  @include MQ(XL) {
+    $cardsInRow: 7;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
+    width: $width;
+    height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6);
+      height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
+  }
+}
+
+// Cards hover effect
+
+.atvImg {
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+  border-radius: 4%;
+  transform-style: preserve-3d;
+  -webkit-tap-highlight-color: rgba(black, 0);
+  &:hover { z-index: 1; }
+  &-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 4%;
+    transition: all 0.2s ease-out;
+  }
+  &-container.over &-shadow {
+    box-shadow: 0 45px 100px rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
+  }
+  &-layers {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 4%;
+    transform-style: preserve-3d;
+    transition: transform 0.2s;
+  }
+  &-rendered-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    background-size: cover;
+    transition: all 0.1s ease-out;
+    border-radius: 4%;
+  }
+  &-shadow {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    transition: all 0.2s ease-out;
+    box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
+  }
+  &-shine {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: 4%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 60%);
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,31 @@
+/* MEDIA QUERIES */
+
+// Extra small devices (portrait phones, less than 544px)
+// No media query since this is the default
+$XS: 0px;
+// Small devices (landscape phones, 544px and up)
+$S: 544px;
+// Medium devices (tablets, 768px and up)
+$M: 768px;
+// Large devices (desktops, 992px and up)
+$L: 992px;
+// Extra large devices (large desktops, 1200px and up)
+$XL: 1200px;
+
+@mixin MQ($canvas) {
+  @if $canvas == S {
+    @media (min-width: $S) { @content; }
+  }
+  @else if $canvas == M {
+    @media (min-width: $M) { @content; }
+  }
+  @else if $canvas == L {
+    @media (min-width: $L) { @content; }
+  }
+  @else if $canvas == XL {
+    @media (min-width: $XL) { @content; }
+  }
+  @else {
+    @media (min-width: $canvas + 'px') { @content; }
+  }
+}

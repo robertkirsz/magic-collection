@@ -1,0 +1,17 @@
+$badgeSize: 40px;
+
+.user-badge {
+  width: $badgeSize;
+  height: $badgeSize;
+  border-radius: 50%;
+  background-color: grey;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  .fa {
+    line-height: $badgeSize;
+    font-size: calc(#{$badgeSize} / 2);
+    color: #ddd;
+  }
+}

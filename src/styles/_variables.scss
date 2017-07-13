@@ -1,0 +1,20 @@
+$text-color: #373a3c;
+$navbarHeight: 70px;
+$horizontalPadding: 15px;
+
+// TODO: check if needed
+@keyframes fly {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-150px);
+    opacity: 0;
+  }
+}
+
+$cardWidth: 223px;
+$cardHeight: 311px;
+$cardRatio: #{$cardHeight / $cardWidth};
+$cardMargin: 5px;
+$mainMargin: 30px;

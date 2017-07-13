@@ -1,0 +1,5 @@
+.my-cards-view {
+  @include flex(column);
+  flex: 1;
+  &__login-prompt { margin: auto; }
+}

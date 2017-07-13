@@ -1,0 +1,75 @@
+@mixin center($xy: xy) {
+  @if $xy == xy {
+    top: 50%; left: 50%; bottom: auto; right: auto;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  @else if $xy == x {
+    right: auto; left: 50%;
+    transform: translateX(-50%);
+  }
+  @else if $xy == y {
+    top: 50%; bottom: auto;
+    transform: translateY(-50%);
+  }
+}
+
+@mixin flex($flex-direction: row, $flex-wrap: nowrap, $justify-content: flex-start, $align-items: stretch, $align-content: stretch) {
+  display: flex;
+  flex-direction: $flex-direction;
+  flex-wrap: $flex-wrap;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  align-content: $align-content;
+}
+
+@mixin inline-flex($flex-direction: row, $flex-wrap: nowrap, $justify-content: flex-start, $align-items: stretch, $align-content: stretch) {
+  display: inline-flex;
+  flex-direction: $flex-direction;
+  flex-wrap: $flex-wrap;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  align-content: $align-content;
+}
+
+// allows you to specify styles for an element when it is in another element
+@mixin is-in ($selector) {
+  #{$selector} & {
+    @content;
+  }
+}
+
+@mixin phone-only {
+  @media (max-width: 599px) { @content; }
+}
+@mixin tablet-portrait-up {
+  @media (min-width: 600px) { @content; }
+}
+@mixin tablet-landscape-up {
+  @media (min-width: 900px) { @content; }
+}
+@mixin desktop-up {
+  @media (min-width: 1200px) { @content; }
+}
+@mixin big-desktop-up {
+  @media (min-width: 1800px) { @content; }
+}
+
+%flex-center {
+  @include flex(column, nowrap, center, center);
+}
+
+%inline-flex-center {
+  @include inline-flex(column, nowrap, center, center);
+}
+
+%layer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder { @content }
+  :-moz-placeholder { @content }
+  ::-moz-placeholder { @content }
+  :-ms-input-placeholder { @content }
+}

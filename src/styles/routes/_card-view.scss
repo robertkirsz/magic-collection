@@ -1,0 +1,10 @@
+.card-view {
+  .card-picture {}
+  .card-details {}
+  .card-variants-list {
+    @include flex(row, wrap, flex-start, flex-start);
+    .card {
+      &:not(:last-child) { margin-right: 10px; }
+    }
+  }
+}
