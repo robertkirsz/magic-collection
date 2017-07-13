@@ -1,3 +1,28 @@
 {
-  "extends": "react-app"
+  "parser": "babel-eslint",
+  "extends": [
+    "react-app",
+    "standard",
+    "standard-react"
+  ],
+  "plugins": [
+    "babel",
+    "react",
+    "promise"
+  ],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "key-spacing"          : "off",
+    "jsx-quotes"           : [1, "prefer-double"],
+    "max-len"              : [2, 120, 2],
+    "object-curly-spacing" : [2, "always"],
+    "comma-dangle"         : "off",
+    "prefer-const"         : 1,
+    "no-var"               : 1,
+    "react/jsx-indent"     : [2, 2],
+    "object-shorthand"     : [1, "always"],
+    "indent"               : [2, 2, { "SwitchCase": 1 }],
+  }
 }
