@@ -54,17 +54,6 @@ export const loadMyCardsSuccess = cards => ({
 })
 export const noCards = () => ({ type: 'NO_CARDS' })
 
-export const actions = {
-  addCard,
-  removeCard,
-  clearMyCards,
-  filterMyCards,
-  loadMyCards,
-  loadMyCardsRequest,
-  loadMyCardsSuccess,
-  noCards
-}
-
 // ------------------------------------
 // Action Handlers
 // ------------------------------------

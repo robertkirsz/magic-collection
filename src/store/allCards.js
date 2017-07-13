@@ -37,14 +37,6 @@ export const getCards = () => {
 }
 export const filterAllCards = filterFunction => ({ type: 'FILTER_ALL_CARDS', filterFunction })
 
-export const actions = {
-  sendRequest,
-  responseSuccess,
-  responseError,
-  getCards,
-  filterAllCards
-}
-
 // ------------------------------------
 // Action Handlers
 // ------------------------------------

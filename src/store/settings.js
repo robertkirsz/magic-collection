@@ -1,4 +1,4 @@
-import { updateAndReturnUserSettings } from 'utils/firebase'
+import { updateAndReturnUserSettings } from '../firebase'
 
 // ------------------------------------
 // Actions
@@ -24,18 +24,13 @@ export const restoreDefaultSettings = () => ({
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  TOGGLE_SETTING: (state, { property, value }) => (
+  TOGGLE_SETTING: (state, { property, value }) =>
     updateAndReturnUserSettings({
       ...state,
-      [property]: value !== undefined
-        ? value
-        : !state[property]
-    })
-  ),
+      [property]: value !== undefined ? value : !state[property]
+    }),
   CARD_DETAILS_POPUP_DELAY: (state, { delayValue }) => {
-    const _delayValue = delayValue === 'false'
-      ? false
-      : parseInt(delayValue, 10)
+    const _delayValue = delayValue === 'false' ? false : parseInt(delayValue, 10)
     return updateAndReturnUserSettings({ ...state, cardDetailsPopupDelay: _delayValue })
   },
   LOAD_INITIAL_SETTINGS: (state, { settings }) => {
@@ -64,8 +59,5 @@ const initialState = {
   collectionLockBehaviour: 'lockedAtStart' // 'unlockedAtStart' || 'asLeft'
 }
 
-export default function settingsReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
-
-  return handler ? handler(state, action) : state
-}
+export default (state = initialState, action) =>
+  ACTION_HANDLERS[action.type] ? ACTION_HANDLERS[action.type](state, action) : state

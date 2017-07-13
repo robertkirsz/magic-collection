@@ -1,6 +1,11 @@
-import { browserHistory } from 'react-router'
-import { firebaseSignIn, firebaseSignUp, firebaseSignOut, firebaseProviderSignIn, updateUserData } from 'utils/firebase'
-import { openModal } from 'store/layout'
+import {
+  firebaseSignIn,
+  firebaseSignUp,
+  firebaseSignOut,
+  firebaseProviderSignIn,
+  updateUserData
+} from '../firebase'
+import { openModal } from './layout'
 
 // ------------------------------------
 // Actions
@@ -38,7 +43,12 @@ export const signOut = () => {
     // Sign user out of Firebase
     const firebaseSignOutResponse = await firebaseSignOut()
     // Display errors if we get any
-    if (firebaseSignOutResponse.error) dispatch(openModal('error', { message: `There was a problem with signing out. This is what we know: ${firebaseSignOutResponse.error}` }))
+    if (firebaseSignOutResponse.error)
+      dispatch(
+        openModal('error', {
+          message: `There was a problem with signing out. This is what we know: ${firebaseSignOutResponse.error}`
+        })
+      )
     else dispatch(signOutSuccess())
   }
 }
@@ -57,10 +67,7 @@ export const signInWithProvider = providerName => {
 export const authRequest = () => ({ type: 'AUTH_REQUEST' })
 export const authSuccess = user => ({ type: 'AUTH_SUCCESS', user })
 export const authError = error => ({ type: 'AUTH_ERROR', error })
-export const signOutSuccess = () => {
-  browserHistory.push('/all-cards')
-  return { type: 'SIGN_OUT_SUCCESS' }
-}
+export const signOutSuccess = () => ({ type: 'SIGN_OUT_SUCCESS' })
 export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })
 export const noUser = () => ({ type: 'NO_USER' })
 
@@ -101,8 +108,5 @@ const initialState = {
   picture: ''
 }
 
-export default function userReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
-
-  return handler ? handler(state, action) : state
-}
+export default (state = initialState, action) =>
+  ACTION_HANDLERS[action.type] ? ACTION_HANDLERS[action.type](state, action) : state
