@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { signIn, signUp, signInWithProvider, authError, clearAuthErrors } from 'store/user'
-import { closeModal } from 'store/layout'
-import { googleIcon, facebookIcon, twitterIcon, githubIcon } from 'svg'
+import { signIn, signUp, signInWithProvider, authError, clearAuthErrors } from '../store/user'
+import { closeModal } from '../store/layout'
+import { googleIcon, facebookIcon, twitterIcon, githubIcon } from '../svg'
 
 const mapStateToProps = ({ user, layout }) => ({
   user,

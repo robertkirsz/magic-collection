@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { closeModal } from 'store/layout'
+import { closeModal } from '../store/layout'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name,

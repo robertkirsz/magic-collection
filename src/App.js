@@ -13,6 +13,7 @@ import { authRequest, authSuccess, noUser } from './store/user'
 import { loadInitialSettings } from './store/settings'
 import { closeModal } from './store/layout'
 // --- Components ---
+import { AuthModal, ErrorModal } from './containers'
 import { Header } from './components'
 
 const mapStateToProps = ({ layout }) => ({
@@ -121,7 +122,8 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <h2>Welcome to React</h2>
+        <AuthModal />
+        <ErrorModal />
       </div>
     )
   }
