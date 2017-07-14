@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
-// import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // --- Helpers ---
 import _get from 'lodash/get'
 import { log } from './utils'
+// --- Firebase ---
 import { auth, firebaseGetData } from './firebase'
+// --- Actions ---
 import { getCards } from './store/allCards'
 import { loadMyCards } from './store/myCards'
 import { authRequest, authSuccess, noUser } from './store/user'
 import { loadInitialSettings } from './store/settings'
 import { closeModal } from './store/layout'
+// --- Components ---
+import { Header } from './components'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name
@@ -28,6 +32,17 @@ const mapDispatchToProps = {
 // TODO: redirect user on logout
 
 class App extends Component {
+  static propTypes = {
+    modalName: PropTypes.string.isRequired,
+    authRequest: PropTypes.func.isRequired,
+    getCards: PropTypes.func.isRequired,
+    loadInitialSettings: PropTypes.func.isRequired,
+    loadMyCards: PropTypes.func.isRequired,
+    noUser: PropTypes.func.isRequired,
+    authSuccess: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired
+  }
+
   componentWillMount () {
     this.props.getCards()
     this.listenToAuthChange(this.props)
@@ -38,7 +53,8 @@ class App extends Component {
     auth.onAuthStateChanged(async firebaseUser => {
       log('Authentication state has changed')
 
-      const authModalOpened = this.props.modalName === 'sign in' || this.props.modalName === 'sign up'
+      const authModalOpened =
+        this.props.modalName === 'sign in' || this.props.modalName === 'sign up'
 
       // Show loading message
       this.props.authRequest()
@@ -71,7 +87,7 @@ class App extends Component {
             createdOn: now
           }
         } else {
-          log('Got user\'s data from the database')
+          log("Got user's data from the database")
           userData = {
             ...usersDataFromDatabase.data,
             lastLogin: now
@@ -92,7 +108,7 @@ class App extends Component {
         this.props.authSuccess(userData)
         // Close any sign in or sign up modals
         if (authModalOpened) this.props.closeModal()
-      // If user's not logged in or logged out...
+        // If user's not logged in or logged out...
       } else {
         this.props.noUser()
         // Log that into console
@@ -101,9 +117,10 @@ class App extends Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <div className="App">
+        <Header />
         <h2>Welcome to React</h2>
       </div>
     )

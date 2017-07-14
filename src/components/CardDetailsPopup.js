@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { CardDetails } from 'components'
+import { CardDetails } from './'
 
 const mapStateToProps = ({ settings }) => ({
   cardDetailsPopupDelay: settings.cardDetailsPopupDelay

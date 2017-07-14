@@ -1,7 +1,7 @@
 import React from 'react'
-import PropTypes from 'proptypes'
-import { ManaBadge } from 'components'
-import { manaLettersToIcons } from 'utils'
+import PropTypes from 'prop-types'
+import { ManaBadge } from './'
+import { manaLettersToIcons } from '../utils'
 
 const propTypes = { card: PropTypes.object.isRequired }
 

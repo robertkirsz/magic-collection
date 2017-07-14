@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // --- Helpers ---
 import cn from 'classnames'
@@ -8,11 +8,11 @@ import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
 // --- Store ---
-import { filterAllCards } from 'store/allCards'
-import { filterMyCards } from 'store/myCards'
-import { resetMainCardFocus } from 'store/keyboard'
+import { filterAllCards } from '../store/allCards'
+import { filterMyCards } from '../store/myCards'
+import { resetMainCardFocus } from '../store/keyboard'
 // --- Components ---
-import { ColorFilter, CmcFilter, ColorButtons } from 'components'
+import { ColorFilter, CmcFilter, ColorButtons } from './'
 
 // TODO: make filetr query stay between route changes
 // TODO: show idicator that a query is on (a dot in the search icon)

@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Form, FormGroup, FormControl, Checkbox, Button } from 'react-bootstrap'
 

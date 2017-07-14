@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 import _every from 'lodash/every'
 

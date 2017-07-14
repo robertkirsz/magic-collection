@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import _slice from 'lodash/slice'
-import { Card } from 'components'
-import { setMainCardFocus, resetMainCardFocus } from 'store/keyboard'
+import { Card } from './'
+import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
 
 const mapStateToProps = () => ({})
 
@@ -15,7 +15,8 @@ const initialCardsNumber = 20
 class CardsSearchList extends Component {
   static propTypes = {
     cards: PropTypes.array.isRequired,
-    path: PropTypes.string.isRequired,
+    // TODO:
+    // path: PropTypes.string.isRequired,
     setMainCardFocus: PropTypes.func.isRequired,
     resetMainCardFocus: PropTypes.func.isRequired
   }
@@ -36,7 +37,8 @@ class CardsSearchList extends Component {
 
   onCardClick = index => card => {
     this.props.setMainCardFocus(index)
-    browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
+    // TODO:
+    // browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
   }
 
   render () {
@@ -45,25 +47,16 @@ class CardsSearchList extends Component {
 
     return (
       <div className="cards-search-list">
-        {
-          _slice(cards, 0, cardsLimit).map((card, index) => (
-            <Card
-              key={card.id}
-              mainCard={card}
-              hoverAnimation
-              detailsPopup
-              onClick={this.onCardClick(index)}
-            />
-          ))
-        }
-        {
-          this.shouldShowButton() && (
-            <div className="cards-search-list__show-more-button" onClick={this.showMoreCards}>
-              <i className="fa fa-search-plus" />
-              <span className="cardsNumber">{cardsLimit} / {cards.length}</span>
-            </div>
-          )
-        }
+        {_slice(cards, 0, cardsLimit).map((card, index) =>
+          <Card key={card.id} mainCard={card} hoverAnimation detailsPopup onClick={this.onCardClick(index)} />
+        )}
+        {this.shouldShowButton() &&
+          <div className="cards-search-list__show-more-button" onClick={this.showMoreCards}>
+            <i className="fa fa-search-plus" />
+            <span className="cardsNumber">
+              {cardsLimit} / {cards.length}
+            </span>
+          </div>}
       </div>
     )
   }

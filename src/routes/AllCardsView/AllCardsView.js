@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Transition from 'react/lib/ReactCSSTransitionGroup'
 import { cardsDatabase } from 'database'

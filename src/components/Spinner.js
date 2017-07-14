@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { AbsoluteFullSize } from 'styled'
-import { spinAnimation } from 'styled/animations'
+import { AbsoluteFullSize } from '../styled'
+import { spinAnimation } from '../styled/animations'
 
 const SpinnerContainer = styled.div`
   position: relative;

@@ -1,9 +1,9 @@
 import React from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { toggleSetting } from 'store/settings'
+import { toggleSetting } from '../store/settings'
 import cn from 'classnames'
-import { LockButton as StyledLockButton } from 'styled'
+import { LockButton as StyledLockButton } from '../styled'
 
 const mapStateToProps = ({ settings }) => ({ myCardsLocked: settings.myCardsLocked })
 

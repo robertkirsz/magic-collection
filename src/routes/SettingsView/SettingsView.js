@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { FormGroup, Radio, ControlLabel, Checkbox, Button } from 'react-bootstrap'
 import { toggleSetting, changeCardDetailsPopupDelay, restoreDefaultSettings } from 'store/settings'

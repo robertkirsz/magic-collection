@@ -1,15 +1,18 @@
 import React from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { UserBadge, LockButton } from 'components'
-import { signOut } from 'store/user'
-import { openModal } from 'store/layout'
+import { Link } from 'react-router-dom'
+import { UserBadge, LockButton } from './'
+import { signOut } from '../store/user'
+import { openModal } from '../store/layout'
 import _reduce from 'lodash/reduce'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   user,
-  pathname: location.pathname,
+  // TODO:
+  // pathname: location.pathname,
+  pathname: '/all-cards',
+
   numberOfTotalCards: _reduce(myCards.cards, (sum, card) => sum + card.cardsInCollection, 0),
   numberOfUniqueCards: myCards.cards.length
 })
@@ -31,7 +34,13 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
   // Brand and toggle get grouped for better mobile display
   const brandAndToggle = (
     <div className="navbar-header">
-      <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button
+        type="button"
+        className="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false"
+      >
         <span className="sr-only">Toggle navigation</span>
         <span className="icon-bar" />
         <span className="icon-bar" />
@@ -59,14 +68,10 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
   const authenticationLinks = (
     <ul className="nav navbar-nav nav-pills navbar-right">
       <li role="presentation">
-        <a onClick={() => openModal('sign in')}>
-          Sign In
-        </a>
+        <a onClick={() => openModal('sign in')}>Sign In</a>
       </li>
       <li role="presentation">
-        <a onClick={() => openModal('sign up')}>
-          Sign Up
-        </a>
+        <a onClick={() => openModal('sign up')}>Sign Up</a>
       </li>
     </ul>
   )
@@ -80,10 +85,16 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
         </a>
         <ul className="dropdown-menu">
           {/* <li><Link to="profile">Profile</Link></li> */}
-          <li><Link to="collection-stats">Collection Stats</Link></li>
-          <li><Link to="settings">Settings</Link></li>
+          <li>
+            <Link to="collection-stats">Collection Stats</Link>
+          </li>
+          <li>
+            <Link to="settings">Settings</Link>
+          </li>
           <li role="separator" className="divider" />
-          <li><a onClick={signOut}>Sign out</a></li>
+          <li>
+            <a onClick={signOut}>Sign out</a>
+          </li>
         </ul>
       </li>
     </ul>
@@ -93,11 +104,12 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
     <nav id="MainHeader" className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
         {brandAndToggle}
-        {!user.authPending && <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          {signedIn && <LockButton />}
-          {signedIn && navigationLinks}
-          {signedIn ? userDropdown : authenticationLinks}
-        </div>}
+        {!user.authPending &&
+          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {signedIn && <LockButton />}
+            {signedIn && navigationLinks}
+            {signedIn ? userDropdown : authenticationLinks}
+          </div>}
       </div>
     </nav>
   )

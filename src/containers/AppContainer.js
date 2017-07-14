@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { browserHistory, Router } from 'react-router'
 import { Provider } from 'react-redux'
 import _get from 'lodash/get'

@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'proptypes'
-import { manaLettersToArray } from 'utils'
+import PropTypes from 'prop-types'
+import { manaLettersToArray } from '../utils'
 
 const propTypes = { manaCost: PropTypes.string }
 

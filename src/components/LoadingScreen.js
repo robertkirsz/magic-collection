@@ -1,6 +1,6 @@
 import React from 'react'
-import { Spinner } from 'components'
-import { AbsoluteCenter } from 'styled'
+import { Spinner } from './'
+import { AbsoluteCenter } from '../styled'
 
 const LoadingScreen = () => (
   <AbsoluteCenter background="white">

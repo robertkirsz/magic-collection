@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import _every from 'lodash/every'
 
 const AllNoneToggle = ({ colors, toggleAll, toggleNone }) => {

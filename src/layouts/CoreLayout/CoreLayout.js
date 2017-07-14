@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // TODO: switch to https://github.com/reactjs/react-transition-group
 import Transition from 'react/lib/ReactCSSTransitionGroup'

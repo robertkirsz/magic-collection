@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import PropTypes from 'proptypes'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _includes from 'lodash/includes'
 import _findIndex from 'lodash/findIndex'
-import { addCard, removeCard } from 'store/myCards'
-import { CardDetailsPopup } from 'components'
-import cardBack from 'components/assets/card_back.jpg'
+import { addCard, removeCard } from '../store/myCards'
+import { CardDetailsPopup } from './'
+import cardBack from './/assets/card_back.jpg'
 import cn from 'classnames'
 
 let bd
