@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Transition from 'react/lib/ReactCSSTransitionGroup'
-import { CardsSearchList, LoadingScreen } from 'components'
+import { CardsSearchList, LoadingScreen } from '../../components'
 
 const mapStateToProps = ({ myCards }) => ({
   cards: myCards.cards,

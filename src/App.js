@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 // --- Helpers ---
 import _get from 'lodash/get'
 import { log } from './utils'
@@ -15,6 +16,7 @@ import { closeModal } from './store/layout'
 // --- Components ---
 import { AuthModal, ErrorModal } from './containers'
 import { Header } from './components'
+import { HomeView, AllCardsView } from './routes'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name
@@ -54,8 +56,7 @@ class App extends Component {
     auth.onAuthStateChanged(async firebaseUser => {
       log('Authentication state has changed')
 
-      const authModalOpened =
-        this.props.modalName === 'sign in' || this.props.modalName === 'sign up'
+      const authModalOpened = this.props.modalName === 'sign in' || this.props.modalName === 'sign up'
 
       // Show loading message
       this.props.authRequest()
@@ -120,11 +121,15 @@ class App extends Component {
 
   render () {
     return (
-      <div className="App">
-        <Header />
-        <AuthModal />
-        <ErrorModal />
-      </div>
+      <Router>
+        <div className="App">
+          <Header />
+          <Route exact path="/" component={HomeView} />
+          <Route path="/all-cards" component={AllCardsView} />
+          <AuthModal />
+          <ErrorModal />
+        </div>
+      </Router>
     )
   }
 }

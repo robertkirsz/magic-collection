@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex } from 'styled'
+import { Flex } from '../../styled'
 
 const NotFoundView = () => (
   <Flex>

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { CollectionStats } from 'components'
+import { CollectionStats } from '../../components'
 
 const mapStateToProps = ({ user }) => ({ user })
 

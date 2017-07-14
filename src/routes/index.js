@@ -1,12 +1,21 @@
+import HomeView from './HomeView'
+import AllCardsView from './AllCardsView'
+
+export {
+  HomeView,
+  AllCardsView
+}
+
+/*
 // import { auth }      from 'utils/firebase'
-import CoreLayout    from 'layouts/CoreLayout'
-import AllCardsView  from 'routes/AllCardsView'
-import MyCardsView   from 'routes/MyCardsView'
-import CardView      from 'routes/CardView'
-// import ProfileView   from 'routes/ProfileView'
-import SettingsView  from 'routes/SettingsView'
-import CollectionStatsView  from 'routes/CollectionStatsView'
-import NotFoundView  from 'routes/NotFoundView'
+import App from '../App'
+import AllCardsView from './AllCardsView'
+import MyCardsView from './MyCardsView'
+import CardView from './CardView'
+// import ProfileView   from './ProfileView'
+import SettingsView from './SettingsView'
+import CollectionStatsView from './CollectionStatsView'
+import NotFoundView from './NotFoundView'
 
 // Redirects unathorized users
 // const requireAuth = (nextState, replace) => {
@@ -17,28 +26,24 @@ import NotFoundView  from 'routes/NotFoundView'
 
 export const createRoutes = () => ({
   path: '/',
-  component: CoreLayout,
+  component: App,
   indexRoute: { component: AllCardsView },
   onEnter: (nextState, replace) => {
     if (nextState.location.pathname === '/') replace('/all-cards')
   },
-  childRoutes: [
+  routes: [
     {
       path: 'all-cards',
       component: AllCardsView,
       showAppButtons: true,
-      childRoutes: [
-        { path: '/all-cards/:cardUrl', component: CardView }
-      ]
+      routes: [{ path: '/all-cards/:cardUrl', component: CardView }]
     },
     {
       path: 'my-cards',
       component: MyCardsView,
       showAppButtons: true,
       // onEnter: requireAuth,
-      childRoutes: [
-        { path: '/my-cards/:cardUrl', component: CardView }
-      ]
+      routes: [{ path: '/my-cards/:cardUrl', component: CardView }]
     },
     {
       path: 'settings',
@@ -46,9 +51,9 @@ export const createRoutes = () => ({
       // onEnter: requireAuth
     },
     // {
-      // path: 'profile',
-      // component: ProfileView
-      // onEnter: requireAuth
+    // path: 'profile',
+    // component: ProfileView
+    // onEnter: requireAuth
     // },
     {
       path: 'collection-stats',
@@ -63,3 +68,4 @@ export const createRoutes = () => ({
 })
 
 export default createRoutes
+*/

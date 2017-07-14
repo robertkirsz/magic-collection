@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'
 import _find from 'lodash/find'
-import { Card, CardDetails } from 'components'
-import { cardsDatabase } from 'database'
-import { resetVariantCardFocus, setVariantCardFocus } from 'store/keyboard'
+import { Card, CardDetails } from '../../components'
+import { cardsDatabase } from '../../database'
+import { resetVariantCardFocus, setVariantCardFocus } from '../../store/keyboard'
 
 const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 
@@ -56,7 +56,7 @@ class CardView extends Component {
   }
 
   goBack = () => {
-    browserHistory.push(`/${this.props.routes[1].path}`)
+    // browserHistory.push(`/${this.props.routes[1].path}`)
   }
 
   getNumberOfCards = variantCard => {
