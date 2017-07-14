@@ -13,7 +13,6 @@ import _filter from 'lodash/filter'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import isAfter from 'date-fns/is_after'
-import { formattedError } from '../utils'
 
 // ------------------------------------
 // Actions
@@ -28,11 +27,12 @@ export const getCards = () => {
     // Dispatch action so we can show spinner
     dispatch(sendRequest())
     // Send API request
-    fetchCards().then(response => dispatch(responseSuccess(response.data))).catch(error => {
-      const errorMessage = formattedError(error)
-      dispatch(responseError(errorMessage))
-      dispatch(openModal('error', { message: errorMessage }))
-    })
+    fetchCards()
+      .then(response => dispatch(responseSuccess(response)))
+      .catch(error => {
+        dispatch(responseError(error))
+        dispatch(openModal('error', { message: error }))
+      })
   }
 }
 export const filterAllCards = filterFunction => ({ type: 'FILTER_ALL_CARDS', filterFunction })

@@ -2,20 +2,8 @@ import _includes from 'lodash/includes'
 
 const debug = process.env.NODE_ENV === 'development'
 
-export const log = msg => (debug ? console.log('%c' + msg, 'padding: 2px 6px; border-radius: 2px; background: #40A8FD; color: white;') : false)
-
-// Converts errors to more readable form
-export const formattedError = error => {
-  if (error.response) {
-    const { status, statusText, data } = error.response
-    // The request was made, but the server responded with a status code
-    // that falls out of the range of 2xx
-    return `ERROR ${status} ${statusText} - ${data.detail || data.message}`
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    return error.message
-  }
-}
+export const log = msg =>
+  debug ? console.log('%c' + msg, 'padding: 2px 6px; border-radius: 2px; background: #40A8FD; color: white;') : false
 
 // Checks if one node is contained in another
 export const isContainedIn = (target, container) => {
