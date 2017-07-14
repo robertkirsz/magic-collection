@@ -2,7 +2,7 @@
   "rules": {
     "Admins": {
       ".read": "auth.uid !== null",
-      ".write": false,
+      ".write": false
     },
     "Users": {
       "$userId": {
