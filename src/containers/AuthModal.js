@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { signIn, signUp, signInWithProvider, authError, clearAuthErrors } from '../store/user'
+import styled from 'styled-components'
+// --- Actions ---
+import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
 import { closeModal } from '../store/layout'
+// --- Assets ---
 import { googleIcon, facebookIcon, twitterIcon, githubIcon } from '../svg'
 
 const mapStateToProps = ({ user, layout }) => ({
@@ -11,7 +14,7 @@ const mapStateToProps = ({ user, layout }) => ({
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithProvider, authError, clearAuthErrors, closeModal }
+const mapDispatchToProps = { signIn, signUp, signInWithProvider, clearAuthErrors, closeModal }
 
 class AuthModal extends Component {
   static propTypes = {
@@ -20,7 +23,6 @@ class AuthModal extends Component {
     signIn: PropTypes.func.isRequired,
     signUp: PropTypes.func.isRequired,
     signInWithProvider: PropTypes.func.isRequired,
-    authError: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
     clearAuthErrors: PropTypes.func.isRequired
   }
@@ -67,8 +69,7 @@ class AuthModal extends Component {
     const disableAutocomplete = modalName === 'sign up'
 
     return (
-      <Modal
-        className="auth-modal"
+      <Container
         show={showModal}
         onHide={closeModal}
         bsSize="small"
@@ -103,31 +104,60 @@ class AuthModal extends Component {
                 value={password}
                 onChange={e => this.updateForm('password', e.target.value)}
               />
-              <span
-                className="fa fa-eye"
-                style={showPassword ? { opacity: 1 } : {}}
-                onClick={this.togglePassword}
-              />
+              <span className="fa fa-eye" style={showPassword ? { opacity: 1 } : {}} onClick={this.togglePassword} />
             </div>
           </form>
-          {error && <p className="text-danger">{error}</p>}
+          {error &&
+            <p className="text-danger">
+              {error}
+            </p>}
           <div className="buttons">
             <button type="submit" form="authForm" className="btn btn-default">
-              {
-                authPending
-                  ? <span className="fa fa-circle-o-notch fa-spin" />
-                  : modalName
-              }
+              {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
             </button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('google')}>{googleIcon}</button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('facebook')}>{facebookIcon}</button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('twitter')}>{twitterIcon}</button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('github')}>{githubIcon}</button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('google')}>
+              {googleIcon}
+            </button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('facebook')}>
+              {facebookIcon}
+            </button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('twitter')}>
+              {twitterIcon}
+            </button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('github')}>
+              {githubIcon}
+            </button>
           </div>
         </Modal.Body>
-      </Modal>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)
+
+const Container = styled(Modal)`
+  .form-group { position: relative; }
+  .fa-eye {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0.5;
+    &:hover { opacity: 1; }
+  }
+  .buttons {
+    display: flex;
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-height: 34px;
+      text-transform: capitalize;
+      &:not(:first-of-type) { margin-left: 0.4em; }
+      svg { width: 1.2em; height: 1.2em; }
+    }
+  }
+`

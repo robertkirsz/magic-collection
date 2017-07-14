@@ -1,0 +1,10 @@
+:root {
+  --text-color: #373a3c;
+  --navbarHeight: 70px;
+  --horizontalPadding: 15px;
+  --cardWidth: 223px;
+  --cardHeight: 311px;
+  --cardRatio: calc(var(--cardHeight) / var(--cardWidth));
+  --cardMargin: 5px;
+  --mainMargin: 30px;
+}

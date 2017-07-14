@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 // import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'
+import styled from 'styled-components'
 import _find from 'lodash/find'
 import { Card, CardDetails } from '../../components'
+import { Div } from '../../styled'
 import { cardsDatabase } from '../../database'
 import { resetVariantCardFocus, setVariantCardFocus } from '../../store/keyboard'
 
@@ -82,8 +84,7 @@ class CardView extends Component {
     if (!card) return null
 
     return (
-      <Modal
-        className="card-view"
+      <Container
         animation={cardModalAnimation}
         show={modalOpened} // Value is from state and is "true" by default
         bsSize="large"
@@ -108,7 +109,7 @@ class CardView extends Component {
               <CardDetails card={card} />
             </Col>
           </Row>
-          <div className="card-variants-list">
+          <Div flex align-items="flex-start" className="card-variants-list">
             {
               card.variants.map(variantCard => {
                 const numberOfCards = this.getNumberOfCards(variantCard)
@@ -127,11 +128,17 @@ class CardView extends Component {
                 )
               })
             }
-          </div>
+          </Div>
         </Modal.Body>
-      </Modal>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView)
+
+const Container = styled(Modal)`
+  .card-variants-list {
+    .card:not(:last-child) { margin-right: 10px; }
+  }
+`

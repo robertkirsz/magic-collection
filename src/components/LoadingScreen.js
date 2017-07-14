@@ -2,10 +2,9 @@ import React from 'react'
 import { Spinner } from './'
 import { AbsoluteCenter } from '../styled'
 
-const LoadingScreen = () => (
+const LoadingScreen = () =>
   <AbsoluteCenter background="white">
     <Spinner />
   </AbsoluteCenter>
-)
 
 export default LoadingScreen

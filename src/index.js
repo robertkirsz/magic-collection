@@ -8,6 +8,7 @@ import registerServiceWorker from './registerServiceWorker'
 // --- Components ---
 import App from './App'
 // --- Layout ---
+import './styles/variables.css'
 import './styles/index.css'
 
 ReactDOM.render(

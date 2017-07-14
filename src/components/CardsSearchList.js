@@ -42,7 +42,6 @@ class CardsSearchList extends Component {
   }
 
   render () {
-    console.warn('ojojojo')
     const { cards } = this.props
     const { cardsLimit } = this.state
 
