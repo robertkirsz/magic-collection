@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _get from 'lodash/get'
@@ -166,12 +167,9 @@ class SearchModule extends Component {
       // Checking text
       const textOk = card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true
       // Checking set
-      const setOK =
-        state.cardSet !== 'all-sets' ? _find(card.variants, { setCode: state.cardSet }) : true
+      const setOK = state.cardSet !== 'all-sets' ? _find(card.variants, { setCode: state.cardSet }) : true
       // Checking card colors
-      const colorsOk = card.colors
-        ? _find(card.colors, color => state.colors[color])
-        : state.colors.Colorless
+      const colorsOk = card.colors ? _find(card.colors, color => state.colors[color]) : state.colors.Colorless
       // Monocolored only test
       let monoOk = true
       if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
@@ -221,11 +219,7 @@ class SearchModule extends Component {
     const { cardSets } = this.props
 
     const searchButton = (
-      <button
-        className="search-button fa fa-search"
-        aria-hidden="true"
-        onMouseEnter={this.focusNameInput}
-      />
+      <button className="search-button fa fa-search" aria-hidden="true" onMouseEnter={this.focusNameInput} />
     )
 
     const searchForm = (
@@ -255,11 +249,7 @@ class SearchModule extends Component {
           />
         </div>
         <div className="form-group">
-          <select
-            className="form-control"
-            value={this.state.cardSet}
-            onChange={this.handleChange('cardSet')}
-          >
+          <select className="form-control" value={this.state.cardSet} onChange={this.handleChange('cardSet')}>
             <option value="all-sets">All sets</option>
             {cardSets.map(set =>
               <option key={set.code} value={set.code}>
@@ -299,15 +289,105 @@ class SearchModule extends Component {
     )
 
     return (
-      <div
+      <Container
         className={cn('search-module', { 'form-visible': this.state.showSearchForm })}
         onMouseLeave={this.searchModuleMouseLeave}
       >
         {searchButton}
         {searchForm}
-      </div>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: none;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: var(--horizontalPadding);
+  background-color: rgba(white, 0.95);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 5px rgba(black, 0.3);
+  pointer-events: auto;
+  .search-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    left: var(--horizontalPadding);
+    width: 385px;
+    transform: scale(0);
+    transform-origin: left center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    .text-inputs {
+      display: flex;
+      input {
+        flex: 1;
+        &:not(:last-child) { margin-right: 5px; }
+      }
+    }
+    .color-filter-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .color-filter {
+      .icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 1.5em;
+        transition: all 0.2s;
+        &:not(:last-child) { margin-right: 5px; }
+        &.unchecked {
+          background-color: transparent;
+          opacity: 0.4;
+        }
+      }
+    }
+    .all-none-checkboxes {
+      label:not(:last-child) { margin-right: 5px; }
+      input { margin-right: 5px; }
+    }
+    .cmc-filter {
+      .input-group { width: 290px; }
+    }
+    .mono-multi-checkboxes {
+      label:not(:last-child) { margin-right: 5px; }
+      input { margin-right: 5px; }
+    }
+  }
+  .search-button {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+  &.form-visible, &:hover {
+    width: 415px;height: 254px;
+    padding: 0;
+    border-radius: 10px;
+    .search-button {
+      font-size: 4em;
+      opacity: 0;
+    }
+    .search-form {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+`

@@ -1,29 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { toggleSetting } from '../store/settings'
+import styled from 'styled-components'
 import cn from 'classnames'
-import { LockButton as StyledLockButton } from '../styled'
+// --- Actions ---
+import { toggleSetting } from '../store/settings'
+// --- Components ---
 
 const mapStateToProps = ({ settings }) => ({ myCardsLocked: settings.myCardsLocked })
 
 const mapDispatchToProps = { toggleSetting }
 
 const propTypes = {
-  myCardsLocked: PropTypes.bool,
-  toggleSetting: PropTypes.func
+  myCardsLocked: PropTypes.bool.isRequired,
+  toggleSetting: PropTypes.func.isRequired
 }
 
-const LockButton = ({ myCardsLocked, toggleSetting }) => (
-  <StyledLockButton
+const LockButton = ({ myCardsLocked, toggleSetting }) =>
+  <Container
     type="button"
     className="navbar-btn"
-    onClick={() => { toggleSetting('myCardsLocked') }}
+    onClick={() => {
+      toggleSetting('myCardsLocked')
+    }}
   >
     <i className={cn('fa', { 'fa-lock': myCardsLocked, 'fa-unlock-alt': !myCardsLocked })} />
-  </StyledLockButton>
-)
+  </Container>
 
 LockButton.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(LockButton)
+
+const Container = styled.button`
+  border: none;
+  background: none;
+  font-size: 1.4em;
+`

@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // import { browserHistory } from 'react-router'
 import _slice from 'lodash/slice'
-import { Card } from './'
+// --- Actions ---
 import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
+// --- Components ---
+import { Div } from '../styled'
+import { Card, ShowMoreButton } from './'
 
 const mapStateToProps = () => ({})
 
@@ -27,13 +30,9 @@ class CardsSearchList extends Component {
     this.props.resetMainCardFocus()
   }
 
-  shouldShowButton = () => {
-    return this.props.cards.length > this.state.cardsLimit
-  }
+  shouldShowButton = () => this.props.cards.length > this.state.cardsLimit
 
-  showMoreCards = () => {
-    this.setState({ cardsLimit: this.state.cardsLimit + initialCardsNumber })
-  }
+  showMoreCards = () => this.setState({ cardsLimit: this.state.cardsLimit + initialCardsNumber })
 
   onCardClick = index => card => {
     this.props.setMainCardFocus(index)
@@ -41,25 +40,18 @@ class CardsSearchList extends Component {
     // browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
   }
 
-  render () {
-    const { cards } = this.props
-    const { cardsLimit } = this.state
-
-    return (
-      <div className="cards-search-list">
-        {_slice(cards, 0, cardsLimit).map((card, index) =>
-          <Card key={card.id} mainCard={card} hoverAnimation detailsPopup onClick={this.onCardClick(index)} />
-        )}
-        {this.shouldShowButton() &&
-          <div className="cards-search-list__show-more-button" onClick={this.showMoreCards}>
-            <i className="fa fa-search-plus" />
-            <span className="cardsNumber">
-              {cardsLimit} / {cards.length}
-            </span>
-          </div>}
-      </div>
-    )
-  }
+  render = () =>
+    <Div flex wrap justifyContent="flex-start" alignItems="flex-start">
+      {_slice(this.props.cards, 0, this.state.cardsLimit).map((card, index) =>
+        <Card key={card.id} mainCard={card} hoverAnimation detailsPopup onClick={this.onCardClick(index)} />
+      )}
+      {this.shouldShowButton() &&
+        <ShowMoreButton
+          onClick={this.showMoreCards}
+          cardsLimit={this.state.cardsLimit}
+          cardsNumber={this.props.cards.length}
+        />}
+    </Div>
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardsSearchList)

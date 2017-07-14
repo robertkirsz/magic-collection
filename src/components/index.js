@@ -12,6 +12,7 @@ import ColorButtons     from './ColorButtons'
 import SearchModule     from './SearchModule'
 import AllNoneToggle    from './AllNoneToggle'
 import LoadingScreen    from './LoadingScreen'
+import ShowMoreButton   from './ShowMoreButton'
 import CardsSearchList  from './CardsSearchList'
 import CollectionStats  from './CollectionStats'
 import MonoMultiToggle  from './MonoMultiToggle'
@@ -32,6 +33,7 @@ export {
   SearchModule,
   AllNoneToggle,
   LoadingScreen,
+  ShowMoreButton,
   CardsSearchList,
   CollectionStats,
   MonoMultiToggle,
