@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 // --- Helpers ---
 import _get from 'lodash/get'
+// import _find from 'lodash/find'
 import { log } from './utils'
 // --- Firebase ---
 import { auth, firebaseGetData } from './firebase'
@@ -15,8 +16,8 @@ import { loadInitialSettings } from './store/settings'
 import { closeModal } from './store/layout'
 // --- Components ---
 import { AuthModal, ErrorModal } from './containers'
-import { Header } from './components'
-import { HomeView, AllCardsView } from './routes'
+import { Header, SearchModule, KeyboardHandler } from './components'
+import { HomeView, AllCardsView, MyCardsView } from './routes'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name
@@ -36,6 +37,8 @@ const mapDispatchToProps = {
 
 class App extends Component {
   static propTypes = {
+    // params: PropTypes.object.isRequired,
+    // routes: PropTypes.array.isRequired,
     modalName: PropTypes.string.isRequired,
     authRequest: PropTypes.func.isRequired,
     getCards: PropTypes.func.isRequired,
@@ -120,14 +123,29 @@ class App extends Component {
   }
 
   render () {
+    // const showAppButtons = _find(this.props.routes, 'showAppButtons')
+    // const topRoute = this.props.routes[this.props.routes.length - 1].path
+
     return (
       <Router>
         <div className="App">
           <Header />
           <Route exact path="/" component={HomeView} />
           <Route path="/all-cards" component={AllCardsView} />
+          <Route path="/my-cards" component={MyCardsView} />
+          {/* {showAppButtons && */}
+          <div className="app-buttons">
+            {/* <SearchModule /> */}
+          </div>
+          {/* } */}
           <AuthModal />
           <ErrorModal />
+          <KeyboardHandler
+            onCardsListPage
+            // onCardsListPage={topRoute === 'all-cards' || topRoute === 'my-cards'}
+            onCardDetailsPage={false}
+            // onCardDetailsPage={this.props.params.cardUrl !== undefined}
+          />
         </div>
       </Router>
     )

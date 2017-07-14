@@ -16,6 +16,7 @@ import ShowMoreButton   from './ShowMoreButton'
 import CardsSearchList  from './CardsSearchList'
 import CollectionStats  from './CollectionStats'
 import MonoMultiToggle  from './MonoMultiToggle'
+import KeyboardHandler  from './KeyboardHandler'
 import CardDetailsPopup from './CardDetailsPopup'
 
 export {
@@ -37,5 +38,6 @@ export {
   CardsSearchList,
   CollectionStats,
   MonoMultiToggle,
+  KeyboardHandler,
   CardDetailsPopup
 }

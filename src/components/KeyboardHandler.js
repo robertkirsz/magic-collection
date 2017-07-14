@@ -8,7 +8,7 @@ const mapStateToProps = ({ keyboard }) => ({
   variantCardFocusIndex: keyboard.variantCardFocusIndex
 })
 
-class KeyboardNavigation extends Component {
+class KeyboardHandler extends Component {
   static propTypes = {
     onCardsListPage: PropTypes.bool.isRequired,
     onCardDetailsPage: PropTypes.bool.isRequired,
@@ -22,6 +22,7 @@ class KeyboardNavigation extends Component {
   }
 
   componentWillMount () {
+    console.log(this.props)
     this.initMouseEvents()
   }
 
@@ -94,8 +95,9 @@ class KeyboardNavigation extends Component {
           const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
           const ratio = Math.floor(windowWidth / cardWidth)
 
-          if (this.state.mainCardIndex + 1 <= ratio) return
-          else this.setState({ mainCardIndex: this.state.mainCardIndex - ratio })
+          if (this.state.mainCardIndex + 1 > ratio) {
+            this.setState({ mainCardIndex: this.state.mainCardIndex - ratio })
+          }
         }
       }
 
@@ -113,8 +115,9 @@ class KeyboardNavigation extends Component {
           const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
           const ratio = Math.floor(parentWidth / variantCardWidth)
 
-          if (this.state.variantCardIndex + 1 <= ratio) return
-          else this.setState({ variantCardIndex: this.state.variantCardIndex - ratio })
+          if (this.state.variantCardIndex + 1 > ratio) {
+            this.setState({ variantCardIndex: this.state.variantCardIndex - ratio })
+          }
         }
       }
     })
@@ -155,8 +158,9 @@ class KeyboardNavigation extends Component {
           const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
           const ratio = Math.floor(parentWidth / variantCardWidth)
 
-          if (this.state.variantCardIndex >= variants.length - ratio) this.setState({ variantCardIndex: variants.length - 1 })
-          else this.setState({ variantCardIndex: this.state.variantCardIndex + ratio })
+          if (this.state.variantCardIndex >= variants.length - ratio) {
+            this.setState({ variantCardIndex: variants.length - 1 })
+          } else this.setState({ variantCardIndex: this.state.variantCardIndex + ratio })
         }
       }
     })
@@ -203,7 +207,9 @@ class KeyboardNavigation extends Component {
 
         const cards = this.getCardWrappers()
 
-        if (this.state.mainCardIndex < cards.length - 1) { this.setState({ mainCardIndex: this.state.mainCardIndex + 1 }) }
+        if (this.state.mainCardIndex < cards.length - 1) {
+          this.setState({ mainCardIndex: this.state.mainCardIndex + 1 })
+        }
       }
 
       if (this.props.onCardDetailsPage) {
@@ -214,7 +220,9 @@ class KeyboardNavigation extends Component {
 
         const variants = this.getVariantWrappers()
 
-        if (this.state.variantCardIndex < variants.length - 1) { this.setState({ variantCardIndex: this.state.variantCardIndex + 1 }) }
+        if (this.state.variantCardIndex < variants.length - 1) {
+          this.setState({ variantCardIndex: this.state.variantCardIndex + 1 })
+        }
       }
     })
 
@@ -250,10 +258,7 @@ class KeyboardNavigation extends Component {
     })
   }
 
-  render = () => {
-    console.log('state', this.state.mainCardIndex, 'props', this.props.mainCardFocusIndex.index)
-    return null
-  }
+  render = () => null
 }
 
-export default connect(mapStateToProps)(KeyboardNavigation)
+export default connect(mapStateToProps)(KeyboardHandler)

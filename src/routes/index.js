@@ -1,9 +1,11 @@
 import HomeView from './HomeView'
 import AllCardsView from './AllCardsView'
+import MyCardsView from './MyCardsView'
 
 export {
   HomeView,
-  AllCardsView
+  AllCardsView,
+  MyCardsView
 }
 
 /*
