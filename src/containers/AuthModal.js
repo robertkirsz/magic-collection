@@ -7,7 +7,10 @@ import styled from 'styled-components'
 import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
 import { closeModal } from '../store/layout'
 // --- Assets ---
-import { googleIcon, facebookIcon, twitterIcon, githubIcon } from '../svg'
+import googleLogo from '../assets/google-logo.svg'
+import facebookLogo from '../assets/facebook-logo.svg'
+import twitterLogo from '../assets/twitter-logo.svg'
+import githubLogo from '../assets/github-logo.svg'
 
 const mapStateToProps = ({ user, layout }) => ({
   user,
@@ -116,16 +119,16 @@ class AuthModal extends Component {
               {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
             </button>
             <button className="btn btn-default" onClick={() => signInWithProvider('google')}>
-              {googleIcon}
+              <img src={googleLogo} alt="Google Logo" />
             </button>
             <button className="btn btn-default" onClick={() => signInWithProvider('facebook')}>
-              {facebookIcon}
+              <img src={facebookLogo} alt="Facebook Logo" />
             </button>
             <button className="btn btn-default" onClick={() => signInWithProvider('twitter')}>
-              {twitterIcon}
+              <img src={twitterLogo} alt="Twitter Logo" />
             </button>
             <button className="btn btn-default" onClick={() => signInWithProvider('github')}>
-              {githubIcon}
+              <img src={githubLogo} alt="GitHub Logo" />
             </button>
           </div>
         </Modal.Body>
@@ -157,7 +160,7 @@ const Container = styled(Modal)`
       min-height: 34px;
       text-transform: capitalize;
       &:not(:first-of-type) { margin-left: 0.4em; }
-      svg { width: 1.2em; height: 1.2em; }
+      img { width: 1.2em; height: 1.2em; }
     }
   }
 `
