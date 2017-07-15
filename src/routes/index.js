@@ -1,18 +1,27 @@
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+// --- Components ---
 import HomeView from './HomeView'
 import AllCardsView from './AllCardsView'
 import MyCardsView from './MyCardsView'
 import CardView from './CardView'
 import SettingsView from './SettingsView'
 import CollectionStatsView from './CollectionStatsView'
+import NotFoundView from './NotFoundView'
 
-export {
-  HomeView,
-  AllCardsView,
-  MyCardsView,
-  CardView,
-  SettingsView,
-  CollectionStatsView
-}
+const Routes = () =>
+  <Switch>
+    <Route exact path="/" component={HomeView} />
+    <Route path="/all-cards" component={AllCardsView} />
+    <Route path="/all-cards/:cardUrl" component={CardView} />
+    <Route path="/my-cards" component={MyCardsView} />
+    <Route path="/my-cards/:cardUrl" component={CardView} />
+    <Route path="/settings" component={SettingsView} />
+    <Route path="/collection-stats" component={CollectionStatsView} />
+    <Route component={NotFoundView} />
+  </Switch>
+
+export default Routes
 
 /*
 // import { auth }      from 'utils/firebase'
@@ -48,12 +57,4 @@ export {
       component: CollectionStatsView
       // onEnter: requireAuth
     },
-    {
-      path: '*',
-      component: NotFoundView
-    }
-  ]
-})
-
-export default createRoutes
 */

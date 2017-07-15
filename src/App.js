@@ -7,9 +7,8 @@ import { log, debug, getLocation } from './utils'
 import { getCards } from './store/allCards'
 import { addAuthListener } from './store/user'
 // --- Components ---
-import { Route } from 'react-router-dom'
 import { Header, SearchModule, KeyboardHandler, AuthModal, ErrorModal } from './components'
-import { HomeView, AllCardsView, MyCardsView, CardView, SettingsView, CollectionStatsView } from './routes'
+import Routes from './routes'
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
@@ -51,13 +50,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Route exact path="/" component={HomeView} />
-        <Route path="/all-cards" component={AllCardsView} />
-        <Route path="/all-cards/:cardUrl" component={CardView} />
-        <Route path="/my-cards" component={MyCardsView} />
-        <Route path="/my-cards/:cardUrl" component={CardView} />
-        <Route path="/settings" component={SettingsView} />
-        <Route path="/collection-stats" component={CollectionStatsView} />
+        <Routes />
         {onCardsPage &&
           !this.state.fetchingData &&
           <div className="app-buttons">
