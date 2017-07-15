@@ -3,25 +3,19 @@ import AllCardsView from './AllCardsView'
 import MyCardsView from './MyCardsView'
 import CardView from './CardView'
 import SettingsView from './SettingsView'
+import CollectionStatsView from './CollectionStatsView'
 
 export {
   HomeView,
   AllCardsView,
   MyCardsView,
   CardView,
-  SettingsView
+  SettingsView,
+  CollectionStatsView
 }
 
 /*
 // import { auth }      from 'utils/firebase'
-import App from '../App'
-import AllCardsView from './AllCardsView'
-import MyCardsView from './MyCardsView'
-import CardView from './CardView'
-// import ProfileView   from './ProfileView'
-import SettingsView from './SettingsView'
-import CollectionStatsView from './CollectionStatsView'
-import NotFoundView from './NotFoundView'
 
 // Redirects unathorized users
 // const requireAuth = (nextState, replace) => {
@@ -30,26 +24,14 @@ import NotFoundView from './NotFoundView'
 
 // TODO: show spinner when loading stuff on routes like settings and stats
 
-export const createRoutes = () => ({
-  path: '/',
-  component: App,
-  indexRoute: { component: AllCardsView },
-  onEnter: (nextState, replace) => {
-    if (nextState.location.pathname === '/') replace('/all-cards')
-  },
-  routes: [
     {
       path: 'all-cards',
-      component: AllCardsView,
       showAppButtons: true,
-      routes: [{ path: '/all-cards/:cardUrl', component: CardView }]
     },
     {
       path: 'my-cards',
-      component: MyCardsView,
       showAppButtons: true,
       // onEnter: requireAuth,
-      routes: [{ path: '/my-cards/:cardUrl', component: CardView }]
     },
     {
       path: 'settings',

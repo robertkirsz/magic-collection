@@ -2,22 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
-// --- Helpers ---
-import _get from 'lodash/get'
 // import _find from 'lodash/find'
 import { log, debug, getLocation } from './utils'
-// --- Firebase ---
-import { auth, firebaseGetData } from './firebase'
 // --- Actions ---
 import { getCards } from './store/allCards'
-import { loadMyCards } from './store/myCards'
-import { authRequest, authSuccess, noUser } from './store/user'
-import { loadInitialSettings } from './store/settings'
-import { closeModal } from './store/layout'
+import { listenToAuthChange } from './store/user'
 // --- Components ---
 import { AuthModal, ErrorModal } from './containers'
 import { Header, SearchModule, KeyboardHandler } from './components'
-import { HomeView, AllCardsView, MyCardsView, CardView, SettingsView } from './routes'
+import { HomeView, AllCardsView, MyCardsView, CardView, SettingsView, CollectionStatsView } from './routes'
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
@@ -28,12 +21,7 @@ const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
 
 const mapDispatchToProps = {
   getCards,
-  loadMyCards,
-  authRequest,
-  authSuccess,
-  noUser,
-  loadInitialSettings,
-  closeModal
+  listenToAuthChange
 }
 
 // TODO: redirect user on logout
@@ -41,14 +29,8 @@ const mapDispatchToProps = {
 class App extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
-    modalName: PropTypes.string.isRequired,
-    authRequest: PropTypes.func.isRequired,
     getCards: PropTypes.func.isRequired,
-    loadInitialSettings: PropTypes.func.isRequired,
-    loadMyCards: PropTypes.func.isRequired,
-    noUser: PropTypes.func.isRequired,
-    authSuccess: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired
+    listenToAuthChange: PropTypes.func.isRequired
   }
 
   state = { fetchingData: false }
@@ -56,7 +38,7 @@ class App extends Component {
   componentWillMount () {
     this.setState({ fetchingData: true })
     this.props.getCards()
-    this.listenToAuthChange(this.props)
+    this.props.listenToAuthChange()
   }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
@@ -67,74 +49,6 @@ class App extends Component {
     if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.fetchingData) {
       this.setState({ fetchingData: false })
     }
-  }
-
-  listenToAuthChange = () => {
-    // When user's authentication status changes...
-    auth.onAuthStateChanged(async firebaseUser => {
-      log('Authentication state has changed')
-
-      const authModalOpened = this.props.modalName === 'sign in' || this.props.modalName === 'sign up'
-
-      // Show loading message
-      this.props.authRequest()
-
-      // Get currect time
-      const now = Date.now()
-
-      // If he's logged in...
-      if (firebaseUser) {
-        // Get user's from Firebase auth object
-        const { uid, displayName, email, photoURL } = firebaseUser
-        log('User logged in as', displayName || email)
-
-        // Get user's data from database
-        const usersDataFromDatabase = await firebaseGetData('Users', uid)
-
-        // Create empty user data object
-        let userData = {}
-
-        // If user's data don't exists in database (this is his first time logging in)...
-        if (!usersDataFromDatabase.success) {
-          log('No user data in the database')
-          // Gather user's data from Firebase authentication
-          userData = {
-            uid,
-            displayName,
-            email,
-            photoURL,
-            lastLogin: now,
-            createdOn: now
-          }
-        } else {
-          log("Got user's data from the database")
-          userData = {
-            ...usersDataFromDatabase.data,
-            lastLogin: now
-          }
-
-          // Check if user is an admin
-          const userIsAdmin = await firebaseGetData('Admins', uid)
-          if (userIsAdmin.success) userData.admin = true
-
-          // Apply user's setting if he has any stored
-          _get(usersDataFromDatabase, 'data.settings') &&
-            this.props.loadInitialSettings(usersDataFromDatabase.data.settings)
-        }
-
-        // Load user's collection
-        this.props.loadMyCards()
-        // Save user's data in Firebase and in store
-        this.props.authSuccess(userData)
-        // Close any sign in or sign up modals
-        if (authModalOpened) this.props.closeModal()
-        // If user's not logged in or logged out...
-      } else {
-        this.props.noUser()
-        // Log that into console
-        log('No user')
-      }
-    })
   }
 
   render () {
@@ -149,7 +63,9 @@ class App extends Component {
         <Route path="/my-cards" component={MyCardsView} />
         <Route path="/my-cards/:cardUrl" component={CardView} />
         <Route path="/settings" component={SettingsView} />
-        {onCardsPage && !this.state.fetchingData &&
+        <Route path="/collection-stats" component={CollectionStatsView} />
+        {onCardsPage &&
+          !this.state.fetchingData &&
           <div className="app-buttons">
             <SearchModule pathname={this.props.location.pathname} />
           </div>}
