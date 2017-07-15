@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom'
 // --- Helpers ---
 import _get from 'lodash/get'
 // import _find from 'lodash/find'
-import { log, getLocation } from './utils'
+import { log, debug, getLocation } from './utils'
 // --- Firebase ---
 import { auth, firebaseGetData } from './firebase'
 // --- Actions ---
@@ -17,9 +17,12 @@ import { closeModal } from './store/layout'
 // --- Components ---
 import { AuthModal, ErrorModal } from './containers'
 import { Header, SearchModule, KeyboardHandler } from './components'
-import { HomeView, AllCardsView, MyCardsView, CardView } from './routes'
+import { HomeView, AllCardsView, MyCardsView, CardView, SettingsView } from './routes'
 
-const mapStateToProps = ({ layout }) => ({
+const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
+  allCardsFetching: allCards.fetching,
+  myCardsLoading: myCards.loading,
+  userAuthPending: user.authPending,
   modalName: layout.modal.name
 })
 
@@ -48,9 +51,22 @@ class App extends Component {
     closeModal: PropTypes.func.isRequired
   }
 
+  state = { fetchingData: false }
+
   componentWillMount () {
+    this.setState({ fetchingData: true })
     this.props.getCards()
     this.listenToAuthChange(this.props)
+  }
+
+  componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
+    if (debug && this.state.fetchingData) {
+      log(`allCardsFetching: ${allCardsFetching} myCardsLoading: ${myCardsLoading} userAuthPending ${userAuthPending}`)
+    }
+
+    if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.fetchingData) {
+      this.setState({ fetchingData: false })
+    }
   }
 
   listenToAuthChange = () => {
@@ -132,7 +148,8 @@ class App extends Component {
         <Route path="/all-cards/:cardUrl" component={CardView} />
         <Route path="/my-cards" component={MyCardsView} />
         <Route path="/my-cards/:cardUrl" component={CardView} />
-        {onCardsPage &&
+        <Route path="/settings" component={SettingsView} />
+        {onCardsPage && !this.state.fetchingData &&
           <div className="app-buttons">
             <SearchModule pathname={this.props.location.pathname} />
           </div>}

@@ -2,12 +2,14 @@ import HomeView from './HomeView'
 import AllCardsView from './AllCardsView'
 import MyCardsView from './MyCardsView'
 import CardView from './CardView'
+import SettingsView from './SettingsView'
 
 export {
   HomeView,
   AllCardsView,
   MyCardsView,
-  CardView
+  CardView,
+  SettingsView
 }
 
 /*
