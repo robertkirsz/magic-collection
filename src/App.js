@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+// --- Helpers ---
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
-// import _find from 'lodash/find'
 import { log, debug, getLocation } from './utils'
 // --- Actions ---
 import { getCards } from './store/allCards'
-import { listenToAuthChange } from './store/user'
+import { addAuthListener } from './store/user'
 // --- Components ---
-import { AuthModal, ErrorModal } from './containers'
-import { Header, SearchModule, KeyboardHandler } from './components'
+import { Route } from 'react-router-dom'
+import { Header, SearchModule, KeyboardHandler, AuthModal, ErrorModal } from './components'
 import { HomeView, AllCardsView, MyCardsView, CardView, SettingsView, CollectionStatsView } from './routes'
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
@@ -19,18 +18,13 @@ const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = {
-  getCards,
-  listenToAuthChange
-}
-
-// TODO: redirect user on logout
+const mapDispatchToProps = { getCards, addAuthListener }
 
 class App extends Component {
   static propTypes = {
     location: PropTypes.object.isRequired,
     getCards: PropTypes.func.isRequired,
-    listenToAuthChange: PropTypes.func.isRequired
+    addAuthListener: PropTypes.func.isRequired
   }
 
   state = { fetchingData: false }
@@ -38,7 +32,7 @@ class App extends Component {
   componentWillMount () {
     this.setState({ fetchingData: true })
     this.props.getCards()
-    this.props.listenToAuthChange()
+    this.props.addAuthListener()
   }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {

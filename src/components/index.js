@@ -5,6 +5,8 @@ import CmcFilter        from './CmcFilter'
 import UserBadge        from './UserBadge'
 import LatestSet        from './LatestSet'
 import ManaBadge        from './ManaBadge'
+import AuthModal        from './AuthModal'
+import ErrorModal       from './ErrorModal'
 import LockButton       from './LockButton'
 import ColorFilter      from './ColorFilter'
 import CardDetails      from './CardDetails'
@@ -27,6 +29,8 @@ export {
   UserBadge,
   LatestSet,
   ManaBadge,
+  AuthModal,
+  ErrorModal,
   LockButton,
   ColorFilter,
   CardDetails,

@@ -1,3 +1,5 @@
+// TODO: redirect user on logout
+
 // --- Firebase ---
 import {
   auth,
@@ -81,7 +83,7 @@ export const authError = error => ({ type: 'AUTH_ERROR', error })
 export const signOutSuccess = () => ({ type: 'SIGN_OUT_SUCCESS' })
 export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })
 export const noUser = () => ({ type: 'NO_USER' })
-export const listenToAuthChange = () => {
+export const addAuthListener = () => {
   return async (dispatch, getState) => {
     const modalName = getState().layout.modal.name
     // When user's authentication status changes...
