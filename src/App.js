@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 // --- Helpers ---
 import _get from 'lodash/get'
 // import _find from 'lodash/find'
@@ -17,7 +17,7 @@ import { closeModal } from './store/layout'
 // --- Components ---
 import { AuthModal, ErrorModal } from './containers'
 import { Header, SearchModule, KeyboardHandler } from './components'
-import { HomeView, AllCardsView, MyCardsView } from './routes'
+import { HomeView, AllCardsView, MyCardsView, CardView } from './routes'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name
@@ -37,8 +37,7 @@ const mapDispatchToProps = {
 
 class App extends Component {
   static propTypes = {
-    // params: PropTypes.object.isRequired,
-    // routes: PropTypes.array.isRequired,
+    location: PropTypes.object.isRequired,
     modalName: PropTypes.string.isRequired,
     authRequest: PropTypes.func.isRequired,
     getCards: PropTypes.func.isRequired,
@@ -125,29 +124,30 @@ class App extends Component {
   render () {
     // const showAppButtons = _find(this.props.routes, 'showAppButtons')
     // const topRoute = this.props.routes[this.props.routes.length - 1].path
+    const { pathname } = this.props.location
+    const onCardsListPage = pathname === '/all-cards' || pathname === '/my-cards'
 
     return (
-      <Router>
-        <div className="App">
-          <Header />
-          <Route exact path="/" component={HomeView} />
-          <Route path="/all-cards" component={AllCardsView} />
-          <Route path="/my-cards" component={MyCardsView} />
-          {/* {showAppButtons && */}
-          <div className="app-buttons">
-            {/* <SearchModule /> */}
-          </div>
-          {/* } */}
-          <AuthModal />
-          <ErrorModal />
-          <KeyboardHandler
-            onCardsListPage
-            // onCardsListPage={topRoute === 'all-cards' || topRoute === 'my-cards'}
-            onCardDetailsPage={false}
-            // onCardDetailsPage={this.props.params.cardUrl !== undefined}
-          />
+      <div className="App">
+        <Header />
+        <Route exact path="/" component={HomeView} />
+        <Route path="/all-cards" component={AllCardsView} />
+        <Route path="/all-cards/:cardUrl" component={CardView} />
+        <Route path="/my-cards" component={MyCardsView} />
+        <Route path="/my-cards/:cardUrl" component={CardView} />
+        {/* {showAppButtons && */}
+        <div className="app-buttons">
+          {/* <SearchModule /> */}
         </div>
-      </Router>
+        {/* } */}
+        <AuthModal />
+        <ErrorModal />
+        <KeyboardHandler
+          onCardsListPage={onCardsListPage}
+          onCardDetailsPage={false}
+          // onCardDetailsPage={this.props.params.cardUrl !== undefined}
+        />
+      </div>
     )
   }
 }

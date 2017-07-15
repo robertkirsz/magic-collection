@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
+// --- Helpers ---
 import _slice from 'lodash/slice'
 // --- Actions ---
 import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
@@ -17,18 +18,16 @@ const initialCardsNumber = 20
 
 class CardsSearchList extends Component {
   static propTypes = {
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     cards: PropTypes.array.isRequired,
-    // TODO:
-    // path: PropTypes.string.isRequired,
     setMainCardFocus: PropTypes.func.isRequired,
     resetMainCardFocus: PropTypes.func.isRequired
   }
 
   state = { cardsLimit: initialCardsNumber }
 
-  componentWillUnmount () {
-    this.props.resetMainCardFocus()
-  }
+  componentWillUnmount () { this.props.resetMainCardFocus() }
 
   shouldShowButton = () => this.props.cards.length > this.state.cardsLimit
 
@@ -36,8 +35,7 @@ class CardsSearchList extends Component {
 
   onCardClick = index => card => {
     this.props.setMainCardFocus(index)
-    // TODO:
-    // browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
+    this.props.history.push(`${this.props.match.path}/${card.cardUrl}`)
   }
 
   render = () =>
@@ -54,4 +52,4 @@ class CardsSearchList extends Component {
     </Div>
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardsSearchList)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CardsSearchList))

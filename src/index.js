@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider as StoreProvider } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 // --- Store ---
 import createStore from './store'
 // --- Service worker ---
@@ -14,7 +15,9 @@ import './styles/index.css'
 
 ReactDOM.render(
   <StoreProvider store={createStore()}>
-    <App />
+    <Router>
+      <Route path="/" component={App} />
+    </Router>
   </StoreProvider>,
   document.getElementById('root')
 )

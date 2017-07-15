@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'
 import styled from 'styled-components'
 import _find from 'lodash/find'
+import _startsWith from 'lodash/startsWith'
 import { Card, CardDetails } from '../../components'
 import { Div } from '../../styled'
 import { cardsDatabase } from '../../database'
@@ -15,12 +15,9 @@ const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
-  card: _find(
-    ownProps.routes[1].path === 'my-cards'
-      ? myCards.cards
-      : cardsDatabase,
-    { cardUrl: ownProps.routeParams.cardUrl }
-  ),
+  card: _find(_startsWith(ownProps.match.params.path, '/my-cards') ? myCards.cards : cardsDatabase, {
+    cardUrl: ownProps.match.params.cardUrl
+  }),
   myCards: myCards.cards,
   myCardsLocked: settings.myCardsLocked,
   cardModalAnimation: settings.cardModalAnimation
@@ -28,8 +25,9 @@ const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
 
 class CardView extends Component {
   static propTypes = {
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     card: PropTypes.object,
-    routes: PropTypes.array,
     myCardsLocked: PropTypes.bool,
     cardModalAnimation: PropTypes.bool,
     myCards: PropTypes.array,
@@ -39,7 +37,7 @@ class CardView extends Component {
 
   state = { modalOpened: true }
 
-  isCollectionPage = this.props.routes[1].path === 'my-cards'
+  isCollectionPage = _startsWith(this.props.match.params.path, '/my-cards')
 
   componentDidMount () {
     this.props.setVariantCardFocus(0)
@@ -58,7 +56,7 @@ class CardView extends Component {
   }
 
   goBack = () => {
-    // browserHistory.push(`/${this.props.routes[1].path}`)
+    this.props.history.push(this.isCollectionPage ? '/my-cards' : '/all-cards')
   }
 
   getNumberOfCards = variantCard => {
@@ -92,17 +90,19 @@ class CardView extends Component {
         onHide={this.closeModal} // Close modal on clicking "X" icon or clicking on backdrop
       >
         <Modal.Header closeButton>
-          <Modal.Title>{card.name}</Modal.Title>
+          <Modal.Title>
+            {card.name}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
             <Col xs={4}>
               <div className="card-picture">
-                <Card
-                  mainCard={card}
-                  hoverAnimation
-                />
-                {this.isCollectionPage && <span>&nbsp;(Total: {card.cardsInCollection})</span>}
+                <Card mainCard={card} hoverAnimation />
+                {this.isCollectionPage &&
+                  <span>
+                    &nbsp;(Total: {card.cardsInCollection})
+                  </span>}
               </div>
             </Col>
             <Col xs={8}>
@@ -110,24 +110,22 @@ class CardView extends Component {
             </Col>
           </Row>
           <Div flex align-items="flex-start" className="card-variants-list">
-            {
-              card.variants.map(variantCard => {
-                const numberOfCards = this.getNumberOfCards(variantCard)
+            {card.variants.map(variantCard => {
+              const numberOfCards = this.getNumberOfCards(variantCard)
 
-                return (
-                  <Card
-                    className="small"
-                    key={variantCard.id}
-                    mainCard={card}
-                    variantCard={variantCard}
-                    setIcon
-                    numberOfCards={numberOfCards}
-                    showAdd={!myCardsLocked}
-                    showRemove={!myCardsLocked && numberOfCards > 0}
-                  />
-                )
-              })
-            }
+              return (
+                <Card
+                  className="small"
+                  key={variantCard.id}
+                  mainCard={card}
+                  variantCard={variantCard}
+                  setIcon
+                  numberOfCards={numberOfCards}
+                  showAdd={!myCardsLocked}
+                  showRemove={!myCardsLocked && numberOfCards > 0}
+                />
+              )
+            })}
           </Div>
         </Modal.Body>
       </Container>

@@ -18,7 +18,7 @@ const AllCardsView = ({ filteredCards, allCardsFetching }) =>
     <Transition transitionName="fade" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
       {allCardsFetching
         ? <LoadingScreen key="a" />
-        : <CardsSearchList key="b" path="all-cards" cards={filteredCards || cardsDatabase} />}
+        : <CardsSearchList key="b" cards={filteredCards || cardsDatabase} />}
     </Transition>
   </Div>
 

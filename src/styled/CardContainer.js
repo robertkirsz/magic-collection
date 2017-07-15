@@ -22,6 +22,10 @@ const CardContainer = styled.div`
     max-height: (var(--cardHeight) * 1px);
     margin: 0 5px 1vw 0;
     border-radius: 4%;
+    &.small {
+      width: calc(var(--width) * 0.6);
+      height: calc(var(--width) * var(--cardRatio) * 0.6);
+    }
   }
 `
 

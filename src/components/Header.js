@@ -6,6 +6,7 @@ import { UserBadge, LockButton } from './'
 import { signOut } from '../store/user'
 import { openModal } from '../store/layout'
 import _reduce from 'lodash/reduce'
+import cn from 'classnames'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   user,
@@ -46,7 +47,7 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <span className="navbar-brand">Magic Cards Manager</span>
+      <Link to="/" className={cn('navbar-brand', { 'active': pathname === '/' })}>Magic Collection</Link>
     </div>
   )
 

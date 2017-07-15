@@ -40,7 +40,7 @@ class MyCardsView extends Component {
         >
           {myCardsLoading
             ? <LoadingScreen key="a" />
-            : <CardsSearchList key="b" path="my-cards" cards={filteredCards || cards} />}
+            : <CardsSearchList key="b" cards={filteredCards || cards} />}
         </Transition>
       </div>
     )
