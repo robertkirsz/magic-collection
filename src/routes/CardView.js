@@ -5,10 +5,11 @@ import { Row, Col, Modal } from 'react-bootstrap'
 import styled from 'styled-components'
 import _find from 'lodash/find'
 import _startsWith from 'lodash/startsWith'
-import { Card, CardDetails } from '../../components'
-import { Div } from '../../styled'
-import { cardsDatabase } from '../../database'
-import { resetVariantCardFocus, setVariantCardFocus } from '../../store/keyboard'
+import { getLocation } from '../utils'
+import { Card, CardDetails } from '../components'
+import { Div } from '../styled'
+import { cardsDatabase } from '../database'
+import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
 
 const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 
@@ -26,7 +27,7 @@ const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
 class CardView extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     card: PropTypes.object,
     myCardsLocked: PropTypes.bool,
     cardModalAnimation: PropTypes.bool,
@@ -36,8 +37,6 @@ class CardView extends Component {
   }
 
   state = { modalOpened: true }
-
-  isCollectionPage = _startsWith(this.props.match.params.path, '/my-cards')
 
   componentDidMount () {
     this.props.setVariantCardFocus(0)
@@ -56,7 +55,7 @@ class CardView extends Component {
   }
 
   goBack = () => {
-    this.props.history.push(this.isCollectionPage ? '/my-cards' : '/all-cards')
+    this.props.history.goBack()
   }
 
   getNumberOfCards = variantCard => {
@@ -76,7 +75,7 @@ class CardView extends Component {
   }
 
   render () {
-    const { card, myCardsLocked, cardModalAnimation } = this.props
+    const { card, myCardsLocked, cardModalAnimation, location } = this.props
     const { modalOpened } = this.state
 
     if (!card) return null
@@ -99,8 +98,9 @@ class CardView extends Component {
             <Col xs={4}>
               <div className="card-picture">
                 <Card mainCard={card} hoverAnimation />
-                {this.isCollectionPage &&
+                {getLocation(location).onMyCardsPage &&
                   <span>
+                    {/* TODO: this doesn't work, 'cardsInCollection' in not added to the Card object */}
                     &nbsp;(Total: {card.cardsInCollection})
                   </span>}
               </div>

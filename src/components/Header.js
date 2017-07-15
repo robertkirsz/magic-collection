@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { UserBadge, LockButton } from './'
 import { signOut } from '../store/user'
 import { openModal } from '../store/layout'
 import _reduce from 'lodash/reduce'
-import cn from 'classnames'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   user,
@@ -47,21 +46,21 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <Link to="/" className={cn('navbar-brand', { 'active': pathname === '/' })}>Magic Collection</Link>
+      <Link to="/" className="navbar-brand">
+        Magic Collection
+      </Link>
     </div>
   )
 
   const navigationLinks = (
     <ul className="route-navigation nav navbar-nav">
       <li>
-        <Link to="/all-cards" className={pathname === '/all-cards' ? 'active' : ''}>
-          All cards
-        </Link>
+        <NavLink to="/all-cards">All cards</NavLink>
       </li>
       <li>
-        <Link to="/my-cards" className={pathname === '/my-cards' ? 'active' : ''}>
+        <NavLink to="/my-cards">
           My cards {numberOfTotalCards} ({numberOfUniqueCards})
-        </Link>
+        </NavLink>
       </li>
     </ul>
   )
@@ -87,10 +86,10 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
         <ul className="dropdown-menu">
           {/* <li><Link to="profile">Profile</Link></li> */}
           <li>
-            <Link to="collection-stats">Collection Stats</Link>
+            <Link to="/collection-stats">Collection Stats</Link>
           </li>
           <li>
-            <Link to="settings">Settings</Link>
+            <Link to="/settings">Settings</Link>
           </li>
           <li role="separator" className="divider" />
           <li>

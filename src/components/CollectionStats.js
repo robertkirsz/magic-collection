@@ -30,7 +30,7 @@ class CollectionStats extends Component {
   }
 
   componentDidMount () {
-    this.initCharts()
+    if (this.props.collection.length) this.initCharts()
   }
 
   // Prepares data for colors pie chart
@@ -268,7 +268,9 @@ class CollectionStats extends Component {
         <Flex column>
           <figure>
             <canvas id="cardColorsChart" />
-            {/* <figcaption>Multicolored cards will make total number of above data bigger then the total number of cards</figcaption> */}
+            {/* <figcaption>
+              Multicolored cards will make total number of above data bigger then the total number of cards
+            </figcaption> */}
           </figure>
           <figure>
             <canvas id="cardSetsChart" />
