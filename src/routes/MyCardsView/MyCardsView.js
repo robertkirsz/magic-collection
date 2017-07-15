@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Transition from 'react/lib/ReactCSSTransitionGroup'
+// --- Components ---
 import { CardsSearchList, LoadingScreen } from '../../components'
 
 const mapStateToProps = ({ myCards }) => ({
@@ -33,15 +33,8 @@ class MyCardsView extends Component {
     return (
       <div className="my-cards-view">
         {children}
-        <Transition
-          transitionName="fade"
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
-        >
-          {myCardsLoading
-            ? <LoadingScreen key="a" />
-            : <CardsSearchList key="b" cards={filteredCards || cards} />}
-        </Transition>
+        <LoadingScreen in={myCardsLoading} />
+        {!myCardsLoading && <CardsSearchList cards={filteredCards || cards} />}
       </div>
     )
   }

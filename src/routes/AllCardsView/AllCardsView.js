@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Transition from 'react/lib/ReactCSSTransitionGroup'
 // --- Database ---
 import { cardsDatabase } from '../../database'
 // --- Components ---
@@ -15,11 +14,8 @@ const mapStateToProps = ({ allCards }) => ({
 
 const AllCardsView = ({ filteredCards, allCardsFetching }) =>
   <Div flex column flexVal={1} className="all-cards-view">
-    <Transition transitionName="fade" transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-      {allCardsFetching
-        ? <LoadingScreen key="a" />
-        : <CardsSearchList key="b" cards={filteredCards || cardsDatabase} />}
-    </Transition>
+    <LoadingScreen in={allCardsFetching} />
+    {!allCardsFetching && <CardsSearchList cards={filteredCards || cardsDatabase} />}
   </Div>
 
 AllCardsView.propTypes = {

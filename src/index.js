@@ -11,6 +11,7 @@ import App from './App'
 // --- Layout ---
 import './styles/variables.css'
 import './styles/atv.css'
+import './styles/animations.css'
 import './styles/index.css'
 
 ReactDOM.render(

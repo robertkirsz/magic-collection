@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -93,7 +94,7 @@ class CollectionStats extends Component {
   initCharts = () => {
     const { cardColorsCount: { White, Blue, Black, Red, Green, undefined } } = this.state
 
-    const cardColorsChart = new Chart('cardColorsChart', {
+    new Chart('cardColorsChart', {
       // eslint-disable-line
       type: 'pie',
       data: {
@@ -121,7 +122,7 @@ class CollectionStats extends Component {
       cardSetsChartData.push(count)
     })
 
-    const cardSetsChart = new Chart('cardSetsChart', {
+    new Chart('cardSetsChart', {
       // eslint-disable-line
       type: 'bar',
       data: {
@@ -157,7 +158,7 @@ class CollectionStats extends Component {
       cardTypesChartData.push(count)
     })
 
-    const cardTypesChart = new Chart('cardTypesChart', {
+    new Chart('cardTypesChart', {
       // eslint-disable-line
       type: 'bar',
       data: {
@@ -193,7 +194,7 @@ class CollectionStats extends Component {
       rarityChartData.push(count)
     })
 
-    const rarityChart = new Chart('rarityChart', {
+    new Chart('rarityChart', {
       // eslint-disable-line
       type: 'bar',
       data: {
@@ -229,7 +230,7 @@ class CollectionStats extends Component {
       creatureTypesChartData.push(count)
     })
 
-    const creatureTypesChart = new Chart('creatureTypesChart', {
+    new Chart('creatureTypesChart', {
       // eslint-disable-line
       type: 'bar',
       data: {

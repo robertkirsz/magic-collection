@@ -11,13 +11,13 @@ import NotFoundView from './NotFoundView'
 
 const Routes = () =>
   <Switch>
-    <Route exact path="/" component={HomeView} />
-    <Route path="/all-cards" component={AllCardsView} />
+    <Route path="/" exact component={HomeView} />
+    <Route path="/all-cards" exact component={AllCardsView} />
     <Route path="/all-cards/:cardUrl" component={CardView} />
-    <Route path="/my-cards" component={MyCardsView} />
+    <Route path="/my-cards" exact component={MyCardsView} />
     <Route path="/my-cards/:cardUrl" component={CardView} />
-    <Route path="/settings" component={SettingsView} />
-    <Route path="/collection-stats" component={CollectionStatsView} />
+    <Route path="/settings" exact component={SettingsView} />
+    <Route path="/collection-stats" exact component={CollectionStatsView} />
     <Route component={NotFoundView} />
   </Switch>
 
