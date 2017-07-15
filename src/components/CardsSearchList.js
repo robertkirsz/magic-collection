@@ -39,7 +39,7 @@ class CardsSearchList extends Component {
   }
 
   render = () =>
-    <Div flex wrap justifyContent="flex-start" alignItems="flex-start">
+    <Div flex wrap justifyContent="flex-start" alignItems="flex-start" className="cards-search-list">
       {_slice(this.props.cards, 0, this.state.cardsLimit).map((card, index) =>
         <Card key={card.id} mainCard={card} hoverAnimation detailsPopup onClick={this.onCardClick(index)} />
       )}

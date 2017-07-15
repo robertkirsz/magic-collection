@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom'
 // --- Helpers ---
 import _get from 'lodash/get'
 // import _find from 'lodash/find'
-import { log } from './utils'
+import { log, getLocation } from './utils'
 // --- Firebase ---
 import { auth, firebaseGetData } from './firebase'
 // --- Actions ---
@@ -122,10 +122,7 @@ class App extends Component {
   }
 
   render () {
-    // const showAppButtons = _find(this.props.routes, 'showAppButtons')
-    // const topRoute = this.props.routes[this.props.routes.length - 1].path
-    const { pathname } = this.props.location
-    const onCardsListPage = pathname === '/all-cards' || pathname === '/my-cards'
+    const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
 
     return (
       <div className="App">
@@ -135,18 +132,13 @@ class App extends Component {
         <Route path="/all-cards/:cardUrl" component={CardView} />
         <Route path="/my-cards" component={MyCardsView} />
         <Route path="/my-cards/:cardUrl" component={CardView} />
-        {/* {showAppButtons && */}
-        <div className="app-buttons">
-          {/* <SearchModule /> */}
-        </div>
-        {/* } */}
+        {onCardsPage &&
+          <div className="app-buttons">
+            <SearchModule pathname={this.props.location.pathname} />
+          </div>}
         <AuthModal />
         <ErrorModal />
-        <KeyboardHandler
-          onCardsListPage={onCardsListPage}
-          onCardDetailsPage={false}
-          // onCardDetailsPage={this.props.params.cardUrl !== undefined}
-        />
+        <KeyboardHandler onCardsListPage={onListPage} onCardDetailsPage={onDetailsPage} />
       </div>
     )
   }

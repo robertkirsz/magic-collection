@@ -1,3 +1,7 @@
+// ----------------------------------------------- //
+// Component for searching for and filtering cards //
+// ----------------------------------------------- //
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -18,10 +22,7 @@ import { ColorFilter, CmcFilter, ColorButtons } from './'
 // TODO: make filetr query stay between route changes
 // TODO: show idicator that a query is on (a dot in the search icon)
 
-const mapStateToProps = ({ location, allCards }) => ({
-  pathname: location.pathname,
-  cardSets: allCards.cardSets
-})
+const mapStateToProps = ({ allCards }) => ({ cardSets: allCards.cardSets })
 
 const mapDispatchToProps = { filterAllCards, filterMyCards, resetMainCardFocus }
 
@@ -104,7 +105,7 @@ class SearchModule extends Component {
   }
 
   // Updates card color query
-  handleChangeColor = (color, state) => {
+  handleChangeColor = (color, state) => e => {
     const newState = { ...this.state }
     newState.colors[color] = state
     this.setState(newState)
@@ -218,83 +219,76 @@ class SearchModule extends Component {
   render () {
     const { cardSets } = this.props
 
-    const searchButton = (
-      <button className="search-button fa fa-search" aria-hidden="true" onMouseEnter={this.focusNameInput} />
-    )
-
-    const searchForm = (
-      <div className="search-form">
-        <div className="text-inputs form-group">
-          <input
-            className="form-control"
-            ref="nameInput"
-            placeholder="Name"
-            value={this.state.queryName}
-            onChange={this.handleChange('queryName')}
-            onBlur={() => {
-              this.setState({ showSearchForm: false })
-            }}
-          />
-          <input
-            className="form-control"
-            placeholder="Type"
-            value={this.state.queryTypes}
-            onChange={this.handleChange('queryTypes')}
-          />
-          <input
-            className="form-control"
-            placeholder="Text"
-            value={this.state.queryText}
-            onChange={this.handleChange('queryText')}
-          />
-        </div>
-        <div className="form-group">
-          <select className="form-control" value={this.state.cardSet} onChange={this.handleChange('cardSet')}>
-            <option value="all-sets">All sets</option>
-            {cardSets.map(set =>
-              <option key={set.code} value={set.code}>
-                {set.name}
-              </option>
-            )}
-          </select>
-        </div>
-        <div className="color-filter-group form-group">
-          <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
-          <ColorButtons
-            colors={this.state.colors}
-            toggleAll={() => {
-              this.toggleColors(true)
-            }}
-            toggleNone={() => {
-              this.toggleColors(false)
-            }}
-            monocoloredOnly={this.state.monocoloredOnly}
-            multicoloredOnly={this.state.multicoloredOnly}
-            handleChangeMonocolored={this.handleChangeMonocolored}
-            handleChangeMulticolored={this.handleChangeMulticolored}
-          />
-        </div>
-        <CmcFilter
-          cmcValue={this.state.cmcValue}
-          cmcType={this.state.cmcType}
-          changeCmcValue={this.handleChange('cmcValue')}
-          changeCmcType={this.handleChange('cmcType')}
-        />
-        <div>
-          <button className="btn" onClick={this.resetState}>
-            Reset
-          </button>
-        </div>
-      </div>
-    )
-
     return (
       <Container
         className={cn('search-module', { 'form-visible': this.state.showSearchForm })}
         onMouseLeave={this.searchModuleMouseLeave}
       >
-        {searchButton}
-        {searchForm}
+        <button className="search-button fa fa-search" aria-hidden="true" onMouseEnter={this.focusNameInput} />
+
+        <div className="search-form">
+          <div className="text-inputs form-group">
+            <input
+              className="form-control"
+              ref="nameInput"
+              placeholder="Name"
+              value={this.state.queryName}
+              onChange={this.handleChange('queryName')}
+              onBlur={() => {
+                this.setState({ showSearchForm: false })
+              }}
+            />
+            <input
+              className="form-control"
+              placeholder="Type"
+              value={this.state.queryTypes}
+              onChange={this.handleChange('queryTypes')}
+            />
+            <input
+              className="form-control"
+              placeholder="Text"
+              value={this.state.queryText}
+              onChange={this.handleChange('queryText')}
+            />
+          </div>
+          <div className="form-group">
+            <select className="form-control" value={this.state.cardSet} onChange={this.handleChange('cardSet')}>
+              <option value="all-sets">All sets</option>
+              {cardSets.map(set =>
+                <option key={set.code} value={set.code}>
+                  {set.name}
+                </option>
+              )}
+            </select>
+          </div>
+          <div className="color-filter-group form-group">
+            <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
+            <ColorButtons
+              colors={this.state.colors}
+              toggleAll={() => {
+                this.toggleColors(true)
+              }}
+              toggleNone={() => {
+                this.toggleColors(false)
+              }}
+              monocoloredOnly={this.state.monocoloredOnly}
+              multicoloredOnly={this.state.multicoloredOnly}
+              handleChangeMonocolored={this.handleChangeMonocolored}
+              handleChangeMulticolored={this.handleChangeMulticolored}
+            />
+          </div>
+          <CmcFilter
+            cmcValue={this.state.cmcValue}
+            cmcType={this.state.cmcType}
+            changeCmcValue={this.handleChange('cmcValue')}
+            changeCmcType={this.handleChange('cmcType')}
+          />
+          <div>
+            <button className="btn" onClick={this.resetState}>
+              Reset
+            </button>
+          </div>
+        </div>
       </Container>
     )
   }
@@ -311,10 +305,10 @@ const Container = styled.div`
   width: 40px;
   height: 40px;
   padding: var(--horizontalPadding);
-  background-color: rgba(white, 0.95);
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 5px rgba(black, 0.3);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
   pointer-events: auto;
   .search-form {
     display: flex;
@@ -331,7 +325,9 @@ const Container = styled.div`
       display: flex;
       input {
         flex: 1;
-        &:not(:last-child) { margin-right: 5px; }
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
       }
     }
     .color-filter-group {
@@ -340,6 +336,7 @@ const Container = styled.div`
       align-items: center;
     }
     .color-filter {
+      display: flex;
       .icon {
         display: flex;
         flex-direction: column;
@@ -348,7 +345,9 @@ const Container = styled.div`
         cursor: pointer;
         font-size: 1.5em;
         transition: all 0.2s;
-        &:not(:last-child) { margin-right: 5px; }
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
         &.unchecked {
           background-color: transparent;
           opacity: 0.4;
@@ -356,29 +355,45 @@ const Container = styled.div`
       }
     }
     .all-none-checkboxes {
-      label:not(:last-child) { margin-right: 5px; }
-      input { margin-right: 5px; }
+      label:not(:last-child) {
+        margin-right: 5px;
+      }
+      input {
+        margin-right: 5px;
+      }
     }
     .cmc-filter {
-      .input-group { width: 290px; }
+      .input-group {
+        width: 290px;
+      }
     }
     .mono-multi-checkboxes {
-      label:not(:last-child) { margin-right: 5px; }
-      input { margin-right: 5px; }
+      label:not(:last-child) {
+        margin-right: 5px;
+      }
+      input {
+        margin-right: 5px;
+      }
     }
   }
   .search-button {
     position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: none;
     border: none;
     font-size: 1.5em;
     opacity: 1;
     transition: all 0.3s ease;
   }
-  &.form-visible, &:hover {
-    width: 415px;height: 254px;
+  &.form-visible,
+  &:hover {
+    width: 415px;
+    height: 254px;
     padding: 0;
     border-radius: 10px;
     .search-button {

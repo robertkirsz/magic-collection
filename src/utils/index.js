@@ -5,6 +5,14 @@ const debug = process.env.NODE_ENV === 'development'
 export const log = msg =>
   debug ? console.log('%c' + msg, 'padding: 2px 6px; border-radius: 2px; background: #40A8FD; color: white;') : false
 
+export const getLocation = location => {
+  const pathArray = location.pathname.split('/')
+  const onCardsPage = pathArray[1] === 'all-cards' || pathArray[1] === 'my-cards'
+  const onListPage = onCardsPage && pathArray.length === 2
+  const onDetailsPage = onCardsPage && pathArray.length === 3
+  return { onCardsPage, onListPage, onDetailsPage }
+}
+
 // Checks if one node is contained in another
 export const isContainedIn = (target, container) => {
   let node = target
