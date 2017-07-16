@@ -26,7 +26,7 @@ export const loadMyCards = () => {
         const collection = response.data
 
         retrievedCollection = _map(collection, (value, key) => {
-          const mainCard = new Card(_find(cardsDatabase, { id: key }))
+          const mainCard = new Card(_find(cardsDatabase, { name: key }))
           mainCard.cardsInCollection = value.cardsInCollection
           mainCard.variants = _map(value.variants, (value, key) => {
             const variant = new Card(_find(mainCard.variants, { id: key }))

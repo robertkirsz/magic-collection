@@ -145,10 +145,10 @@ export const saveCollection = collection => {
 export const updateCardInDatabase = _debounce(card => {
   // Update card it total numer is more then 0
   if (card.cardsInCollection > 0) {
-    return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.id}`, card.formatForFirebase())
+    return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.name}`, card.formatForFirebase())
   }
   // In other case, remove the card completelly
-  return firebaseSetData('Collections', `${auth.currentUser.uid}/${card.id}`, null)
+  return firebaseSetData('Collections', `${auth.currentUser.uid}/${card.name}`, null)
 }, 1000)
 
 export const loadCollection = () => {
