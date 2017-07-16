@@ -8,7 +8,7 @@ import registerServiceWorker from './registerServiceWorker'
 import { Provider as StoreProvider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
-// --- Layout ---
+// --- Styles ---
 import './styles/variables.css'
 import './styles/atv.css'
 import './styles/animations.css'

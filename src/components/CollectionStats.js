@@ -2,100 +2,63 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import _ from 'lodash'
-import { CollectionStats as StyledCollectionStats, Flex } from '../styled'
+import styled from 'styled-components'
 import Chart from 'chart.js'
+// --- Helpers ---
+import _flatMap from 'lodash/flatMap'
+import _times from 'lodash/times'
+import _countBy from 'lodash/countBy'
+import _flatMapDeep from 'lodash/flatMapDeep'
+import _map from 'lodash/map'
+import _forEach from 'lodash/forEach'
+import _find from 'lodash/find'
+import _filter from 'lodash/filter'
+import _includes from 'lodash/includes'
+// --- Components ---
+import { Div } from '../styled'
+import { LoadingScreen } from '../components'
 
 const mapStateToProps = ({ myCards, allCards }) => ({
   collection: myCards.cards,
-  cardSets: allCards.cardSets
+  emptyCollection: myCards.cards.length === 0,
+  cardSets: allCards.cardSets,
+  loadingCollection: myCards.loading,
+  collectionLoaded: myCards.loaded
 })
 
 class CollectionStats extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
+    emptyCollection: PropTypes.bool.isRequired,
+    loadingCollection: PropTypes.bool.isRequired,
+    collectionLoaded: PropTypes.bool.isRequired,
     cardSets: PropTypes.array.isRequired
   }
 
-  constructor (props) {
-    super(props)
+  state = { chartsInitialized: false }
 
-    this.state = {
-      cardColorsCount: this.createColorsChartData(),
-      setNamesCount: this.createSetsChartData(),
-      cardTypesCount: this.createTypesChartData(),
-      rarityCount: this.createRarityChartData(),
-      creatureTypesCount: this.createCreatureTypesChartData()
+  componentDidMount () {
+    if (!this.state.chartsInitialized && !this.props.emptyCollection) {
+      this.createCharts(this.props.collection, this.props.cardSets)
     }
   }
 
-  componentDidMount () {
-    if (this.props.collection.length) this.initCharts()
+  componentWillReceiveProps (nextProps) {
+    if (!this.props.collectionLoaded && nextProps.collectionLoaded) {
+      if (!this.state.chartsInitialized && !nextProps.emptyCollection) {
+        this.createCharts(nextProps.collection, nextProps.cardSets)
+      }
+    }
   }
 
-  // Prepares data for colors pie chart
-  createColorsChartData = () => {
+  // 1. Colors pie chart
+  createColorsChartData = collection => {
     // Create an array of colors for each individual card from the collection
-    const colorsOfEachCard = _.flatMap(this.props.collection, card =>
-      _.times(card.cardsInCollection, () => card.colors)
-    )
+    const colorsOfEachCard = _flatMap(collection, card => _times(card.cardsInCollection, () => card.colors))
     // Put them in an object and count by color
-    return _.countBy(colorsOfEachCard)
-  }
-
-  // Prepares data for sets bar chart
-  createSetsChartData = () => {
-    // Create an array of sets for each individual card from the collection
-    const setCodesOfEachCard = _.flatMapDeep(this.props.collection, card =>
-      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.setCode))
-    )
-    // Put them in an object and count by color
-    const setCodesCount = _.countBy(setCodesOfEachCard)
-    // Convert set codes to set names
-    const setNamesCount = {}
-    _.forEach(setCodesCount, (count, code) => {
-      const setName = _.find(this.props.cardSets, { code }).name
-      setNamesCount[setName] = count
-    })
-    return setNamesCount
-  }
-
-  // Prepares data for types bar chart
-  createTypesChartData = () => {
-    // Create an array of types for each individual card from the collection
-    const typesOfEachCard = _.flatMapDeep(this.props.collection, card =>
-      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.types))
-    )
-    // Put them in an object and count by type
-    return _.countBy(typesOfEachCard)
-  }
-
-  // Prepares data for rarity bar chart
-  createRarityChartData = () => {
-    // Create an array of types for each individual card from the collection
-    const rarityOfEachCard = _.flatMapDeep(this.props.collection, card =>
-      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.rarity))
-    )
-    // Put them in an object and count by type
-    return _.countBy(rarityOfEachCard)
-  }
-
-  // Prepares data for subtypes bar chart
-  createCreatureTypesChartData = () => {
-    // Create an array of subtypes for each individual card from the collection
-    const creatures = _.filter(this.props.collection, card => _.includes(card.types, 'Creature'))
-    const creatureTypes = _.flatMapDeep(creatures, card =>
-      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.subtypes))
-    )
-    // Put them in an object and count by subtype
-    return _.countBy(creatureTypes)
-  }
-
-  initCharts = () => {
-    const { cardColorsCount: { White, Blue, Black, Red, Green, undefined } } = this.state
-
+    const { White, Blue, Black, Red, Green, undefined } = _countBy(colorsOfEachCard)
+    // Render a chart
     new Chart('cardColorsChart', {
-      // eslint-disable-line
       type: 'pie',
       data: {
         labels: ['White', 'Blue', 'Black', 'Red', 'Green', 'Colorless'],
@@ -113,17 +76,31 @@ class CollectionStats extends Component {
         }
       }
     })
+  }
 
-    const { setNamesCount } = this.state
+  // 2. Sets bar chart
+  createSetsChartData = (collection, cardSets) => {
+    // Create an array of sets for each individual card from the collection
+    const setCodesOfEachCard = _flatMapDeep(collection, card =>
+      _map(card.variants, card => _times(card.cardsInCollection, () => card.setCode))
+    )
+    // Put them in an object and count by color
+    const setCodesCount = _countBy(setCodesOfEachCard)
+    // Convert set codes to set names
+    const setNamesCount = {}
+    _forEach(setCodesCount, (count, code) => {
+      const setName = _find(cardSets, { code }).name
+      setNamesCount[setName] = count
+    })
+    // Prepare data and render a chart
     const cardSetsChartLabels = []
     const cardSetsChartData = []
-    _.forEach(setNamesCount, (count, name) => {
+    _forEach(setNamesCount, (count, name) => {
       cardSetsChartLabels.push(name)
       cardSetsChartData.push(count)
     })
 
     new Chart('cardSetsChart', {
-      // eslint-disable-line
       type: 'bar',
       data: {
         labels: cardSetsChartLabels,
@@ -149,17 +126,25 @@ class CollectionStats extends Component {
         }
       }
     })
+  }
 
-    const { cardTypesCount } = this.state
+  // 3. Types bar chart
+  createTypesChartData = collection => {
+    // Create an array of types for each individual card from the collection
+    const typesOfEachCard = _flatMapDeep(collection, card =>
+      _map(card.variants, card => _times(card.cardsInCollection, () => card.types))
+    )
+    // Put them in an object and count by type
+    const cardTypesCount = _countBy(typesOfEachCard)
+    // Prepare data and render a chart
     const cardTypesChartLabels = []
     const cardTypesChartData = []
-    _.forEach(cardTypesCount, (count, type) => {
+    _forEach(cardTypesCount, (count, type) => {
       cardTypesChartLabels.push(type)
       cardTypesChartData.push(count)
     })
 
     new Chart('cardTypesChart', {
-      // eslint-disable-line
       type: 'bar',
       data: {
         labels: cardTypesChartLabels,
@@ -185,17 +170,25 @@ class CollectionStats extends Component {
         }
       }
     })
+  }
 
-    const { rarityCount } = this.state
+  // 4. Rarity bar chart
+  createRarityChartData = collection => {
+    // Create an array of types for each individual card from the collection
+    const rarityOfEachCard = _flatMapDeep(collection, card =>
+      _map(card.variants, card => _times(card.cardsInCollection, () => card.rarity))
+    )
+    // Put them in an object and count by type
+    const rarityCount = _countBy(rarityOfEachCard)
+    // Prepare data and render a chart
     const rarityChartLabels = []
     const rarityChartData = []
-    _.forEach(rarityCount, (count, type) => {
+    _forEach(rarityCount, (count, type) => {
       rarityChartLabels.push(type)
       rarityChartData.push(count)
     })
 
     new Chart('rarityChart', {
-      // eslint-disable-line
       type: 'bar',
       data: {
         labels: rarityChartLabels,
@@ -221,17 +214,26 @@ class CollectionStats extends Component {
         }
       }
     })
+  }
 
-    const { creatureTypesCount } = this.state
+  // 5. Subtypes bar chart
+  createCreatureTypesChartData = collection => {
+    // Create an array of subtypes for each individual card from the collection
+    const creatures = _filter(collection, card => _includes(card.types, 'Creature'))
+    const creatureTypes = _flatMapDeep(creatures, card =>
+      _map(card.variants, card => _times(card.cardsInCollection, () => card.subtypes))
+    )
+    // Put them in an object and count by subtype
+    const creatureTypesCount = _countBy(creatureTypes)
+    // Prepare data and render a chart
     const creatureTypesChartLabels = []
     const creatureTypesChartData = []
-    _.forEach(creatureTypesCount, (count, type) => {
+    _forEach(creatureTypesCount, (count, type) => {
       creatureTypesChartLabels.push(type)
       creatureTypesChartData.push(count)
     })
 
     new Chart('creatureTypesChart', {
-      // eslint-disable-line
       type: 'bar',
       data: {
         labels: creatureTypesChartLabels,
@@ -259,13 +261,28 @@ class CollectionStats extends Component {
     })
   }
 
-  render () {
-    if (!this.props.collection.length) return <StyledCollectionStats>No cards in collection</StyledCollectionStats>
+  // Calls all functions above
+  createCharts = (collection, cardSets) => {
+    this.createColorsChartData(collection)
+    this.createSetsChartData(collection, cardSets)
+    this.createTypesChartData(collection)
+    this.createRarityChartData(collection)
+    this.createCreatureTypesChartData(collection)
+    this.setState({ chartsInitialized: true })
+  }
 
+  render () {
     return (
-      <StyledCollectionStats>
+      <Container>
+        <LoadingScreen in={this.props.loadingCollection} />
         <h3>Collection Stats</h3>
-        <Flex column>
+
+        {this.props.emptyCollection &&
+          <Div flex justifyContent="center" alignItems="center" flexVal={1}>
+            <h1>No cards in collection</h1>
+          </Div>}
+
+        <Div flex column>
           <figure>
             <canvas id="cardColorsChart" />
             {/* <figcaption>
@@ -284,10 +301,26 @@ class CollectionStats extends Component {
           <figure>
             <canvas id="creatureTypesChart" />
           </figure>
-        </Flex>
-      </StyledCollectionStats>
+        </Div>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps)(CollectionStats)
+
+const Container = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  h2 {
+    margin: 8px 0;
+  }
+  figure {
+    display: inline-block;
+    border: 1px solid;
+    padding: 8px;
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+`

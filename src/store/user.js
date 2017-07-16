@@ -85,11 +85,11 @@ export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })
 export const noUser = () => ({ type: 'NO_USER' })
 export const addAuthListener = () => {
   return async (dispatch, getState) => {
-    const modalName = getState().layout.modal.name
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
       log('Authentication state has changed')
 
+      const modalName = getState().layout.modal.name
       const authModalOpened = modalName === 'sign in' || modalName === 'sign up'
 
       // Show loading message

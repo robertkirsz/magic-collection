@@ -8,16 +8,11 @@ import { Card } from '../classes'
 import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
-
-const debug = false
+import { debug } from '../utils'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const addCard = (card, variant) => ({ type: 'ADD_CARD', card, variant })
-export const removeCard = (card, variant) => ({ type: 'REMOVE_CARD', card, variant })
-export const clearMyCards = () => ({ type: 'CLEAR_MY_CARDS' })
-export const filterMyCards = filterFunction => ({ type: 'FILTER_MY_CARDS', filterFunction })
 export const loadMyCards = () => {
   return async (dispatch, getState) => {
     if (!cardsDatabase.length) return
@@ -46,12 +41,12 @@ export const loadMyCards = () => {
     dispatch(loadMyCardsSuccess(retrievedCollection))
   }
 }
-export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST', loading: true })
-export const loadMyCardsSuccess = cards => ({
-  type: 'LOAD_MY_CARDS_SUCCESS',
-  cards,
-  loading: false
-})
+export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST' })
+export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards })
+export const addCard = (card, variant) => ({ type: 'ADD_CARD', card, variant })
+export const removeCard = (card, variant) => ({ type: 'REMOVE_CARD', card, variant })
+export const clearMyCards = () => ({ type: 'CLEAR_MY_CARDS' })
+export const filterMyCards = filterFunction => ({ type: 'FILTER_MY_CARDS', filterFunction })
 export const noCards = () => ({ type: 'NO_CARDS' })
 
 // ------------------------------------
@@ -78,8 +73,9 @@ const ACTION_HANDLERS = {
       const variantToUpdate = _find(cardCopy.variants, { id: variantCopy.id })
       // If it does...
       if (variantToUpdate) {
-        if (debug)
+        if (debug) {
           console.log('%c   existing card - existing variant - incrementing', 'color: #A1C659;')
+        }
         // Increment its count
         variantToUpdate.cardsInCollection++
         // In other case...
@@ -206,11 +202,9 @@ const ACTION_HANDLERS = {
   },
   CLEAR_MY_CARDS: () => initialState,
   LOAD_MY_CARDS_REQUEST: state => ({ ...state, loading: true }),
-  LOAD_MY_CARDS_SUCCESS: (state, { cards }) => ({ ...state, loading: false, cards }),
-  FILTER_MY_CARDS: (state, { filterFunction }) => ({
-    ...state,
-    filteredCards: state.cards.filter(filterFunction)
-  }),
+  LOAD_MY_CARDS_SUCCESS: (state, { cards }) => ({ ...state, cards, loading: false, loaded: true }),
+  FILTER_MY_CARDS: (state, { filterFunction }) => ({ ...state, filteredCards: state.cards.filter(filterFunction) }),
+  // TODO: check why these action handlers are used here
   SIGN_OUT_SUCCESS: () => ({ ...initialState, loading: false }),
   NO_USER: () => ({ ...initialState, loading: false })
 }
@@ -221,6 +215,7 @@ const ACTION_HANDLERS = {
 const initialState = {
   cards: [],
   loading: true,
+  loaded: false,
   filteredCards: null
 }
 

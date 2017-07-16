@@ -117,7 +117,8 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  fetching: true,
+  fetching: true, // TODO: change to 'loading'
+  // TODO: add 'loaded'
   error: null,
   cardsNumber: 0,
   latestSet: {},
