@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
+// --- Components ---
 import { CardDetails } from './'
 
 const mapStateToProps = ({ settings }) => ({
@@ -13,10 +15,7 @@ class CardDetailsPopup extends Component {
     cardData: PropTypes.object,
     show: PropTypes.bool,
     coordinates: PropTypes.object,
-    cardDetailsPopupDelay: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number
-    ])
+    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
   }
 
   state = {
@@ -43,7 +42,7 @@ class CardDetailsPopup extends Component {
           // Hide it
           this.hideDetailsPopup()
         }
-      // If popup is hidden
+        // If popup is hidden
       } else if (nextProps.show) {
         // Show it
         this.timeout = setTimeout(() => {
@@ -91,15 +90,23 @@ class CardDetailsPopup extends Component {
     if (cardDetailsPopupDelay === false || !popupVisible) return null
 
     return (
-      <div
-        className="card__details-popup"
-        style={popupPosition}
-        ref="detailsPopup"
-      >
+      <Container style={popupPosition} ref="detailsPopup">
         <CardDetails card={cardData} />
-      </div>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps)(CardDetailsPopup)
+
+const Container = styled.div`
+  position: absolute;
+  width: 250px;
+  padding: 5px 8px;
+  background: white;
+  border-radius: 5px;
+  font-size: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 1000;
+`

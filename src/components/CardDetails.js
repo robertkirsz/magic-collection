@@ -29,15 +29,11 @@ CardDetails.propTypes = propTypes
 export default CardDetails
 
 const Container = styled.div`
-  > .text {
-    white-space: pre-line;
-  }
+  > .text { white-space: pre-line; }
   > ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    > li:not(:first-of-type) {
-      margin-top: 5px;
-    }
+    > li:not(:first-of-type) { margin-top: 5px; }
   }
 `

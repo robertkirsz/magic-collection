@@ -163,18 +163,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(Card)
 const Container = CardContainer.extend`
   .card {
     &:focus {
-      .card-hover-effect-layers {
-        transform: scale(1.05);
-      }
+      .card-hover-effect-layers { transform: scale(1.05); }
     }
 
     &__content {
       height: 100%;
       z-index: 2;
       &:hover {
-        .card__add-remove-buttons {
-          opacity: 1;
-        }
+        .card__add-remove-buttons { opacity: 1; }
       }
     }
 
@@ -219,15 +215,9 @@ const Container = CardContainer.extend`
         border: none;
         outline: none;
         transition: transform 0.1s;
-        &:active {
-          transform: scale(0.9);
-        }
-        &.remove-button {
-          margin-right: auto;
-        }
-        &.add-button {
-          margin-left: auto;
-        }
+        &:active { transform: scale(0.9); }
+        &.remove-button { margin-right: auto; }
+        &.add-button { margin-left: auto; }
       }
       .fa {
         font-size: 2em;
@@ -250,24 +240,8 @@ const Container = CardContainer.extend`
       font-weight: bold;
       animation: fly 1s ease-out 1 forwards;
       pointer-events: none;
-      &.card__count-animation--add {
-        color: #8cf54c;
-      }
-      &.card__count-animation--remove {
-        color: #f14621;
-      }
-    }
-
-    &__details-popup {
-      position: absolute;
-      width: 250px;
-      padding: 5px 8px;
-      background: white;
-      border-radius: 5px;
-      font-size: 12px;
-      box-shadow: 0 3px 10px rgba(black, 0.3);
-      pointer-events: none;
-      z-index: 1000;
+      &.card__count-animation--add { color: #8cf54c; }
+      &.card__count-animation--remove { color: #f14621; }
     }
   }
 `
