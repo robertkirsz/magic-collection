@@ -1,3 +1,5 @@
+// TODO: variants list should only show owned cards
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'

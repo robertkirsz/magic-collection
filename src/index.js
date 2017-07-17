@@ -10,7 +10,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
 // --- Styles ---
 import './styles/variables.css'
-import './styles/atv.css'
 import './styles/animations.css'
 import './styles/index.css'
 

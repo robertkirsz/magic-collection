@@ -31,7 +31,7 @@ export const getCards = () => {
       .then(response => dispatch(responseSuccess(response)))
       .catch(error => {
         dispatch(responseError(error))
-        dispatch(openModal('error', { message: error }))
+        dispatch(openModal('error', { message: typeof error === 'string' ? error : error.message }))
       })
   }
 }
