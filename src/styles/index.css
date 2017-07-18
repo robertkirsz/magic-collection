@@ -13,41 +13,14 @@ body {
   background: white;
 }
 
-*, *::before, *::after {
+*,
+*::before, *::after {
   box-sizing: inherit;
   outline: none;
 }
 
 a, button, .clickable { cursor: pointer; }
 
-.App {
-  display: flex;
-  flex-direction: column;
-  padding: var(--navbarHeight) var(--horizontalPadding) 0;
-}
-
 .no-scroll { overflow-y: hidden; }
 
 .ms-cost { font-size: 1em; }
-
-.alert { margin-top: 1vh; }
-
-.app-buttons {
-  display: flex;
-  justify-content: space-around;
-  align-content: flex-end;
-  flex: none;
-  position: fixed;
-  right: 0; bottom: 20px; left: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
-#MainHeader { pointer-events: auto; }
-#MainHeader .route-navigation a.active { text-decoration: underline; }
-#MainHeader .dropdown-toggle {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.error-modal { background: rgba(200, 0, 0, 0.5); }

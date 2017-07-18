@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 // --- Helpers ---
 import { connect } from 'react-redux'
 import { log, debug, getLocation } from './utils'
@@ -48,20 +49,38 @@ class App extends Component {
     const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
 
     return (
-      <div className="App">
+      <Container>
         <Header />
         <Routes />
-        {onCardsPage &&
-          !this.state.fetchingData &&
-          <div className="app-buttons">
+        {onCardsPage && !this.state.fetchingData &&
+          <AppButtons>
             <SearchModule pathname={this.props.location.pathname} />
-          </div>}
+          </AppButtons>}
         <AuthModal />
         <ErrorModal />
         <KeyboardHandler onCardsListPage={onListPage} onCardDetailsPage={onDetailsPage} />
-      </div>
+      </Container>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: var(--navbarHeight) var(--horizontalPadding) 0;
+`
+
+const AppButtons = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-content: flex-end;
+  flex: none;
+  position: fixed;
+  right: 0;
+  bottom: 20px;
+  left: 0;
+  z-index: 5;
+  pointer-events: none;
+`

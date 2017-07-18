@@ -2,10 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink, Link } from 'react-router-dom'
-import { UserBadge, LockButton } from './'
+import styled from 'styled-components'
+// --- Helpers ---
+import _reduce from 'lodash/reduce'
+// --- Actions ---
 import { signOut } from '../store/user'
 import { openModal } from '../store/layout'
-import _reduce from 'lodash/reduce'
+// --- Components ---
+import { UserBadge, LockButton } from './'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   user,
@@ -84,7 +88,6 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
           <UserBadge />
         </a>
         <ul className="dropdown-menu">
-          {/* <li><Link to="profile">Profile</Link></li> */}
           <li>
             <Link to="/collection-stats">Collection Stats</Link>
           </li>
@@ -101,7 +104,7 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
   )
 
   return (
-    <nav id="MainHeader" className="navbar navbar-default navbar-fixed-top">
+    <Container className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
         {brandAndToggle}
         {!user.authPending &&
@@ -111,10 +114,20 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
             {signedIn ? userDropdown : authenticationLinks}
           </div>}
       </div>
-    </nav>
+    </Container>
   )
 }
 
 Header.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
+
+const Container = styled.nav`
+  pointer-events: auto;
+
+  .route-navigation a.active { text-decoration: underline; }
+  .dropdown-toggle {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+`

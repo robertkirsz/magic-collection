@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
+import styled from 'styled-components'
+// --- Actions ---
 import { closeModal } from '../store/layout'
+// -- Components ---
+import { Modal } from 'react-bootstrap'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name,
@@ -12,7 +15,7 @@ const mapStateToProps = ({ layout }) => ({
 const mapDispatchToProps = { closeModal }
 
 const ErrorModal = ({ modalName, errorMessage, closeModal }) => (
-  <Modal
+  <StyledModal
     className="error-modal"
     show={modalName === 'error'}
     onHide={closeModal}
@@ -21,7 +24,7 @@ const ErrorModal = ({ modalName, errorMessage, closeModal }) => (
     <Modal.Body>
       {errorMessage}
     </Modal.Body>
-  </Modal>
+  </StyledModal>
 )
 
 ErrorModal.propTypes = {
@@ -31,3 +34,7 @@ ErrorModal.propTypes = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ErrorModal)
+
+const StyledModal = styled(Modal)`
+  background: rgba(200, 0, 0, 0.5);
+`
