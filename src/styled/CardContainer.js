@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 
+// TODO: some of that stuff is overly complicated, need to simplify it
+
 const CardContainer = styled.div`
   --cardWidth: 223;
   --cardHeight: 311;
   --cardRatio: calc(var(--cardHeight) / var(--cardWidth));
   --cardsInRow: 2;
   --mainMargin: 30px;
-  --width: calc((100vw - var(--mainMargin)) / var(--cardsInRow) - 5px);
+  --width: calc((100vw - var(--mainMargin)) / var(--cardsInRow) - 6px);
   --height: calc(var(--width) * var(--cardRatio));
 
   @media (min-width: 544px) { --cardsInRow: 4; }

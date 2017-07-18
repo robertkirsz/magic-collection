@@ -168,7 +168,7 @@ const ACTION_HANDLERS = {
       authPending: false,
       signedIn: true
     }
-
+    // TODO: deal with admins - I don't know if I need that option now
     if (user.admin) newState.admin = true
 
     return newState

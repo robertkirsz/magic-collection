@@ -49,7 +49,7 @@ class App extends Component {
     const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
 
     return (
-      <Container>
+      <StyledApp>
         <Header />
         <Routes />
         {onCardsPage && !this.state.fetchingData &&
@@ -59,28 +59,27 @@ class App extends Component {
         <AuthModal />
         <ErrorModal />
         <KeyboardHandler onCardsListPage={onListPage} onCardDetailsPage={onDetailsPage} />
-      </Container>
+      </StyledApp>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
-const Container = styled.div`
+const StyledApp = styled.main`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: var(--navbarHeight) var(--horizontalPadding) 0;
+  padding-top: var(--navbarHeight);
 `
 
 const AppButtons = styled.div`
+  flex: none;
   display: flex;
   justify-content: space-around;
   align-content: flex-end;
-  flex: none;
   position: fixed;
-  right: 0;
-  bottom: 20px;
-  left: 0;
+  right: 0; bottom: 20px; left: 0;
   z-index: 5;
   pointer-events: none;
 `

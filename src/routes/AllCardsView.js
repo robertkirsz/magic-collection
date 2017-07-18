@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
+import styled from 'styled-components'
 // --- Database ---
 import { cardsDatabase } from '../database'
 // --- Components ---
@@ -20,12 +21,18 @@ const propTypes = {
 }
 
 const AllCardsView = ({ match, filteredCards, allCardsFetching }) =>
-  <div>
+  <StyledAllCardsView>
     <Route path={`${match.url}/:cardUrl`} component={CardView} />
     <LoadingScreen in={allCardsFetching} />
     {!allCardsFetching && <CardsSearchList cards={filteredCards || cardsDatabase} />}
-  </div>
+  </StyledAllCardsView>
 
 AllCardsView.propTypes = propTypes
 
 export default connect(mapStateToProps)(AllCardsView)
+
+const StyledAllCardsView = styled.section`
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+`

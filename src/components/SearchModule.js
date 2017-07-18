@@ -302,9 +302,8 @@ const Container = styled.div`
   justify-content: center;
   flex: none;
   position: relative;
-  width: 40px;
-  height: 40px;
-  padding: var(--horizontalPadding);
+  width: 40px; height: 40px;
+  padding: 8px;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
   transition: all 0.3s ease;
@@ -315,7 +314,7 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     position: absolute;
-    left: var(--horizontalPadding);
+    left: 8px;
     width: 385px;
     transform: scale(0);
     transform-origin: left center;
