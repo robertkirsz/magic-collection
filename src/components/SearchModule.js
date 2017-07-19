@@ -146,6 +146,8 @@ class SearchModule extends Component {
   }
 
   // Returns filtering function that will be used by reducers to filter cards
+  // TODO: test how efficient this filtering is. Maybe it fould be faster when
+  // filtering first by set, then by color etc.
   search = state => {
     const queryName = state.queryName.trim().toLowerCase()
     const queryTypes = state.queryTypes.toLowerCase().split(' ')

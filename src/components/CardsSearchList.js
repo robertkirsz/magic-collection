@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import styled from 'styled-components'
 // --- Helpers ---
 import _slice from 'lodash/slice'
 // --- Actions ---
 import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
 // --- Components ---
-import { Div } from '../styled'
 import { Card, ShowMoreButton } from './'
 
 const mapStateToProps = () => ({})
@@ -27,7 +27,9 @@ class CardsSearchList extends Component {
 
   state = { cardsLimit: initialCardsNumber }
 
-  componentWillUnmount () { this.props.resetMainCardFocus() }
+  componentWillUnmount () {
+    this.props.resetMainCardFocus()
+  }
 
   shouldShowButton = () => this.props.cards.length > this.state.cardsLimit
 
@@ -39,7 +41,7 @@ class CardsSearchList extends Component {
   }
 
   render = () =>
-    <Div flex wrap justifyContent="flex-start" alignItems="flex-start" className="cards-search-list">
+    <StyledCardsSearchList className="cards-search-list">
       {_slice(this.props.cards, 0, this.state.cardsLimit).map((card, index) =>
         <Card key={card.id} mainCard={card} hoverAnimation detailsPopup onClick={this.onCardClick(index)} />
       )}
@@ -49,7 +51,15 @@ class CardsSearchList extends Component {
           cardsLimit={this.state.cardsLimit}
           cardsNumber={this.props.cards.length}
         />}
-    </Div>
+    </StyledCardsSearchList>
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CardsSearchList))
+
+const StyledCardsSearchList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 16px;
+`

@@ -111,7 +111,7 @@ class CardView extends Component {
               <CardDetails card={card} />
             </Col>
           </Row>
-          <Div flex align-items="flex-start" className="card-variants-list">
+          <Div flex wrap align-items="flex-start" className="card-variants-list">
             {card.variants.map(variantCard => {
               const numberOfCards = this.getNumberOfCards(variantCard)
 

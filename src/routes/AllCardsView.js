@@ -33,6 +33,5 @@ export default connect(mapStateToProps)(AllCardsView)
 
 const StyledAllCardsView = styled.section`
   flex: 1;
-  padding: 16px;
   overflow: auto;
 `
