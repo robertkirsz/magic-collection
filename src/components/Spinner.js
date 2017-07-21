@@ -1,6 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+// --- Components ---
 import { AbsoluteFullSize } from '../styled'
+// --- Animations ---
 import { spinAnimation } from '../styled/animations'
 
 const spinnerDots = [
@@ -11,23 +14,33 @@ const spinnerDots = [
   { color: '#93B483', rotation: 285 }
 ]
 
-const Spinner = () =>
-  <SpinnerContainer>
+const propTypes = {
+  size: PropTypes.string
+}
+
+const Spinner = props =>
+  <SpinnerContainer size={props.size}>
     {spinnerDots.map(({ color, rotation }) =>
       <SpinnerLayer key={color} rotation={rotation}>
-        <SpinnerDot color={color} rotation={rotation} />
+        <SpinnerDot color={color} rotation={rotation} size={props.size} />
       </SpinnerLayer>
     )}
   </SpinnerContainer>
+
+Spinner.propTypes = propTypes
 
 export default Spinner
 
 const SpinnerContainer = styled.div`
   position: relative;
-  width: 100px; height: 100px;
-  margin: 100px auto;
+  width: ${props => props.size};
+  height: ${props => props.size};
   animation: ${spinAnimation(0)} 2s linear infinite;
 `
+
+SpinnerContainer.defaultProps = {
+  size: '100px'
+}
 
 const SpinnerLayer = styled(AbsoluteFullSize)`
   transform: rotate(${props => props.rotation}deg);
@@ -36,7 +49,8 @@ const SpinnerLayer = styled(AbsoluteFullSize)`
 const SpinnerDot = styled.span`
   position: relative;
   display: block;
-  width: 20px; height: 20px;
+  width: calc(${props => props.size} / 5);
+  height: calc(${props => props.size} / 5);
   margin: 0 auto;
   border-radius: 50%;
   background: ${props => props.color};
@@ -46,9 +60,15 @@ const SpinnerDot = styled.span`
     content: "";
     display: block;
     position: absolute;
-    top: 3px; right: 2px;
-    width: 8px; height: 8px;
+    top: 15%;
+    right: 10%;
+    width: 40%;
+    height: 40%;
     background: radial-gradient(circle at center, white 0%, transparent 100%);
     border-radius: 50%;
   }
 `
+
+SpinnerDot.defaultProps = {
+  size: '100px'
+}

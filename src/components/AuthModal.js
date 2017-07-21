@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
 import styled from 'styled-components'
 // --- Actions ---
 import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
-import { closeModal } from '../store/layout'
 // --- Assets ---
 import googleLogo from '../assets/google-logo.svg'
 import facebookLogo from '../assets/facebook-logo.svg'
@@ -17,7 +15,7 @@ const mapStateToProps = ({ user, layout }) => ({
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithProvider, clearAuthErrors, closeModal }
+const mapDispatchToProps = { signIn, signUp, signInWithProvider, clearAuthErrors }
 
 class AuthModal extends Component {
   static propTypes = {
@@ -26,7 +24,6 @@ class AuthModal extends Component {
     signIn: PropTypes.func.isRequired,
     signUp: PropTypes.func.isRequired,
     signInWithProvider: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
     clearAuthErrors: PropTypes.func.isRequired
   }
 
@@ -50,8 +47,8 @@ class AuthModal extends Component {
     if (this.props.user.error) this.props.clearAuthErrors()
   }
 
-  updateForm = (property, value) => {
-    this.setState({ [property]: value })
+  updateForm = (property, value) => e => {
+    this.setState({ [property]: value || e.target.value })
   }
 
   submitForm = e => {
@@ -63,84 +60,70 @@ class AuthModal extends Component {
     if (modalName === 'sign up') signUp(this.state)
   }
 
+  signInWithProvider = provider => e => {
+    this.props.signInWithProvider(provider)
+  }
+
   render () {
-    const { modalName, user, signInWithProvider, closeModal } = this.props
+    const { modalName, user } = this.props
     const { authPending, error } = user
     const { email, password, showPassword } = this.state
 
-    const showModal = modalName === 'sign in' || modalName === 'sign up'
     const disableAutocomplete = modalName === 'sign up'
 
     return (
-      <Container
-        show={showModal}
-        onHide={closeModal}
-        bsSize="small"
-        onExited={this.onExited}
-        style={authPending && { pointerEvents: 'none' }}
-        backdrop={authPending ? 'static' : true}
-      >
-        <Modal.Body>
-          <form onSubmit={this.submitForm} id="authForm">
-            <div className="form-group">
-              <input
-                type="email"
-                name={disableAutocomplete ? Date.now().toString() : 'email'}
-                className="form-control"
-                id="emailInput"
-                placeholder="Email"
-                title="Email"
-                required
-                value={email}
-                onChange={e => this.updateForm('email', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name={disableAutocomplete ? Date.now().toString() : 'password'}
-                className="form-control"
-                id="passwordInput"
-                placeholder="Password"
-                title="Password"
-                required
-                value={password}
-                onChange={e => this.updateForm('password', e.target.value)}
-              />
-              <span className="fa fa-eye" style={showPassword ? { opacity: 1 } : {}} onClick={this.togglePassword} />
-            </div>
-          </form>
-          {error &&
-            <p className="text-danger">
-              {error}
-            </p>}
-          <div className="buttons">
-            <button type="submit" form="authForm" className="btn btn-default">
-              {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
-            </button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('google')}>
-              <img src={googleLogo} alt="Google Logo" />
-            </button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('facebook')}>
-              <img src={facebookLogo} alt="Facebook Logo" />
-            </button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('twitter')}>
-              <img src={twitterLogo} alt="Twitter Logo" />
-            </button>
-            <button className="btn btn-default" onClick={() => signInWithProvider('github')}>
-              <img src={githubLogo} alt="GitHub Logo" />
-            </button>
-          </div>
-        </Modal.Body>
-      </Container>
+      <StyledAuthModal onSubmit={this.submitForm} id="authForm">
+        <div className="input-wrapper">
+          <input
+            type="email"
+            name={disableAutocomplete ? Date.now().toString() : 'email'}
+            placeholder="Email"
+            title="Email"
+            required
+            value={email}
+            onChange={this.updateForm('email')}
+          />
+        </div>
+        <div className="input-wrapper">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name={disableAutocomplete ? Date.now().toString() : 'password'}
+            placeholder="Password"
+            title="Password"
+            required
+            value={password}
+            onChange={this.updateForm('password')}
+          />
+          <span className="fa fa-eye" style={showPassword ? { opacity: 1 } : {}} onClick={this.togglePassword} />
+        </div>
+        {error && <p>{error}</p>}
+        <div className="buttons">
+          <button type="submit" form="authForm">
+            {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
+          </button>
+          <button onClick={this.signInWithProvider('google')}>
+            <img src={googleLogo} alt="Google Logo" />
+          </button>
+          <button onClick={this.signInWithProvider('facebook')}>
+            <img src={facebookLogo} alt="Facebook Logo" />
+          </button>
+          <button onClick={this.signInWithProvider('twitter')}>
+            <img src={twitterLogo} alt="Twitter Logo" />
+          </button>
+          <button onClick={this.signInWithProvider('github')}>
+            <img src={githubLogo} alt="GitHub Logo" />
+          </button>
+        </div>
+      </StyledAuthModal>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)
 
-const Container = styled(Modal)`
-  .form-group { position: relative; }
+const StyledAuthModal = styled.form`
+  .input-wrapper { position: relative; }
+
   .fa-eye {
     position: absolute;
     top: 5px;
@@ -150,9 +133,10 @@ const Container = styled(Modal)`
     opacity: 0.5;
     &:hover { opacity: 1; }
   }
+
   .buttons {
     display: flex;
-    .btn {
+    button {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -160,7 +144,10 @@ const Container = styled(Modal)`
       min-height: 34px;
       text-transform: capitalize;
       &:not(:first-of-type) { margin-left: 0.4em; }
-      img { width: 1.2em; height: 1.2em; }
+      img {
+        width: 1.2em;
+        height: 1.2em;
+      }
     }
   }
 `

@@ -17,21 +17,20 @@ const propTypes = {
 }
 
 const LockButton = ({ myCardsLocked, toggleSetting }) =>
-  <Container
+  <StyledLockButton
     type="button"
-    className="navbar-btn"
     onClick={() => {
       toggleSetting('myCardsLocked')
     }}
   >
     <i className={cn('fa', { 'fa-lock': myCardsLocked, 'fa-unlock-alt': !myCardsLocked })} />
-  </Container>
+  </StyledLockButton>
 
 LockButton.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(LockButton)
 
-const Container = styled.button`
+const StyledLockButton = styled.button`
   border: none;
   background: none;
   font-size: 1.4em;

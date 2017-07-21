@@ -8,7 +8,8 @@ import { log, debug, getLocation } from './utils'
 import { getCards } from './store/allCards'
 import { addAuthListener } from './store/user'
 // --- Components ---
-import { Header, SearchModule, KeyboardHandler, AuthModal, ErrorModal } from './components'
+import { Header, SearchModule, KeyboardHandler } from './components'
+import ModalsHandler from './modals'
 import Routes from './routes'
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
@@ -56,8 +57,7 @@ class App extends Component {
           <AppButtons>
             <SearchModule pathname={this.props.location.pathname} />
           </AppButtons>}
-        <AuthModal />
-        <ErrorModal />
+        <ModalsHandler />
         <KeyboardHandler onCardsListPage={onListPage} onCardDetailsPage={onDetailsPage} />
       </StyledApp>
     )

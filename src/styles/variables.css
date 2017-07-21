@@ -2,4 +2,6 @@
   --text-color: #373a3c;
   --navbarHeight: 50px;
   --horizontalPadding: 8px;
+  --contentWidth: 1024px;
+  --shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
