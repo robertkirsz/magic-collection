@@ -14,18 +14,17 @@ export const closeModal = () => ({ type: CLOSE_MODAL })
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [OPEN_MODAL]: (state, { name, props = {} }) => ({ ...state, modal: { name, props } }),
-  [CLOSE_MODAL]: state => ({ ...state, modal: { name: '', props: {} } })
+  [OPEN_MODAL]: (state, { name, props = {} }) => ({ ...state, opened: true, name, props }),
+  [CLOSE_MODAL]: state => ({ ...state, opened: false })
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  modal: {
-    name: '',
-    props: {}
-  }
+  opened: false,
+  name: '',
+  props: {}
 }
 
 export default (state = initialState, action) =>

@@ -14,7 +14,7 @@ import {
 import _get from 'lodash/get'
 import { log } from '../utils'
 // --- Actions ---
-import { openModal, closeModal } from './layout'
+import { openModal, closeModal } from './modal'
 import { loadMyCards } from './myCards'
 import { loadInitialSettings } from './settings'
 
@@ -89,7 +89,7 @@ export const addAuthListener = () => {
     auth.onAuthStateChanged(async firebaseUser => {
       log('Authentication state has changed')
 
-      const modalName = getState().layout.modal.name
+      const modalName = getState().modal.name
       const authModalOpened = modalName === 'sign in' || modalName === 'sign up'
 
       // Show loading message

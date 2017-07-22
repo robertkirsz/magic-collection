@@ -3,22 +3,24 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 // --- Actions ---
-import { closeModal } from '../store/layout'
+import { closeModal } from '../store/modal'
 // --- Animations ---
 import { Fade } from '../transitions'
 // --- Components ---
 import AuthModal from './AuthModal'
 import ErrorModal from './ErrorModal'
 
-const mapStateToProps = ({ layout }) => ({
-  modalName: layout.modal.name,
-  modalProps: layout.modal.props
+const mapStateToProps = ({ modal }) => ({
+  modalOpened: modal.opened,
+  modalName: modal.name,
+  modalProps: modal.props
 })
 
 const mapDispatchToProps = { closeModal }
 
 class ModalsHandler extends Component {
   static propTypes = {
+    modalOpened: PropTypes.bool.isRequired,
     modalName: PropTypes.string,
     modalProps: PropTypes.object,
     closeModal: PropTypes.func.isRequired
@@ -33,13 +35,12 @@ class ModalsHandler extends Component {
   }
 
   render = () =>
-    <Fade in={!!this.props.modalName}>
+    <Fade in={this.props.modalOpened}>
       <StyledModal error={this.props.modalName === 'error'} onClick={this.props.closeModal}>
         <div onClick={this.onContentClick}>
           {(this.props.modalName === 'sign in' || this.props.modalName === 'sign up') &&
             <AuthModal {...this.props.modalProps} />}
-          {this.props.modalName === 'error' &&
-            <ErrorModal {...this.props.modalProps} />}
+          {this.props.modalName === 'error' && <ErrorModal {...this.props.modalProps} />}
         </div>
       </StyledModal>
     </Fade>
@@ -56,7 +57,7 @@ const StyledModal = styled.div`
   height: 100%;
   background: ${props => (props.error ? 'rgba(200, 0, 0, .5)' : 'rgba(0, 0, 0, .5)')};
   z-index: 9999;
-  transition: opacity .3s ease;
+  transition: opacity var(--transitionTime);
   > div {
     width: 300px;
     margin: auto;

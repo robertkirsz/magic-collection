@@ -12,9 +12,9 @@ import facebookLogo from '../assets/facebook-logo.svg'
 import twitterLogo from '../assets/twitter-logo.svg'
 import githubLogo from '../assets/github-logo.svg'
 
-const mapStateToProps = ({ user, layout }) => ({
+const mapStateToProps = ({ user, modal }) => ({
   user,
-  modalName: layout.modal.name
+  modalName: modal.name
 })
 
 const mapDispatchToProps = { signIn, signUp, signInWithProvider, clearAuthErrors }

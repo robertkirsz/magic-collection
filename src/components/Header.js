@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _reduce from 'lodash/reduce'
 // --- Actions ---
-import { openModal } from '../store/layout'
+import { openModal } from '../store/modal'
 // --- Components ---
 import { NavLink, Link } from 'react-router-dom'
 import { List, Container } from '../styled'

@@ -3,7 +3,7 @@ import { cardsDatabase, saveCardsDatabase, fetchCards } from '../database'
 // --- Classes ---
 import { Card } from '../classes'
 // --- Actions ---
-import { openModal } from './layout'
+import { openModal } from './modal'
 // --- Helpers ---
 import _reduce from 'lodash/reduce'
 import _forEach from 'lodash/forEach'

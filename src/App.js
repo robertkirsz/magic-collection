@@ -12,11 +12,11 @@ import { Header, SearchModule, KeyboardHandler } from './components'
 import ModalsHandler from './modals'
 import Routes from './routes'
 
-const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
+const mapStateToProps = ({ modal, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
   myCardsLoading: myCards.loading,
   userAuthPending: user.authPending,
-  modalName: layout.modal.name
+  modalName: modal.name
 })
 
 const mapDispatchToProps = { getCards, addAuthListener }
