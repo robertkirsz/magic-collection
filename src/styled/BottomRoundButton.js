@@ -8,7 +8,7 @@ const BottomRoundButton = styled.button`
   border: none;
   font-size: 1.5em;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-  transition: color 0.3s;
+  transition: color var(--transitionTime);
   pointer-events: auto;
   cursor: pointer;
   color: ${props => props.active ? 'lime' : 'inherit'};

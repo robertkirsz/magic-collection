@@ -3,6 +3,9 @@
   --navbarHeight: 50px;
   --horizontalPadding: 8px;
   --contentWidth: 1024px;
-  --shadow: 0 2px 7px -3px rgba(0, 0, 0, 0.4);
   --borderRadius: 4px;
+  --transitionTime: 0.3s;
+
+  --shadow: 0 2px 7px -3px rgba(0, 0, 0, 0.4);
+  --shadow-1: 0 1px 8px -3px rgba(0, 0, 0, 0.75);
 }

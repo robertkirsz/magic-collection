@@ -10,7 +10,7 @@ export default styled.div`
   display: flex;
   flex-direction: ${props => {
     if (props.row) return 'row'
-    if (props.column) return 'column'
+    if (props.column || !props.row) return 'column'
   }};
   width: 100%; height: 100%;
   justify-content: center;

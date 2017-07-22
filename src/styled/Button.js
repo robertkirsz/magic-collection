@@ -15,6 +15,10 @@ export default styled.button.attrs({
   border: 1px solid #E2E8ED;
   box-shadow: var(--shadow);
   border-radius: var(--borderRadius);
-  transition: border-color 0.3s;
-  &:focus { border-color: #A2A7AB; }
+  transition: all var(--transitionTime);
+  &:focus:not(:active) { border-color: #A2A7AB; }
+  &:active {
+    transform: scale(0.95);
+    box-shadow: var(--shadow-1);
+  }
 `

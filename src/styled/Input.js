@@ -11,7 +11,7 @@ export default styled.input`
   border: 1px solid #E2E8ED;
   box-shadow: inset var(--shadow);
   border-radius: var(--borderRadius);
-  transition: border-color 0.3s;
+  transition: border-color var(--transitionTime);
   &:focus { border-color: #A2A7AB; }
   &::placeholder { color: #A8B5BE; }
 `

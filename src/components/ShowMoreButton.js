@@ -30,7 +30,7 @@ const Container = CardContainer.extend`
     border: 2px dashed;
     color: #BBB;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: color var(--transitionTime);
     &:hover { color: #555; }
     .fa { font-size: 4em; }
     .cardsNumber {

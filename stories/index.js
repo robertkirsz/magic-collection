@@ -18,17 +18,21 @@ import '../src/styles/index.css'
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
 
 storiesOf('Button', module).add('default', () =>
-  <CenteringWrapper column>
-    <Button onClick={action('clicked')}>Hello Button</Button>
+  <CenteringWrapper>
+    <Button onClick={action('clicked')}>Button</Button>
   </CenteringWrapper>
 )
 
 storiesOf('Card', module).add('on search list', () =>
   <Provider store={createStore()}>
-    <Card mainCard={mainCard} hoverAnimation detailsPopup onClick={action('clicked')} />
+    <CenteringWrapper>
+      <Card mainCard={mainCard} hoverAnimation detailsPopup onClick={action('clicked')} />
+    </CenteringWrapper>
   </Provider>
 )
 
 storiesOf('ColorFilter', module).add('default', () =>
-  <ColorFilter colors={colors} onColorChange={e => action('clicked')} />
+  <CenteringWrapper>
+    <ColorFilter colors={colors} onColorChange={e => action('clicked')} />
+  </CenteringWrapper>
 )
