@@ -4,14 +4,17 @@
 
 import styled from 'styled-components'
 
-export default styled.input`
-  width: 100%;
+export default styled.button.attrs({
+  type: 'button'
+})`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
   background: white;
   border: 1px solid #E2E8ED;
-  box-shadow: inset var(--shadow);
+  box-shadow: var(--shadow);
   border-radius: var(--borderRadius);
   transition: border-color 0.3s;
   &:focus { border-color: #A2A7AB; }
-  &::placeholder { color: #A8B5BE; }
 `

@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 // --- Actions ---
 import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
+// --- Components ---
+import { Input, Button } from '../styled'
 // --- Assets ---
 import googleLogo from '../assets/google-logo.svg'
 import facebookLogo from '../assets/facebook-logo.svg'
@@ -74,7 +76,7 @@ class AuthModal extends Component {
     return (
       <StyledAuthModal onSubmit={this.submitForm} id="authForm">
         <div className="input-wrapper">
-          <input
+          <Input
             type="email"
             name={disableAutocomplete ? Date.now().toString() : 'email'}
             placeholder="Email"
@@ -85,7 +87,7 @@ class AuthModal extends Component {
           />
         </div>
         <div className="input-wrapper">
-          <input
+          <Input
             type={showPassword ? 'text' : 'password'}
             name={disableAutocomplete ? Date.now().toString() : 'password'}
             placeholder="Password"
@@ -98,21 +100,21 @@ class AuthModal extends Component {
         </div>
         {error && <p>{error}</p>}
         <div className="buttons">
-          <button type="submit" form="authForm">
+          <Button type="submit" form="authForm">
             {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
-          </button>
-          <button onClick={this.signInWithProvider('google')}>
+          </Button>
+          <Button onClick={this.signInWithProvider('google')}>
             <img src={googleLogo} alt="Google Logo" />
-          </button>
-          <button onClick={this.signInWithProvider('facebook')}>
+          </Button>
+          <Button onClick={this.signInWithProvider('facebook')}>
             <img src={facebookLogo} alt="Facebook Logo" />
-          </button>
-          <button onClick={this.signInWithProvider('twitter')}>
+          </Button>
+          <Button onClick={this.signInWithProvider('twitter')}>
             <img src={twitterLogo} alt="Twitter Logo" />
-          </button>
-          <button onClick={this.signInWithProvider('github')}>
+          </Button>
+          <Button onClick={this.signInWithProvider('github')}>
             <img src={githubLogo} alt="GitHub Logo" />
-          </button>
+          </Button>
         </div>
       </StyledAuthModal>
     )
@@ -122,7 +124,10 @@ class AuthModal extends Component {
 export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)
 
 const StyledAuthModal = styled.form`
-  .input-wrapper { position: relative; }
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+  }
 
   .fa-eye {
     position: absolute;
@@ -140,10 +145,10 @@ const StyledAuthModal = styled.form`
       display: flex;
       justify-content: center;
       align-items: center;
-      flex: 1;
-      min-height: 34px;
-      text-transform: capitalize;
-      &:not(:first-of-type) { margin-left: 0.4em; }
+      &:not(:first-of-type) {
+        flex: 1;
+        margin-left: 0.4em;
+      }
       img {
         width: 1.2em;
         height: 1.2em;

@@ -2,9 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+// --- Actions ---
 import { closeModal } from '../store/layout'
+// --- Animations ---
 import { Fade } from '../transitions'
-import { AuthModal, ErrorModal } from '../components'
+// --- Components ---
+import AuthModal from './AuthModal'
+import ErrorModal from './ErrorModal'
 
 const mapStateToProps = ({ layout }) => ({
   modalName: layout.modal.name,
@@ -58,7 +62,7 @@ const StyledModal = styled.div`
     margin: auto;
     padding: 16px;
     background-color: white;
-    border-radius: 2px;
+    border-radius: var(--borderRadius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     transition: all .3s;
   }

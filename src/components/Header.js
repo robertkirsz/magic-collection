@@ -8,7 +8,7 @@ import _reduce from 'lodash/reduce'
 import { openModal } from '../store/layout'
 // --- Components ---
 import { NavLink, Link } from 'react-router-dom'
-import { Div, List, Container } from '../styled'
+import { List, Container } from '../styled'
 import { UserBadge, LockButton, UserDropdownMenu } from './'
 import { Fade } from '../transitions'
 
