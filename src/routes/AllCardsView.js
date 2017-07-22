@@ -31,7 +31,7 @@ AllCardsView.propTypes = propTypes
 
 export default connect(mapStateToProps)(AllCardsView)
 
-const StyledAllCardsView = styled.section`
+const StyledAllCardsView = styled.main`
   flex: 1;
   overflow: auto;
 `

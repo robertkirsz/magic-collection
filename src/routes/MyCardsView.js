@@ -30,11 +30,11 @@ const MyCardsView = ({ match, cards, filteredCards, myCardsLoading }) => {
   }
 
   return (
-    <div>
+    <main>
       <Route path={`${match.url}/:cardUrl`} component={CardView} />
       <LoadingScreen in={myCardsLoading} />
       {!myCardsLoading && <CardsSearchList cards={filteredCards || cards} />}
-    </div>
+    </main>
   )
 }
 

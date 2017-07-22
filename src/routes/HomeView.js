@@ -10,7 +10,7 @@ const HomeView = () =>
 
 export default HomeView
 
-const StyledHomeView = styled.section`
+const StyledHomeView = styled.main`
   flex: 1;
   display: flex;
   flex-wrap: wrap;

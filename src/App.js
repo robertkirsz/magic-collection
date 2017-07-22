@@ -66,7 +66,7 @@ class App extends Component {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
-const StyledApp = styled.main`
+const StyledApp = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;

@@ -34,22 +34,40 @@ class ModalsHandler extends Component {
     e.stopPropagation()
   }
 
-  render = () =>
-    <Fade in={this.props.modalOpened}>
-      <StyledModal error={this.props.modalName === 'error'} onClick={this.props.closeModal}>
-        <div onClick={this.onContentClick}>
-          {(this.props.modalName === 'sign in' || this.props.modalName === 'sign up') &&
-            <AuthModal {...this.props.modalProps} />}
-          {this.props.modalName === 'error' && <ErrorModal {...this.props.modalProps} />}
-        </div>
-      </StyledModal>
-    </Fade>
+  render () {
+    let modal = null
+
+    if (this.props.modalName === 'sign in' || this.props.modalName === 'sign up') {
+      modal = (
+        <StyledModal onClick={this.props.closeModal}>
+          <AuthModal onContentClick={this.onContentClick} {...this.props.modalProps} />}
+        </StyledModal>
+      )
+    }
+
+    if (this.props.modalName === 'error') {
+      modal = (
+        <StyledModal error onClick={this.props.closeModal}>
+          <ErrorModal onContentClick={this.onContentClick} {...this.props.modalProps} />
+        </StyledModal>
+      )
+    }
+
+    return (
+      <Fade in={this.props.modalOpened}>
+        {modal}
+      </Fade>
+    )
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalsHandler)
 
 const StyledModal = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -58,13 +76,4 @@ const StyledModal = styled.div`
   background: ${props => (props.error ? 'rgba(200, 0, 0, .5)' : 'rgba(0, 0, 0, .5)')};
   z-index: 9999;
   transition: opacity var(--transitionTime);
-  > div {
-    width: 300px;
-    margin: auto;
-    padding: 16px;
-    background-color: white;
-    border-radius: var(--borderRadius);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-    transition: all .3s;
-  }
 `

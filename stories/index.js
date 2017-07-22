@@ -11,19 +11,20 @@ import { mainCard, colors } from './data'
 
 import { Card, ColorFilter } from '../src/components'
 import { CenteringWrapper, Button } from '../src/styled'
+import ModalsHandler from '../src/modals'
 
 import '../src/styles/variables.css'
 import '../src/styles/index.css'
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
+storiesOf('Welcome').add('to Storybook', () => <Welcome showApp={linkTo('Button')} />)
 
-storiesOf('Button', module).add('default', () =>
+storiesOf('Button').add('default', () =>
   <CenteringWrapper>
     <Button onClick={action('clicked')}>Button</Button>
   </CenteringWrapper>
 )
 
-storiesOf('Card', module).add('on search list', () =>
+storiesOf('Card').add('on search list', () =>
   <Provider store={createStore()}>
     <CenteringWrapper>
       <Card mainCard={mainCard} hoverAnimation detailsPopup onClick={action('clicked')} />
@@ -31,8 +32,24 @@ storiesOf('Card', module).add('on search list', () =>
   </Provider>
 )
 
-storiesOf('ColorFilter', module).add('default', () =>
+storiesOf('ColorFilter').add('default', () =>
   <CenteringWrapper>
     <ColorFilter colors={colors} onColorChange={e => action('clicked')} />
   </CenteringWrapper>
+)
+
+const modalStore = {
+  modal: {
+    opened: true,
+    name: 'error',
+    props: {
+      message: 'Sample error message'
+    }
+  }
+}
+
+storiesOf('Modal').add('error', () =>
+  <Provider store={createStore(modalStore)}>
+    <ModalsHandler />
+  </Provider>
 )

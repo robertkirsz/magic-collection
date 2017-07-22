@@ -6,9 +6,9 @@ import { CollectionStats } from '../components'
 const mapStateToProps = ({ user }) => ({ user })
 
 const CollectionStatsView = ({ user }) => (
-  <div className="collection-stats-view">
+  <main className="collection-stats-view">
     <CollectionStats />
-  </div>
+  </main>
 )
 
 CollectionStatsView.propTypes = {

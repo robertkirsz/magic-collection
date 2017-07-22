@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 // --- Actions ---
 import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
 // --- Components ---
-import { Input, Button } from '../styled'
+import { Input, Button, ModalContent } from '../styled'
 // --- Assets ---
 import googleLogo from '../assets/google-logo.svg'
 import facebookLogo from '../assets/facebook-logo.svg'
@@ -26,27 +25,22 @@ class AuthModal extends Component {
     signIn: PropTypes.func.isRequired,
     signUp: PropTypes.func.isRequired,
     signInWithProvider: PropTypes.func.isRequired,
-    clearAuthErrors: PropTypes.func.isRequired
+    clearAuthErrors: PropTypes.func.isRequired,
+    onContentClick: PropTypes.func.isRequired
   }
 
-  initialState = {
+  state = {
     email: '',
     password: '',
     showPassword: false
   }
 
-  state = this.initialState
+  componentWillUnmount = () => {
+    if (this.props.user.error) this.props.clearAuthErrors()
+  }
 
   togglePassword = () => {
     this.setState({ showPassword: !this.state.showPassword })
-  }
-
-  // Called when modal disappears
-  onExited = () => {
-    // Clear modal's state
-    this.setState(this.initialState)
-    // Clear any authentication errors
-    if (this.props.user.error) this.props.clearAuthErrors()
   }
 
   updateForm = (property, value) => e => {
@@ -62,19 +56,19 @@ class AuthModal extends Component {
     if (modalName === 'sign up') signUp(this.state)
   }
 
-  signInWithProvider = provider => e => {
+  signInWithProvider = provider => () => {
     this.props.signInWithProvider(provider)
   }
 
   render () {
-    const { modalName, user } = this.props
+    const { modalName, user, onContentClick } = this.props
     const { authPending, error } = user
     const { email, password, showPassword } = this.state
 
     const disableAutocomplete = modalName === 'sign up'
 
     return (
-      <StyledAuthModal onSubmit={this.submitForm} id="authForm">
+      <StyledAuthModal onSubmit={this.submitForm} onClick={onContentClick}>
         <div className="input-wrapper">
           <Input
             type="email"
@@ -100,7 +94,7 @@ class AuthModal extends Component {
         </div>
         {error && <p>{error}</p>}
         <div className="buttons">
-          <Button type="submit" form="authForm">
+          <Button type="submit">
             {authPending ? <span className="fa fa-circle-o-notch fa-spin" /> : modalName}
           </Button>
           <Button onClick={this.signInWithProvider('google')}>
@@ -123,7 +117,7 @@ class AuthModal extends Component {
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)
 
-const StyledAuthModal = styled.form`
+const StyledAuthModal = ModalContent.withComponent('form').extend`
   .input-wrapper {
     position: relative;
     margin-bottom: 1rem;
@@ -145,6 +139,7 @@ const StyledAuthModal = styled.form`
       display: flex;
       justify-content: center;
       align-items: center;
+      &[type="submit"] { text-transform: capitalize; }
       &:not(:first-of-type) {
         flex: 1;
         margin-left: 0.4em;

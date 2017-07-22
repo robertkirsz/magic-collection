@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
 const propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
   in: PropTypes.bool.isRequired,
   classNames: PropTypes.oneOfType([
     PropTypes.string,

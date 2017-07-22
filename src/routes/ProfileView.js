@@ -6,7 +6,7 @@ import { Grid, Row, Col, Form, FormGroup, FormControl, Checkbox, Button } from '
 const mapStateToProps = ({ user }) => ({ user })
 
 const ProfileView = ({ user }) => (
-  <div className="profile-view">
+  <main className="profile-view">
     <Grid>
       <Row>
         <Col md={3}>
@@ -68,7 +68,7 @@ const ProfileView = ({ user }) => (
         </Col>
       </Row>
     </Grid>
-  </div>
+  </main>
 )
 
 ProfileView.propTypes = {
