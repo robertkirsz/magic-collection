@@ -142,50 +142,48 @@ const StyledCardHoverEffect = styled.div`
   border-radius: 4%;
   transform-style: preserve-3d;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-
   &:hover {
     z-index: 1;
   }
 
-  .container {
+  > .container {
     position: relative;
     width: 100%;
     height: 100%;
     border-radius: 4%;
     transition: all 0.2s ease-out;
+    &.over > .shadow {
+      box-shadow: 0 45px 100px rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
+    }
+    > .content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 4%;
+      transform-style: preserve-3d;
+      transition: transform 0.2s;
+    }
+
+    > .shadow {
+      position: absolute;
+      top: 5%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      transition: all 0.2s ease-out;
+      box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
+    }
+
+    > .shine {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      border-radius: 4%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 60%);
+      pointer-events: none;
+    }
   }
 
-  .container.over .shadow {
-    box-shadow: 0 45px 100px rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
-  }
-
-  .content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 4%;
-    transform-style: preserve-3d;
-    transition: transform 0.2s;
-  }
-
-  .shadow {
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    width: 90%;
-    height: 90%;
-    transition: all 0.2s ease-out;
-    box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
-  }
-
-  .shine {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    border-radius: 4%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 60%);
-    pointer-events: none;
-  }
 `

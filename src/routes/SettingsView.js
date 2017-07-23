@@ -79,19 +79,12 @@ class SettingsView extends Component {
 
   render () {
     const { restoreDefaultSettings, toggleSetting, settings } = this.props
-    const { cardModalAnimation, cardHoverAnimation } = settings
+    const { cardHoverAnimation } = settings
 
     return (
       <Flex column alignItems="center">
         <Flex column>
           <FormGroup>
-            <ControlLabel>Animations and transitions</ControlLabel>
-            <Checkbox
-              checked={cardModalAnimation}
-              onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
-            >
-              Card modal animation
-            </Checkbox>
             <Checkbox
               checked={cardHoverAnimation}
               onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}

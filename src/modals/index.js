@@ -5,7 +5,7 @@ import styled from 'styled-components'
 // --- Actions ---
 import { closeModal } from '../store/modal'
 // --- Animations ---
-import { Fade } from '../transitions'
+import { Fade, Scale } from '../transitions'
 // --- Components ---
 import AuthModal from './AuthModal'
 import ErrorModal from './ErrorModal'
@@ -35,27 +35,27 @@ class ModalsHandler extends Component {
   }
 
   render () {
-    let modal = null
+    let modal = ''
 
     if (this.props.modalName === 'sign in' || this.props.modalName === 'sign up') {
       modal = (
-        <StyledModal onClick={this.props.closeModal}>
-          <AuthModal onContentClick={this.onContentClick} {...this.props.modalProps} />}
-        </StyledModal>
+        <AuthModal onContentClick={this.onContentClick} {...this.props.modalProps} />
       )
     }
 
     if (this.props.modalName === 'error') {
       modal = (
-        <StyledModal error onClick={this.props.closeModal}>
-          <ErrorModal onContentClick={this.onContentClick} {...this.props.modalProps} />
-        </StyledModal>
+        <ErrorModal onContentClick={this.onContentClick} {...this.props.modalProps} />
       )
     }
 
     return (
       <Fade in={this.props.modalOpened}>
-        {modal}
+        <StyledModal error={this.props.modalName === 'error'} onClick={this.props.closeModal}>
+          <Scale in={this.props.modalOpened}>
+            {modal}
+          </Scale>
+        </StyledModal>
       </Fade>
     )
   }
@@ -75,5 +75,4 @@ const StyledModal = styled.div`
   height: 100%;
   background: ${props => (props.error ? 'rgba(200, 0, 0, .5)' : 'rgba(0, 0, 0, .5)')};
   z-index: 9999;
-  transition: opacity var(--transitionTime);
 `

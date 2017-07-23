@@ -54,7 +54,6 @@ const ACTION_HANDLERS = {
 const initialState = {
   myCardsLocked: true,
   cardDetailsPopupDelay: 1000,
-  cardModalAnimation: true,
   cardHoverAnimation: true,
   collectionLockBehaviour: 'lockedAtStart' // 'unlockedAtStart' || 'asLeft'
 }

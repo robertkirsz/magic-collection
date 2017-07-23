@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Row, Col, Modal } from 'react-bootstrap'
 import styled from 'styled-components'
 import _find from 'lodash/find'
 import _startsWith from 'lodash/startsWith'
@@ -11,6 +10,8 @@ import { getLocation } from '../utils'
 import { Card, CardDetails } from '../components'
 import { cardsDatabase } from '../database'
 import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
+import { ModalContent } from '../styled'
+import { Fade, Scale } from '../transitions'
 
 const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 
@@ -21,8 +22,7 @@ const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
     cardUrl: ownProps.match.params.cardUrl
   }),
   myCards: myCards.cards,
-  myCardsLocked: settings.myCardsLocked,
-  cardModalAnimation: settings.cardModalAnimation
+  myCardsLocked: settings.myCardsLocked
 })
 
 class CardView extends Component {
@@ -31,32 +31,51 @@ class CardView extends Component {
     location: PropTypes.object.isRequired,
     card: PropTypes.object,
     myCardsLocked: PropTypes.bool,
-    cardModalAnimation: PropTypes.bool,
     myCards: PropTypes.array,
     resetVariantCardFocus: PropTypes.func.isRequired,
     setVariantCardFocus: PropTypes.func.isRequired
   }
 
-  state = { modalOpened: true }
+  state = { modalOpened: false }
 
   componentDidMount () {
-    this.props.setVariantCardFocus(0)
+    if (this.props.card) {
+      setTimeout(() => {
+        this.setState({ modalOpened: true })
+        this.props.setVariantCardFocus(0)
+      }, 80)
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.props.card && !nextProps.card) this.goBack()
+    if (this.props.card && !nextProps.card) {
+      this.closeModal()
+    }
+    if (!this.props.card && nextProps.card) {
+      this.setState({ modalOpened: true })
+      this.props.setVariantCardFocus(0)
+    }
   }
 
   closeModal = () => {
-    // Hide modal
     this.setState({ modalOpened: false })
-    // Go back, if animation is disabled (because normally we go back when exit animation finishes)
     this.props.resetVariantCardFocus()
-    if (!this.props.cardModalAnimation) this.goBack()
   }
 
   goBack = () => {
-    this.props.history.goBack()
+    this.props.history.replace('/' + this.props.location.pathname.split('/')[1])
+  }
+
+  onContentClick = e => {
+    e.stopPropagation()
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevState.modalOpened && !this.state.modalOpened) {
+      setTimeout(() => {
+        this.goBack()
+      }, 300)
+    }
   }
 
   getNumberOfCards = variantCard => {
@@ -76,69 +95,100 @@ class CardView extends Component {
   }
 
   render () {
-    const { card, myCardsLocked, cardModalAnimation, location } = this.props
-    const { modalOpened } = this.state
+    const { card, myCardsLocked, location } = this.props
 
-    if (!card) return null
+    if (!card) {
+      console.warn('ASDADASDASDSADSAD')
+      return null
+    }
 
     return (
-      <Modal
-        animation={cardModalAnimation}
-        show={modalOpened} // Value is from state and is "true" by default
-        bsSize="large"
-        onExited={this.goBack} // Go back when exit animation finishes
-        onHide={this.closeModal} // Close modal on clicking "X" icon or clicking on backdrop
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {card.name}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col xs={4}>
-              <div className="card-picture">
+      <Fade in={this.state.modalOpened}>
+        <StyledModal onClick={this.closeModal}>
+          <Scale in={this.state.modalOpened}>
+            <StyledCardView onClick={this.onContentClick}>
+              <TitleArea>
+                {card.name}
+              </TitleArea>
+              <CardArea>
                 <Card mainCard={card} hoverAnimation />
                 {getLocation(location).onMyCardsPage &&
                   <span>
                     {/* TODO: this doesn't work, 'cardsInCollection' in not added to the Card object */}
                     &nbsp;(Total: {card.cardsInCollection})
                   </span>}
-              </div>
-            </Col>
-            <Col xs={8}>
-              <CardDetails card={card} />
-            </Col>
-          </Row>
-          <VariantsList className="card-variants-list">
-            {card.variants.map(variantCard => {
-              const numberOfCards = this.getNumberOfCards(variantCard)
+              </CardArea>
+              <DetailsArea>
+                <CardDetails card={card} />
+              </DetailsArea>
+              <VariantsArea className="card-variants-list">
+                {card.variants.map(variantCard => {
+                  const numberOfCards = this.getNumberOfCards(variantCard)
 
-              return (
-                <Card
-                  key={variantCard.id}
-                  mainCard={card}
-                  variantCard={variantCard}
-                  setIcon
-                  numberOfCards={numberOfCards}
-                  showAdd={!myCardsLocked}
-                  showRemove={!myCardsLocked && numberOfCards > 0}
-                  showContent
-                />
-              )
-            })}
-          </VariantsList>
-        </Modal.Body>
-      </Modal>
+                  return (
+                    <Card
+                      key={variantCard.id}
+                      mainCard={card}
+                      variantCard={variantCard}
+                      setIcon
+                      numberOfCards={numberOfCards}
+                      showAdd={!myCardsLocked}
+                      showRemove={!myCardsLocked && numberOfCards > 0}
+                      showContent
+                    />
+                  )
+                })}
+              </VariantsArea>
+            </StyledCardView>
+          </Scale>
+        </StyledModal>
+      </Fade>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView)
 
-const VariantsList = styled.div`
+const StyledModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .5);
+  z-index: 9999;
+  transition: opacity var(--transitionTime);
+`
+
+const StyledCardView = ModalContent.extend`
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr auto auto;
+  grid-template-areas: "title title" "card details" "variants variants";
+  grid-gap: 1rem;
+
+  width: 100%;
+  padding: 1rem;
+`
+
+const TitleArea = styled.h4`
+  grid-area: title;
+
+  margin: 0;
+`
+
+const CardArea = styled.div`grid-area: card;`
+
+const DetailsArea = styled.div`grid-area: details;`
+
+const VariantsArea = styled.div`
+  grid-area: variants;
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   grid-gap: 1rem;
-  margin-top: 1rem;
 `
