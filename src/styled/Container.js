@@ -5,5 +5,5 @@ export default styled(Div)`
   position: relative;
   width: 100%;
   max-width: var(--contentWidth);
-  padding: 0 16px;
+  padding: 0 1rem;
 `

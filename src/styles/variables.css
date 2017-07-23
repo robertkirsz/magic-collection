@@ -1,11 +1,9 @@
 :root {
   --text-color: #373a3c;
   --navbarHeight: 50px;
-  --horizontalPadding: 8px;
-  --contentWidth: 1024px;
+  --contentWidth: 1440px;
   --borderRadius: 4px;
   --transitionTime: 0.3s;
-
   --shadow: 0 2px 7px -3px rgba(0, 0, 0, 0.4);
   --shadow-1: 0 1px 8px -3px rgba(0, 0, 0, 0.75);
 }

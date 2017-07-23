@@ -33,5 +33,8 @@ export default connect(mapStateToProps)(AllCardsView)
 
 const StyledAllCardsView = styled.main`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow: auto;
 `

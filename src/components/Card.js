@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _findIndex from 'lodash/findIndex'
 // --- Actions ---
 import { addCard, removeCard } from '../store/myCards'
 // --- Components ---
-import { CardContainer } from '../styled'
 import { CardDetailsPopup, CardHoverEffect } from './'
 // --- Assets ---
 import cardBack from './assets/card_back.jpg'
@@ -27,9 +27,9 @@ class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    className: PropTypes.string,
     detailsPopup: PropTypes.bool,
-    hoverAnimation: PropTypes.bool // TODO: Refactor this - This is from props (route based)
+    hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
+    showContent: PropTypes.bool
   }
 
   state = {
@@ -99,7 +99,6 @@ class Card extends Component {
       numberOfCards,
       showAdd,
       showRemove,
-      className,
       detailsPopup,
       hoverAnimation
     } = this.props
@@ -108,7 +107,7 @@ class Card extends Component {
     const cardData = variantCard || mainCard
 
     const addRemoveControls = (
-      <div className="card__add-remove-buttons">
+      <div className="add-remove-buttons">
         {showRemove &&
           <button className="remove-button" onClick={this.removeCard}>
             <span className="fa fa-minus-circle" />
@@ -120,128 +119,163 @@ class Card extends Component {
       </div>
     )
 
+    const countAnimations = animations.map(
+      a =>
+        a.animationType === 'add'
+          ? <span key={a.id} className="count-animation count-animation--add">
+              +1
+            </span>
+          : <span key={a.id} className="count-animation count-animation--remove">
+              -1
+            </span>
+    )
+
     return (
-      <Container className="card-wrapper">
-        <CardHoverEffect
-          className={cn('card', className)}
-          onClick={this.onCardClick}
-          hoverAnimation={hoverAnimation}
-          layers={[
-            <div style={{ backgroundImage: `url(${cardData.image}), url(${cardBack})` }} />,
-            <div className="card__content">
-              {setIcon && <span className={cn('card__set-icon', cardData.setIcon)} />}
+      <CardHoverEffect
+        onClick={this.onCardClick}
+        hoverAnimation={hoverAnimation}
+        onMouseEnter={this.showDetailsPopup}
+        onMouseLeave={this.hideDetailsPopup}
+        onMouseMove={this.updateDetailsPopupPosition}
+      >
+        <StyledCard className="card" tabIndex="1">
+          {this.props.showContent &&
+            <div className="content">
+              {setIcon && <span className={cn('set-icon', cardData.setIcon)} />}
               {numberOfCards > 0 &&
-                <span className="card__count">
+                <span className="count">
                   {numberOfCards}
                 </span>}
               {(showAdd || showRemove) && addRemoveControls}
-              {animations.map(
-                a =>
-                  a.animationType === 'add'
-                    ? <span key={a.id} className="card__count-animation card__count-animation--add">
-                        +1
-                      </span>
-                    : <span key={a.id} className="card__count-animation card__count-animation--remove">
-                        -1
-                      </span>
-              )}
-            </div>
-          ]}
-          onMouseEnter={this.showDetailsPopup}
-          onMouseLeave={this.hideDetailsPopup}
-          onMouseMove={this.updateDetailsPopupPosition}
-        />
-        {detailsPopup &&
-          <CardDetailsPopup cardData={cardData} show={detailsPopupShow} coordinates={detailsPopupCoordinates} />}
-      </Container>
+              {countAnimations}
+            </div>}
+          <div className="images">
+            <img src={cardData.image} className="artwork" alt="Card artwork" />
+            <img src={cardBack} className="background" alt="Card background" />
+          </div>
+          {detailsPopup &&
+            <CardDetailsPopup cardData={cardData} show={detailsPopupShow} coordinates={detailsPopupCoordinates} />}
+        </StyledCard>
+      </CardHoverEffect>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card)
 
-const Container = CardContainer.extend`
-  .card {
-    &:focus {
-      .card-hover-effect-layers { transform: scale(1.05); }
-    }
+const StyledCard = styled.div`
+  position: relative;
+  transition: transform 0.1s;
+  &:hover {
+    z-index: 10;
+  }
+  &:focus {
+    transform: scale(1.05);
+  }
 
-    &__content {
-      height: 100%;
-      z-index: 2;
-      &:hover {
-        .card__add-remove-buttons { opacity: 1; }
+  .content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    &:hover {
+      .add-remove-buttons {
+        opacity: 1;
       }
     }
+  }
 
-    &__set-icon {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      padding: 3px;
-      background: white;
-      border-radius: 20%;
-      font-size: 2.5em;
-      transform: translateX(-50%);
-    }
-
-    &__count {
-      position: absolute;
-      bottom: 4px;
-      left: 4px;
-      width: 1.4em;
-      height: 1.4em;
-      background: white;
-      border: 1px solid black;
-      border-radius: 0.3em;
-      color: black;
-      font-size: 1.3em;
-      line-height: 1.4em;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    &__add-remove-buttons {
-      display: flex;
-      position: absolute;
-      top: 50%;
-      right: 15%;
-      left: 15%;
-      transform: translateY(-50%);
-      opacity: 0;
-      transition: opacity 0.1s;
-      button {
-        background: none;
-        border: none;
-        outline: none;
-        transition: transform 0.1s;
-        &:active { transform: scale(0.9); }
-        &.remove-button { margin-right: auto; }
-        &.add-button { margin-left: auto; }
-      }
-      .fa {
-        font-size: 2em;
-        color: white;
-        text-shadow: 1px 1px 2px black;
+  .images {
+    position: relative;
+    border-radius: 4%;
+    overflow: hidden;
+    z-index: 1;
+    img {
+      width: 100%;
+      &.artwork {
+        position: absolute;
+        height: 100%;
       }
     }
+  }
 
-    &__count-animation {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+  .set-icon {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    padding: 3px;
+    background: white;
+    border-radius: 20%;
+    font-size: 2.5em;
+    transform: translateX(-50%);
+  }
+
+  .count {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    width: 1.4em;
+    height: 1.4em;
+    background: white;
+    border: 1px solid black;
+    border-radius: 0.3em;
+    color: black;
+    font-size: 1.3em;
+    line-height: 1.4em;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .add-remove-buttons {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    left: 15%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.1s;
+    button {
+      background: none;
+      border: none;
+      outline: none;
+      transition: transform 0.1s;
+      &:active {
+        transform: scale(0.9);
+      }
+      &.remove-button {
+        margin-right: auto;
+      }
+      &.add-button {
+        margin-left: auto;
+      }
+    }
+    .fa {
       font-size: 2em;
-      font-weight: bold;
-      animation: fly 1s ease-out 1 forwards;
-      pointer-events: none;
-      &.card__count-animation--add { color: #8cf54c; }
-      &.card__count-animation--remove { color: #f14621; }
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    }
+  }
+
+  .count-animation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: 2em;
+    font-weight: bold;
+    animation: fly 1s ease-out 1 forwards;
+    pointer-events: none;
+    &.count-animation--add {
+      color: #8cf54c;
+    }
+    &.count-animation--remove {
+      color: #f14621;
     }
   }
 `

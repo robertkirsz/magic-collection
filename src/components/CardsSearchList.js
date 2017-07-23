@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import styled from 'styled-components'
 // --- Helpers ---
 import _slice from 'lodash/slice'
 // --- Actions ---
 import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
 // --- Components ---
+import { Container } from '../styled'
 import { Card, ShowMoreButton } from './'
 
 const mapStateToProps = () => ({})
@@ -56,10 +56,9 @@ class CardsSearchList extends Component {
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CardsSearchList))
 
-const StyledCardsSearchList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 16px;
+const StyledCardsSearchList = Container.extend`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1rem;
+  padding: 2rem 1rem;
 `

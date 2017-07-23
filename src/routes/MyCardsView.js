@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import styled from 'styled-components'
 // --- Components ---
 import { Div } from '../styled'
+import { Route } from 'react-router-dom'
 import { CardsSearchList, LoadingScreen } from '../components'
 import CardView from '../routes/CardView'
 
@@ -30,14 +31,22 @@ const MyCardsView = ({ match, cards, filteredCards, myCardsLoading }) => {
   }
 
   return (
-    <main>
+    <StyledMyCardsView>
       <Route path={`${match.url}/:cardUrl`} component={CardView} />
       <LoadingScreen in={myCardsLoading} />
       {!myCardsLoading && <CardsSearchList cards={filteredCards || cards} />}
-    </main>
+    </StyledMyCardsView>
   )
 }
 
 MyCardsView.propTypes = propTypes
 
 export default connect(mapStateToProps)(MyCardsView)
+
+const StyledMyCardsView = styled.main`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+`

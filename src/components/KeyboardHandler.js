@@ -63,11 +63,7 @@ class KeyboardHandler extends Component {
 
   getCards = () => document.querySelectorAll('.cards-search-list .card')
 
-  getCardWrappers = () => document.querySelectorAll('.cards-search-list .card-wrapper')
-
   getVariants = () => document.querySelectorAll('.card-variants-list .card')
-
-  getVariantWrappers = () => document.querySelectorAll('.card-variants-list .card-wrapper')
 
   blurActiveCard = () => {
     const activeCard = document.querySelector('.card:focus')
@@ -84,7 +80,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const cards = this.getCardWrappers()
+        const cards = this.getCards()
         const singleCard = cards[0]
 
         if (singleCard) {
@@ -104,7 +100,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const variants = this.getVariantWrappers()
+        const variants = this.getVariants()
         const singleVariant = variants[0]
 
         if (singleVariant) {
@@ -128,7 +124,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const cards = this.getCardWrappers()
+        const cards = this.getCards()
         const singleCard = cards[0]
 
         if (singleCard) {
@@ -147,7 +143,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const variants = this.getVariantWrappers()
+        const variants = this.getVariants()
         const singleVariant = variants[0]
 
         if (singleVariant) {
@@ -202,7 +198,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const cards = this.getCardWrappers()
+        const cards = this.getCards()
 
         if (this.state.mainCardIndex < cards.length - 1) {
           this.setState({ mainCardIndex: this.state.mainCardIndex + 1 })
@@ -215,7 +211,7 @@ class KeyboardHandler extends Component {
           return
         }
 
-        const variants = this.getVariantWrappers()
+        const variants = this.getVariants()
 
         if (this.state.variantCardIndex < variants.length - 1) {
           this.setState({ variantCardIndex: this.state.variantCardIndex + 1 })
@@ -232,7 +228,7 @@ class KeyboardHandler extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
-        const addButton = document.querySelector('.card:focus .card__add-remove-buttons .add-button')
+        const addButton = document.querySelector('.card:focus .add-button')
         if (addButton) addButton.click()
       }
     })
@@ -244,13 +240,13 @@ class KeyboardHandler extends Component {
 
     key.bind(['=', 'num+'], e => {
       e.preventDefault()
-      const addButton = document.querySelector('.card:focus .card__add-remove-buttons .add-button')
+      const addButton = document.querySelector('.card:focus .add-button')
       if (addButton) addButton.click()
     })
 
     key.bind(['-', 'num-'], e => {
       e.preventDefault()
-      const removeButton = document.querySelector('.card:focus .card__add-remove-buttons .remove-button')
+      const removeButton = document.querySelector('.card:focus .remove-button')
       if (removeButton) removeButton.click()
     })
   }

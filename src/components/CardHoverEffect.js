@@ -15,9 +15,8 @@ const mapStateToProps = ({ settings }) => ({
 
 class CardHoverEffect extends Component {
   static propTypes = {
-    layers: PropTypes.array.isRequired,
+    children: PropTypes.element,
     onClick: PropTypes.func,
-    className: PropTypes.string,
     hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
     cardHoverAnimation: PropTypes.bool.isRequired, // TODO: Refactor this - This is from settings
     onMouseEnter: PropTypes.func,
@@ -110,11 +109,9 @@ class CardHoverEffect extends Component {
 
   render () {
     return (
-      <Container
-        innerRef={node => {
-          this.containerElement = node
-        }}
-        className={cn('card-hover-effect', this.props.className, { clickable: !!this.props.onClick })}
+      <StyledCardHoverEffect
+        innerRef={o => { this.containerElement = o }}
+        className={cn('card-hover-effect', { clickable: !!this.props.onClick })}
         onClick={this.handleClick}
         onMouseMove={this.handleMouseMove}
         onMouseEnter={this.handleMouseEnter}
@@ -122,44 +119,35 @@ class CardHoverEffect extends Component {
         tabIndex="1"
       >
         <div
-          className="card-hover-effect-container"
-          ref={node => {
-            this.contentElement = node
-          }}
+          className="container"
+          ref={o => { this.contentElement = o }}
         >
-          <div className="card-hover-effect-shadow" />
-          <div className="card-hover-effect-layers">
-            {this.props.layers.map((layer, index) =>
-              <div key={index} className={cn('card-hover-effect-rendered-layer', layer.className)}>
-                {layer}
-              </div>
-            )}
+          <div className="shadow" />
+          <div className="content">
+            {this.props.children}
           </div>
           <div
-            className="card-hover-effect-shine"
-            ref={node => {
-              this.shineElement = node
-            }}
+            className="shine"
+            ref={o => { this.shineElement = o }}
           />
         </div>
-      </Container>
+      </StyledCardHoverEffect>
     )
   }
 }
 
 export default connect(mapStateToProps)(CardHoverEffect)
 
-const Container = styled.div`
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: cover;
+const StyledCardHoverEffect = styled.div`
   border-radius: 4%;
   transform-style: preserve-3d;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-  .card-hover-effect:hover { z-index: 1; }
+  &:hover {
+    z-index: 1;
+  }
 
-  .card-hover-effect-container {
+  .container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -167,11 +155,11 @@ const Container = styled.div`
     transition: all 0.2s ease-out;
   }
 
-  .card-hover-effect-container.over .card-hover-effect-shadow {
+  .container.over .shadow {
     box-shadow: 0 45px 100px rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
   }
 
-  .card-hover-effect-layers {
+  .content {
     position: relative;
     width: 100%;
     height: 100%;
@@ -180,21 +168,7 @@ const Container = styled.div`
     transition: transform 0.2s;
   }
 
-  .card-hover-effect-rendered-layer > *:first-child {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: transparent;
-    background-size: cover;
-    transition: all 0.1s ease-out;
-    border-radius: 4%;
-  }
-
-  .card-hover-effect-shadow {
+  .shadow {
     position: absolute;
     top: 5%;
     left: 5%;
@@ -204,7 +178,7 @@ const Container = styled.div`
     box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
   }
 
-  .card-hover-effect-shine {
+  .shine {
     position: absolute;
     top: 0;
     right: 0;

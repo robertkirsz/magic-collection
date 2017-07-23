@@ -9,7 +9,6 @@ import _find from 'lodash/find'
 import _startsWith from 'lodash/startsWith'
 import { getLocation } from '../utils'
 import { Card, CardDetails } from '../components'
-import { Div } from '../styled'
 import { cardsDatabase } from '../database'
 import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
 
@@ -83,7 +82,7 @@ class CardView extends Component {
     if (!card) return null
 
     return (
-      <Container
+      <Modal
         animation={cardModalAnimation}
         show={modalOpened} // Value is from state and is "true" by default
         bsSize="large"
@@ -111,13 +110,12 @@ class CardView extends Component {
               <CardDetails card={card} />
             </Col>
           </Row>
-          <Div flex wrap align-items="flex-start" className="card-variants-list">
+          <VariantsList className="card-variants-list">
             {card.variants.map(variantCard => {
               const numberOfCards = this.getNumberOfCards(variantCard)
 
               return (
                 <Card
-                  className="small"
                   key={variantCard.id}
                   mainCard={card}
                   variantCard={variantCard}
@@ -125,20 +123,22 @@ class CardView extends Component {
                   numberOfCards={numberOfCards}
                   showAdd={!myCardsLocked}
                   showRemove={!myCardsLocked && numberOfCards > 0}
+                  showContent
                 />
               )
             })}
-          </Div>
+          </VariantsList>
         </Modal.Body>
-      </Container>
+      </Modal>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView)
 
-const Container = styled(Modal)`
-  .card-variants-list {
-    .card:not(:last-child) { margin-right: 10px; }
-  }
+const VariantsList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-gap: 1rem;
+  margin-top: 1rem;
 `

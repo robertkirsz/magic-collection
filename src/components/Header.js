@@ -50,7 +50,7 @@ class Header extends Component {
         <Link to="/">Magic Collection</Link>
 
         <Fade in={this.props.userSignedIn}>
-          <List space="24px" margin="0 auto">
+          <List space="24px" margin="0 0 0 auto">
             <LockButton />
             <NavLink to="/all-cards">All cards</NavLink>
             <NavLink to="/my-cards">

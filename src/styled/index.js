@@ -6,7 +6,6 @@ import Button from './Button'
 import Container from './Container'
 import ModalContent from './ModalContent'
 import ColumnCenter from './ColumnCenter'
-import CardContainer from './CardContainer'
 import AbsoluteCenter from './AbsoluteCenter'
 import CenteringWrapper from './CenteringWrapper'
 import AbsoluteFullSize from './AbsoluteFullSize'
@@ -21,7 +20,6 @@ export {
   Container,
   ModalContent,
   ColumnCenter,
-  CardContainer,
   AbsoluteCenter,
   CenteringWrapper,
   AbsoluteFullSize,
