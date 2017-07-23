@@ -97,10 +97,7 @@ class CardView extends Component {
   render () {
     const { card, myCardsLocked, location } = this.props
 
-    if (!card) {
-      console.warn('ASDADASDASDSADSAD')
-      return null
-    }
+    if (!card) return null
 
     return (
       <Fade in={this.state.modalOpened}>
@@ -168,7 +165,10 @@ const StyledCardView = ModalContent.extend`
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr auto auto;
-  grid-template-areas: "title title" "card details" "variants variants";
+  grid-template-areas:
+    "title title"
+    "card details"
+    "variants variants";
   grid-gap: 1rem;
 
   width: 100%;

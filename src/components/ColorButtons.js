@@ -4,39 +4,14 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _every from 'lodash/every'
+// --- Components ---
+import { Button } from '../styled'
 
-const ColorButtons = props =>
-  <div className="color-buttons btn-toolbar" role="toolbar">
-    <div className="btn-group btn-group-sm" role="group">
-      <button className={cn('btn btn-default', { active: _every(props.colors, c => c) })} onClick={props.toggleAll}>
-        All
-      </button>
-      <button className={cn('btn btn-default', { active: _every(props.colors, c => !c) })} onClick={props.toggleNone}>
-        None
-      </button>
-    </div>
-    <div className="btn-group btn-group-sm" role="group">
-      <button
-        className={cn('btn btn-default', { active: props.monocoloredOnly })}
-        title="Only monocolored cards"
-        onClick={props.handleChangeMonocolored}
-      >
-        Mono
-      </button>
-      <button
-        className={cn('btn btn-default', { active: props.multicoloredOnly })}
-        title="Only multicolored cards"
-        onClick={props.handleChangeMulticolored}
-      >
-        Multi
-      </button>
-    </div>
-  </div>
-
-ColorButtons.propTypes = {
+const propTypes = {
   colors: PropTypes.object.isRequired,
   monocoloredOnly: PropTypes.bool.isRequired,
   multicoloredOnly: PropTypes.bool.isRequired,
@@ -46,4 +21,46 @@ ColorButtons.propTypes = {
   handleChangeMulticolored: PropTypes.func.isRequired
 }
 
+const ColorButtons = props =>
+  <StyledColorButtons>
+    <Button
+      className={cn({ active: _every(props.colors, c => c) })}
+      onClick={props.toggleAll}
+    >
+      All
+    </Button>
+    <Button
+      className={cn({ active: _every(props.colors, c => !c) })}
+      onClick={props.toggleNone}
+    >
+      None
+    </Button>
+    <Button
+      className={cn({ active: props.monocoloredOnly })}
+      title="Only monocolored cards"
+      onClick={props.handleChangeMonocolored}
+    >
+      Mono
+    </Button>
+    <Button
+      className={cn({ active: props.multicoloredOnly })}
+      title="Only multicolored cards"
+      onClick={props.handleChangeMulticolored}
+    >
+      Multi
+    </Button>
+  </StyledColorButtons>
+
+ColorButtons.propTypes = propTypes
+
 export default ColorButtons
+
+const StyledColorButtons = styled.div`
+  grid-area: color-buttons-area;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  button.active { text-decoration: underline; }
+`

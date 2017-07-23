@@ -18,6 +18,7 @@ import { filterMyCards } from '../store/myCards'
 import { resetMainCardFocus } from '../store/keyboard'
 // --- Components ---
 import { ColorFilter, CmcFilter, ColorButtons } from './'
+import { Button, Input } from '../styled'
 
 // TODO: make filetr query stay between route changes
 // TODO: show idicator that a query is on (a dot in the search icon)
@@ -53,6 +54,8 @@ class SearchModule extends Component {
     filterMyCards: PropTypes.func.isRequired,
     resetMainCardFocus: PropTypes.func.isRequired
   }
+
+  nameInput = null
 
   state = {
     ...initialState(),
@@ -201,7 +204,7 @@ class SearchModule extends Component {
   focusNameInput = () => {
     if (document.activeElement.tagName === 'INPUT') return
 
-    this.refs.nameInput.focus()
+    this.nameInput.focus()
   }
 
   selectNameInput = () => {
@@ -222,39 +225,37 @@ class SearchModule extends Component {
     const { cardSets } = this.props
 
     return (
-      <Container
+      <StyledSearchModule
         className={cn('search-module', { 'form-visible': this.state.showSearchForm })}
         onMouseLeave={this.searchModuleMouseLeave}
       >
         <button className="search-button fa fa-search" aria-hidden="true" onMouseEnter={this.focusNameInput} />
 
-        <div className="search-form">
-          <div className="text-inputs form-group">
-            <input
-              className="form-control"
-              ref="nameInput"
-              placeholder="Name"
-              value={this.state.queryName}
-              onChange={this.handleChange('queryName')}
-              onBlur={() => {
-                this.setState({ showSearchForm: false })
-              }}
-            />
-            <input
-              className="form-control"
-              placeholder="Type"
-              value={this.state.queryTypes}
-              onChange={this.handleChange('queryTypes')}
-            />
-            <input
-              className="form-control"
-              placeholder="Text"
-              value={this.state.queryText}
-              onChange={this.handleChange('queryText')}
-            />
-          </div>
-          <div className="form-group">
-            <select className="form-control" value={this.state.cardSet} onChange={this.handleChange('cardSet')}>
+        <SearchForm className="search-form">
+          <NameInput
+            innerRef={o => { this.nameInput = o }}
+            placeholder="Name"
+            value={this.state.queryName}
+            onChange={this.handleChange('queryName')}
+            onBlur={() => {
+              this.setState({ showSearchForm: false })
+            }}
+          />
+
+          <TypeInput
+            placeholder="Type"
+            value={this.state.queryTypes}
+            onChange={this.handleChange('queryTypes')}
+          />
+
+          <TextInput
+            placeholder="Text"
+            value={this.state.queryText}
+            onChange={this.handleChange('queryText')}
+          />
+
+          <SetsArea>
+            <select value={this.state.cardSet} onChange={this.handleChange('cardSet')}>
               <option value="all-sets">All sets</option>
               {cardSets.map(set =>
                 <option key={set.code} value={set.code}>
@@ -262,121 +263,75 @@ class SearchModule extends Component {
                 </option>
               )}
             </select>
-          </div>
-          <div className="color-filter-group form-group">
-            <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
-            <ColorButtons
-              colors={this.state.colors}
-              toggleAll={() => {
-                this.toggleColors(true)
-              }}
-              toggleNone={() => {
-                this.toggleColors(false)
-              }}
-              monocoloredOnly={this.state.monocoloredOnly}
-              multicoloredOnly={this.state.multicoloredOnly}
-              handleChangeMonocolored={this.handleChangeMonocolored}
-              handleChangeMulticolored={this.handleChangeMulticolored}
+          </SetsArea>
+
+          <CmcArea>
+            <CmcFilter
+              cmcValue={this.state.cmcValue}
+              cmcType={this.state.cmcType}
+              changeCmcValue={this.handleChange('cmcValue')}
+              changeCmcType={this.handleChange('cmcType')}
             />
-          </div>
-          <CmcFilter
-            cmcValue={this.state.cmcValue}
-            cmcType={this.state.cmcType}
-            changeCmcValue={this.handleChange('cmcValue')}
-            changeCmcType={this.handleChange('cmcType')}
+          </CmcArea>
+
+          <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
+
+          <ColorButtons
+            colors={this.state.colors}
+            toggleAll={() => {
+              this.toggleColors(true)
+            }}
+            toggleNone={() => {
+              this.toggleColors(false)
+            }}
+            monocoloredOnly={this.state.monocoloredOnly}
+            multicoloredOnly={this.state.multicoloredOnly}
+            handleChangeMonocolored={this.handleChangeMonocolored}
+            handleChangeMulticolored={this.handleChangeMulticolored}
           />
-          <div>
-            <button className="btn" onClick={this.resetState}>
+
+          <ButtonsArea>
+            <Button className="btn" onClick={this.resetState}>
               Reset
-            </button>
-          </div>
-        </div>
-      </Container>
+            </Button>
+          </ButtonsArea>
+        </SearchForm>
+      </StyledSearchModule>
     )
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+const StyledSearchModule = styled.div`
   flex: none;
   position: relative;
-  width: 40px; height: 40px;
-  padding: 8px;
-  background-color: rgba(255, 255, 255, 0.95);
+  width: 40px;
+  height: 40px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
   pointer-events: auto;
-  .search-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: absolute;
-    left: 8px;
-    width: 385px;
-    transform: scale(0);
-    transform-origin: left center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    .text-inputs {
-      display: flex;
-      input {
-        flex: 1;
-        &:not(:last-child) {
-          margin-right: 5px;
-        }
-      }
+  &.form-visible,
+  &:hover {
+    width: 100%;
+    max-width: 415px;
+    height: 220px;
+    height: auto;
+    padding: 0;
+    border-radius: 10px;
+    .search-button {
+      font-size: 4em;
+      opacity: 0;
     }
-    .color-filter-group {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .color-filter {
-      display: flex;
-      .icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        font-size: 1.5em;
-        transition: all 0.2s;
-        &:not(:last-child) {
-          margin-right: 5px;
-        }
-        &.unchecked {
-          background-color: transparent;
-          opacity: 0.4;
-        }
-      }
-    }
-    .all-none-checkboxes {
-      label:not(:last-child) {
-        margin-right: 5px;
-      }
-      input {
-        margin-right: 5px;
-      }
-    }
-    .cmc-filter {
-      .input-group {
-        width: 290px;
-      }
-    }
-    .mono-multi-checkboxes {
-      label:not(:last-child) {
-        margin-right: 5px;
-      }
-      input {
-        margin-right: 5px;
-      }
+    .search-form {
+      transform: scale(1);
+      opacity: 1;
     }
   }
+
   .search-button {
     position: absolute;
     top: 0;
@@ -389,21 +344,71 @@ const Container = styled.div`
     border: none;
     font-size: 1.5em;
     opacity: 1;
-    transition: all 0.3s ease;
+    transition: all var(--transitionTime);
   }
-  &.form-visible,
-  &:hover {
-    width: 415px;
-    height: 254px;
-    padding: 0;
-    border-radius: 10px;
-    .search-button {
-      font-size: 4em;
-      opacity: 0;
-    }
-    .search-form {
-      transform: scale(1);
-      opacity: 1;
-    }
+`
+
+const SearchForm = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "name-input"
+    "type-input"
+    "text-input"
+    "sets-area"
+    "cmc-area"
+    "colors-area"
+    "color-buttons-area"
+    "buttons-area";
+  grid-gap: 0.5rem;
+
+  ${'' /* position: absolute; */}
+  bottom: 0;
+  ${'' /* width: 100%; */}
+  ${'' /* height: 100%; */}
+  padding: 0.5rem;
+
+  transform: scale(0);
+  transform-origin: center bottom;
+  opacity: 0;
+  transition: all var(--transitionTime);
+
+  @media (min-width: 400px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "name-input type-input text-input"
+      "sets-area cmc-area cmc-area"
+      "colors-area colors-area color-buttons-area"
+      "buttons-area buttons-area buttons-area";
   }
+`
+
+const NameInput = styled(Input)`
+  grid-area: name-input;
+`
+const TypeInput = styled(Input)`
+  grid-area: type-input;
+`
+const TextInput = styled(Input)`
+  grid-area: text-input;
+`
+
+const SetsArea = styled.div`
+  grid-area: sets-area;
+  display: flex;
+  select {
+    flex: 1;
+    width: 100%;
+  }
+`
+
+const CmcArea = styled.div`
+  grid-area: cmc-area;
+`
+
+const ButtonsArea = styled.div`
+  grid-area: buttons-area;
+  justify-self: center;
 `

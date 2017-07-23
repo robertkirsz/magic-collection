@@ -80,6 +80,7 @@ const AppButtons = styled.div`
   align-content: flex-end;
   position: fixed;
   right: 0; bottom: 20px; left: 0;
+  padding: 0 1rem;
   z-index: 5;
   pointer-events: none;
 `
