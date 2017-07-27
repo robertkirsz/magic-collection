@@ -14,6 +14,7 @@ import { Fade } from '../transitions'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   loading: user.authPending,
+  collectionLoaded: myCards.loaded,
   userSignedIn: user.signedIn,
   numberOfTotalCards: _reduce(myCards.cards, (sum, card) => sum + card.cardsInCollection, 0),
   numberOfUniqueCards: myCards.cards.length
@@ -23,6 +24,7 @@ const mapDispatchToProps = { openModal }
 
 const propTypes = {
   loading: PropTypes.bool.isRequired,
+  collectionLoaded: PropTypes.bool.isRequired,
   userSignedIn: PropTypes.bool.isRequired,
   openModal: PropTypes.func.isRequired,
   numberOfTotalCards: PropTypes.number,
@@ -39,19 +41,19 @@ class Header extends Component {
       <Container flex alignItems="center">
         <Link to="/">Magic Collection</Link>
 
-        <Fade in={this.props.userSignedIn}>
-          <List space="24px" margin="0 0 0 auto">
-            <LockButton />
+        <Fade in={this.props.collectionLoaded}>
+          <List space="1.5vw" margin="0 0 0 auto">
             <NavLink to="/all-cards">All cards</NavLink>
             <NavLink to="/my-cards">
               My cards {this.props.numberOfTotalCards} ({this.props.numberOfUniqueCards})
             </NavLink>
+            <LockButton />
           </List>
         </Fade>
 
         {!this.props.loading &&
           !this.props.userSignedIn &&
-          <List right space="24px" margin="0 0 0 auto">
+          <List right space="1.5vw" margin="0 0 0 auto">
             <a onClick={this.openModal('sign in')}>Sign In</a>
             <a onClick={this.openModal('sign up')}>Sign Up</a>
           </List>}
@@ -81,5 +83,9 @@ const StyledHeader = styled.nav`
 
   * {
     user-select: none;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 0.8em;
   }
 `

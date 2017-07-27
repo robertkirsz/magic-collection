@@ -308,24 +308,28 @@ const StyledSearchModule = styled.div`
   position: relative;
   width: 40px;
   height: 40px;
-  padding: 1rem;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 50%;
-  transition: all 0.3s ease;
   box-shadow: var(--shadow);
   pointer-events: auto;
+  transition: all var(--transitionTime);
+  overflow: hidden;
+
   &.form-visible,
   &:hover {
-    width: 100%;
-    max-width: 415px;
-    height: 220px;
-    height: auto;
-    padding: 0;
+    width: 90vw;
+    height: 420px;
     border-radius: 10px;
+    @media (min-width: 401px) {
+      width: 415px;
+      height: 220px;
+    }
+
     .search-button {
       font-size: 4em;
       opacity: 0;
     }
+
     .search-form {
       transform: scale(1);
       opacity: 1;
@@ -363,18 +367,17 @@ const SearchForm = styled.div`
     "buttons-area";
   grid-gap: 0.5rem;
 
-  ${'' /* position: absolute; */}
-  bottom: 0;
-  ${'' /* width: 100%; */}
-  ${'' /* height: 100%; */}
+  position: absolute;
+  height: 100%;
+  width: 100%;
   padding: 0.5rem;
 
   transform: scale(0);
-  transform-origin: center bottom;
+  transform-origin: center;
   opacity: 0;
   transition: all var(--transitionTime);
 
-  @media (min-width: 400px) {
+  @media (min-width: 401px) {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:

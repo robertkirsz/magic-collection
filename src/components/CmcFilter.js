@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import styled from 'styled-components'
 // --- Components ---
-import { Button, Input, Div } from '../styled'
+import { Button, Input, Div, List } from '../styled'
 
 const CmcTypeButton = ({ thisType, activeType, onChange, label }) =>
   <StyledCmcTypeButton
@@ -27,7 +27,7 @@ const StyledCmcTypeButton = styled(Button)`
 `
 
 const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) =>
-  <StyledCmcFilter>
+  <List space="3px">
     <Input
       type="number"
       min="0"
@@ -41,7 +41,7 @@ const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) =>
       <CmcTypeButton thisType="exactly" label="Exactly" activeType={cmcType} onChange={changeCmcType} />
       <CmcTypeButton thisType="maximum" label="Max" activeType={cmcType} onChange={changeCmcType} />
     </Div>
-  </StyledCmcFilter>
+  </List>
 
 CmcFilter.propTypes = {
   cmcValue: PropTypes.number,
@@ -51,7 +51,3 @@ CmcFilter.propTypes = {
 }
 
 export default CmcFilter
-
-const StyledCmcFilter = styled.div`
-  display: flex;
-`
