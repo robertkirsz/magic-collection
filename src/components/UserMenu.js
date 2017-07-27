@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import onClickOutside from 'react-onclickoutside'
 // --- Components ---
 import { UserBadge, UserDropdownMenu } from './'
-// --- Transitions ---
-import { Fade } from '../transitions'
 
 class UserMenu extends Component {
   static propTypes = {
@@ -29,9 +27,10 @@ class UserMenu extends Component {
   render = () =>
     <div style={this.props.style}>
       <UserBadge onClick={this.toggleDropdown} />
-      <Fade in={this.props.userSignedIn && this.state.isDropdownVisible}>
-        <UserDropdownMenu onHide={this.hideDropdown} />
-      </Fade>
+      <UserDropdownMenu
+        show={this.props.userSignedIn && this.state.isDropdownVisible}
+        onHide={this.hideDropdown}
+      />
     </div>
 }
 

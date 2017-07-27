@@ -4,6 +4,7 @@ import List from './List'
 import Input from './Input'
 import Button from './Button'
 import Container from './Container'
+import DropdownMenu from './DropdownMenu'
 import ModalContent from './ModalContent'
 import ColumnCenter from './ColumnCenter'
 import AbsoluteCenter from './AbsoluteCenter'
@@ -18,6 +19,7 @@ export {
   Input,
   Button,
   Container,
+  DropdownMenu,
   ModalContent,
   ColumnCenter,
   AbsoluteCenter,

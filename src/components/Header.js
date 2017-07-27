@@ -77,10 +77,9 @@ const StyledHeader = styled.nav`
   background: white;
   box-shadow: var(--shadow);
   z-index: 10;
-  pointer-events: auto;
+  text-align: center;
 
-  a {
-    color: inherit;
-    text-decoration: none;
+  * {
+    user-select: none;
   }
 `

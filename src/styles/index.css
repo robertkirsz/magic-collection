@@ -21,7 +21,13 @@ body {
   height: 100%;
 }
 
-a, button, .clickable { cursor: pointer; }
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button, .clickable { cursor: pointer; }
 
 .no-scroll { overflow-y: hidden; }
 
