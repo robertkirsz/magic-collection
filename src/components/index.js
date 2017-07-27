@@ -1,6 +1,7 @@
 import Card from './Card'
 import Header from './Header'
 import Spinner from './Spinner'
+import UserMenu from './UserMenu'
 import CmcFilter from './CmcFilter'
 import UserBadge from './UserBadge'
 import LatestSet from './LatestSet'
@@ -25,6 +26,7 @@ export {
   Card,
   Header,
   Spinner,
+  UserMenu,
   CmcFilter,
   UserBadge,
   LatestSet,

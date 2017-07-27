@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 // --- Helpers ---
 import { connect } from 'react-redux'
-import onClickOutside from 'react-onclickoutside'
 import styled from 'styled-components'
 // --- Components ---
 import { Link } from 'react-router-dom'
@@ -13,26 +12,21 @@ const mapStateToProps = () => ({})
 
 const mapDispatchToProps = { signOut }
 
-class UserDropdownMenu extends Component {
-  static propTypes = {
-    onHide: PropTypes.func.isRequired,
-    signOut: PropTypes.func.isRequired
-  }
-
-  handleClickOutside = () => { this.props.onHide() }
-
-  render () {
-    return (
-      <StyledUserDropdownMenu onClick={this.props.onHide}>
-        <Link to="/collection-stats">Collection Stats</Link>
-        <Link to="/settings">Settings</Link>
-        <a onClick={this.props.signOut}>Sign out</a>
-      </StyledUserDropdownMenu>
-    )
-  }
+const propTypes = {
+  onHide: PropTypes.func.isRequired,
+  signOut: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(onClickOutside(UserDropdownMenu))
+const UserDropdownMenu = props =>
+  <StyledUserDropdownMenu onClick={props.onHide}>
+    <Link to="/collection-stats">Collection Stats</Link>
+    <Link to="/settings">Settings</Link>
+    <a onClick={props.signOut}>Sign out</a>
+  </StyledUserDropdownMenu>
+
+UserDropdownMenu.propTypes = propTypes
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserDropdownMenu)
 
 const StyledUserDropdownMenu = styled.div`
   display: flex;
@@ -50,6 +44,8 @@ const StyledUserDropdownMenu = styled.div`
   a {
     color: inherit;
     text-decoration: none;
-    &:not(:first-child) { margin-top: 16px; }
+    &:not(:first-child) {
+      margin-top: 16px;
+    }
   }
 `

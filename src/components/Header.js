@@ -9,7 +9,7 @@ import { openModal } from '../store/modal'
 // --- Components ---
 import { NavLink, Link } from 'react-router-dom'
 import { List, Container } from '../styled'
-import { UserBadge, LockButton, UserDropdownMenu } from './'
+import { LockButton, UserMenu } from './'
 import { Fade } from '../transitions'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
@@ -30,16 +30,6 @@ const propTypes = {
 }
 
 class Header extends Component {
-  state = { showDropdown: false }
-
-  showDropdown = () => {
-    this.setState({ showDropdown: true })
-  }
-
-  hideDropdown = () => {
-    this.setState({ showDropdown: false })
-  }
-
   openModal = modalName => e => {
     this.props.openModal(modalName)
   }
@@ -67,11 +57,7 @@ class Header extends Component {
           </List>}
 
         {(this.props.loading || this.props.userSignedIn) &&
-          <UserBadge style={{ margin: '0 0 0 auto' }} onClick={!this.state.showDropdown ? this.showDropdown : null} />}
-
-        <Fade in={this.props.userSignedIn && this.state.showDropdown}>
-          <UserDropdownMenu onHide={this.hideDropdown} />
-        </Fade>
+          <UserMenu userSignedIn={this.props.userSignedIn} style={{ margin: '0 0 0 auto' }} />}
       </Container>
     </StyledHeader>
 }
