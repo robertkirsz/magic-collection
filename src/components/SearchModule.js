@@ -210,7 +210,7 @@ class SearchModule extends Component {
   selectNameInput = () => {
     if (document.activeElement.tagName === 'INPUT') return
 
-    this.refs.nameInput.select()
+    this.nameInput.select()
   }
 
   searchModuleMouseLeave = () => {

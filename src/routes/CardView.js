@@ -12,6 +12,7 @@ import { cardsDatabase } from '../database'
 import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
 import { ModalContent } from '../styled'
 import { Fade, Scale } from '../transitions'
+import key from 'keyboardjs'
 
 const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 
@@ -45,16 +46,31 @@ class CardView extends Component {
         this.props.setVariantCardFocus(0)
       }, 80)
     }
+
+    key.bind('esc', this.closeModal)
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevState.modalOpened && !this.state.modalOpened) {
+      setTimeout(() => {
+        this.goBack()
+      }, 300)
+    }
   }
 
   componentWillReceiveProps (nextProps) {
     if (this.props.card && !nextProps.card) {
       this.closeModal()
     }
+
     if (!this.props.card && nextProps.card) {
       this.setState({ modalOpened: true })
       this.props.setVariantCardFocus(0)
     }
+  }
+
+  componentWillUnmount () {
+    key.unbind('esc', this.closeModal)
   }
 
   closeModal = () => {
@@ -68,14 +84,6 @@ class CardView extends Component {
 
   onContentClick = e => {
     e.stopPropagation()
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (prevState.modalOpened && !this.state.modalOpened) {
-      setTimeout(() => {
-        this.goBack()
-      }, 300)
-    }
   }
 
   getNumberOfCards = variantCard => {

@@ -21,7 +21,9 @@ class KeyboardHandler extends Component {
     variantCardIndex: null
   }
 
-  componentWillMount () { this.initMouseEvents() }
+  componentWillMount () {
+    this.initMouseEvents()
+  }
 
   componentWillUnmount () {
     key.reset()
