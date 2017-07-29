@@ -128,7 +128,7 @@ export default class Card extends Component {
     )
 
     return (
-      <div>
+      <StyledCard className="card" tabIndex="1">
         <CardHoverEffect
           onClick={this.onCardClick}
           hoverAnimation={hoverAnimation}
@@ -136,7 +136,8 @@ export default class Card extends Component {
           onMouseLeave={this.hideDetailsPopup}
           onMouseMove={this.updateDetailsPopupPosition}
         >
-          <StyledCard className="card" tabIndex="1">
+          {/* <div style={{ position: 'relative' }}> */}
+          <div>
             {this.props.showContent &&
               <div className="content">
                 {setIcon && <span className={cn('set-icon', cardData.setIcon)} />}
@@ -151,7 +152,7 @@ export default class Card extends Component {
               <img src={cardData.image} className="artwork" alt="Card artwork" />
               <img src={cardBack} className="background" alt="Card background" />
             </div>
-          </StyledCard>
+          </div>
         </CardHoverEffect>
         {cardDetailsPopupDelay !== false &&
           <CardDetailsPopup
@@ -160,7 +161,7 @@ export default class Card extends Component {
             coordinates={detailsPopupCoordinates}
             cardDetailsPopupDelay={cardDetailsPopupDelay}
           />}
-      </div>
+      </StyledCard>
     )
   }
 }

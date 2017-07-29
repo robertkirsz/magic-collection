@@ -7,33 +7,38 @@ import { manaLettersToIcons } from '../utils'
 const propTypes = { card: PropTypes.object.isRequired }
 
 const CardDetails = ({ card }) =>
-  <Container>
+  <StyledCardDetails>
     <ul>
       <li>
-        {card.name} {<ManaBadge manaCost={card.manaCost} />}
+        {card.name} <ManaBadge manaCost={card.manaCost} />
       </li>
       <li>
         {card.type}
       </li>
-      {card.text && <li className="text" dangerouslySetInnerHTML={{ __html: manaLettersToIcons(card.text) }} />}
+      {card.text &&
+        <li className="text" dangerouslySetInnerHTML={{ __html: manaLettersToIcons(card.text) }} />}
       {card.power &&
         card.toughness &&
         <li>
           {card.power} / {card.toughness}
         </li>}
     </ul>
-  </Container>
+  </StyledCardDetails>
 
 CardDetails.propTypes = propTypes
 
 export default CardDetails
 
-const Container = styled.div`
-  > .text { white-space: pre-line; }
+const StyledCardDetails = styled.div`
+  > .text {
+    white-space: pre-line;
+  }
   > ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    > li:not(:first-of-type) { margin-top: 5px; }
+    > li:not(:first-of-type) {
+      margin-top: 5px;
+    }
   }
 `

@@ -5,9 +5,6 @@ import styled from 'styled-components'
 import cn from 'classnames'
 import _includes from 'lodash/includes'
 
-let bd
-let htm
-
 export default class CardHoverEffect extends Component {
   static propTypes = {
     children: PropTypes.element,
@@ -31,17 +28,11 @@ export default class CardHoverEffect extends Component {
 
   handleClick = () => {
     this.handleMouseLeave()
-    if (this.props.onClick) this.props.onClick()
+    this.props.onClick()
   }
 
   componentDidMount () {
-    bd = document.getElementsByTagName('body')[0]
-    htm = document.getElementsByTagName('html')[0]
-
-    const w =
-      this.containerElement.clientWidth ||
-      this.containerElement.offsetWidth ||
-      this.containerElement.scrollWidth
+    const w = this.containerElement.clientWidth
     this.containerElement.style.transform = 'perspective(' + w * 3 + 'px)'
   }
 
@@ -50,25 +41,16 @@ export default class CardHoverEffect extends Component {
     // This covers situation where "mouseMove" happens without "mouseEnter"
     if (!_includes(this.contentElement.className, ' over')) this.handleMouseEnter()
 
-    const touchEnabled = false
-    const bdst = bd.scrollTop || htm.scrollTop
-    const bdsl = bd.scrollLeft
-    const pageX = touchEnabled ? e.touches[0].pageX : e.pageX
-    const pageY = touchEnabled ? e.touches[0].pageY : e.pageY
+    const pageX = e.pageX
+    const pageY = e.pageY
     const offsets = this.containerElement.getBoundingClientRect()
-    const w =
-      this.containerElement.clientWidth ||
-      this.containerElement.offsetWidth ||
-      this.containerElement.scrollWidth
-    const h =
-      this.containerElement.clientHeight ||
-      this.containerElement.offsetHeight ||
-      this.containerElement.scrollHeight
+    const w = this.containerElement.clientWidth
+    const h = this.containerElement.clientHeight
     const wMultiple = 320 / w
-    const offsetX = 0.52 - (pageX - offsets.left - bdsl) / w
-    const offsetY = 0.52 - (pageY - offsets.top - bdst) / h
-    const dy = pageY - offsets.top - bdst - h / 2
-    const dx = pageX - offsets.left - bdsl - w / 2
+    const offsetX = 0.52 - (pageX - offsets.left) / w
+    const offsetY = 0.52 - (pageY - offsets.top) / h
+    const dy = pageY - offsets.top - h / 2
+    const dx = pageX - offsets.left - w / 2
     const yRotate = (offsetX - dx) * (0.07 * wMultiple)
     const xRotate = (dy - offsetY) * (0.1 * wMultiple)
     let imgCSS = 'rotateX(' + xRotate + 'deg) rotateY(' + yRotate + 'deg)'
@@ -79,7 +61,9 @@ export default class CardHoverEffect extends Component {
 
     if (angle < 0) angle = angle + 360
 
-    if (this.contentElement.className.indexOf(' over') !== -1) imgCSS += ' scale3d(1.07,1.07,1.07)'
+    if (this.contentElement.className.indexOf(' over') !== -1) {
+      imgCSS += ' scale3d(1.07, 1.07, 1.07)'
+    }
 
     this.contentElement.style.transform = imgCSS
 
@@ -87,7 +71,7 @@ export default class CardHoverEffect extends Component {
       'linear-gradient(' +
       angle +
       'deg, rgba(255, 255, 255, ' +
-      (pageY - offsets.top - bdst) / h * 0.4 +
+      (pageY - offsets.top) / h * 0.4 +
       ') 0%,rgba(255, 255, 255, 0) 80%)'
     this.shineElement.style.transform =
       'translateX(' + offsetX + 'px) translateY(' + offsetY + 'px)'
@@ -96,14 +80,12 @@ export default class CardHoverEffect extends Component {
   handleMouseEnter = () => {
     this.props.onMouseEnter()
     if (!this.props.hoverAnimation) return
-
     this.contentElement.className += ' over'
   }
 
   handleMouseLeave = () => {
     this.props.onMouseLeave()
     if (!this.props.hoverAnimation) return
-
     this.contentElement.className = this.contentElement.className.replace(' over', '')
     this.contentElement.style.transform = ''
     this.shineElement.style.cssText = ''
@@ -128,16 +110,16 @@ export default class CardHoverEffect extends Component {
             this.contentElement = o
           }}
         >
-          <div className="shadow" />
-          <div className="content">
-            {this.props.children}
-          </div>
           <div
             className="shine"
             ref={o => {
               this.shineElement = o
             }}
           />
+          <div className="content">
+            {this.props.children}
+          </div>
+          <div className="shadow" />
         </div>
       </StyledCardHoverEffect>
     )
@@ -147,10 +129,6 @@ export default class CardHoverEffect extends Component {
 const StyledCardHoverEffect = styled.div`
   border-radius: 4%;
   transform-style: preserve-3d;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  &:hover {
-    z-index: 1;
-  }
 
   > .container {
     position: relative;
@@ -160,24 +138,6 @@ const StyledCardHoverEffect = styled.div`
     transition: all 0.2s ease-out;
     &.over > .shadow {
       box-shadow: 0 45px 100px rgba(14, 21, 47, 0.4), 0 16px 40px rgba(14, 21, 47, 0.4);
-    }
-    > .content {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 4%;
-      transform-style: preserve-3d;
-      transition: transform 0.2s;
-    }
-
-    > .shadow {
-      position: absolute;
-      top: 5%;
-      left: 5%;
-      width: 90%;
-      height: 90%;
-      transition: all 0.2s ease-out;
-      box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
     }
 
     > .shine {
@@ -189,6 +149,28 @@ const StyledCardHoverEffect = styled.div`
       border-radius: 4%;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 60%);
       pointer-events: none;
+      z-index: 3;
+    }
+
+    > .content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 4%;
+      transform-style: preserve-3d;
+      transition: transform 0.2s;
+      z-index: 2;
+    }
+
+    > .shadow {
+      position: absolute;
+      top: 5%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      transition: all 0.2s ease-out;
+      box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
+      z-index: 1;
     }
   }
 `

@@ -125,9 +125,6 @@ class CardView extends Component {
         <StyledModal onClick={this.closeModal}>
           <Scale in={this.state.modalOpened}>
             <StyledCardView onClick={this.onContentClick}>
-              <TitleArea>
-                {card.name}
-              </TitleArea>
               <CardArea>
                 <Card
                   mainCard={card}
@@ -192,18 +189,16 @@ const StyledModal = styled.div`
 const StyledCardView = ModalContent.extend`
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: 1fr auto auto;
-  grid-template-areas: "title title" "card details" "variants variants";
+  grid-template-areas: "card details" "variants variants";
   grid-gap: 1rem;
 
   width: 100%;
   padding: 1rem;
-`
 
-const TitleArea = styled.h4`
-  grid-area: title;
-
-  margin: 0;
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "card" "details" "variants";
+  }
 `
 
 const CardArea = styled.div`grid-area: card;`
