@@ -1,5 +1,6 @@
 :root {
   --text-color: #373a3c;
+  --fontSize: 16px;
   --navbarHeight: 50px;
   --contentWidth: 1440px;
   --borderRadius: 4px;

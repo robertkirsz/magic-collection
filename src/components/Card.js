@@ -20,9 +20,13 @@ export default class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]).isRequired,
+    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
     hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
     showContent: PropTypes.bool
+  }
+
+  static defaultProps = {
+    cardDetailsPopupDelay: false
   }
 
   state = {

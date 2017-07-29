@@ -1,6 +1,8 @@
 {
   "name": "magic-collection",
   "version": "0.1.0",
+  "description": "Magic: The Gathering cards manager and database",
+  "author": "Robert Kirsz <robert.kirsz@gmail.com> (http://robertkirsz.pl/)",
   "private": true,
   "dependencies": {
     "chart.js": "^2.6.0",
@@ -11,7 +13,6 @@
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
-    "react-bootstrap": "^0.31.1",
     "react-dom": "^15.6.1",
     "react-onclickoutside": "^6.4.0",
     "react-redux": "^5.0.5",

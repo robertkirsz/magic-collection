@@ -4,7 +4,9 @@
 
 import styled, { css } from 'styled-components'
 
-export default styled.div`
+export default styled.div.attrs({
+  className: 'Div'
+})`
   ${''/* DISPLAY */}
   ${({ flex, block, inline }) => {
     if (inline) {

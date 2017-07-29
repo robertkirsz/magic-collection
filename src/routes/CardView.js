@@ -129,7 +129,10 @@ class CardView extends Component {
                 {card.name}
               </TitleArea>
               <CardArea>
-                <Card mainCard={card} hoverAnimation />
+                <Card
+                  mainCard={card}
+                  hoverAnimation
+                />
                 {getLocation(location).onMyCardsPage &&
                   <span>
                     {/* TODO: this doesn't work, 'cardsInCollection' in

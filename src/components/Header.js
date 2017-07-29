@@ -38,11 +38,11 @@ class Header extends Component {
 
   render = () =>
     <StyledHeader>
-      <Container flex alignItems="center">
+      <Container flex justifyContent="space-between" alignItems="center">
         <Link to="/">Magic Collection</Link>
 
         <Fade in={this.props.collectionLoaded}>
-          <List space="1.5vw" margin="0 0 0 auto">
+          <List space="1.5vw">
             <NavLink to="/all-cards">All cards</NavLink>
             <NavLink to="/my-cards">
               My cards {this.props.numberOfTotalCards} ({this.props.numberOfUniqueCards})
@@ -53,13 +53,13 @@ class Header extends Component {
 
         {!this.props.loading &&
           !this.props.userSignedIn &&
-          <List right space="1.5vw" margin="0 0 0 auto">
+          <List right space="1.5vw">
             <a onClick={this.openModal('sign in')}>Sign In</a>
             <a onClick={this.openModal('sign up')}>Sign Up</a>
           </List>}
 
         {(this.props.loading || this.props.userSignedIn) &&
-          <UserMenu userSignedIn={this.props.userSignedIn} style={{ margin: '0 0 0 auto' }} />}
+          <UserMenu userSignedIn={this.props.userSignedIn} />}
       </Container>
     </StyledHeader>
 }
@@ -68,7 +68,9 @@ Header.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
 
-const StyledHeader = styled.nav`
+const StyledHeader = styled.nav.attrs({
+  className: 'Header'
+})`
   display: flex;
   justify-content: center;
   position: fixed;
@@ -77,9 +79,9 @@ const StyledHeader = styled.nav`
   left: 0;
   height: var(--navbarHeight);
   background: white;
+  text-align: center;
   box-shadow: var(--shadow);
   z-index: 10;
-  text-align: center;
 
   * {
     user-select: none;

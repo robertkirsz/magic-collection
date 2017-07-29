@@ -4,11 +4,13 @@
 
 import styled, { css } from 'styled-components'
 
-const List = styled.div`
+const List = styled.div.attrs({
+  className: 'List'
+})`
   display: flex;
-  flex-direction: ${({ vertical }) => vertical ? 'column' : 'row'};
+  flex-direction: ${({ vertical }) => (vertical ? 'column' : 'row')};
   justify-content: ${({ right, center }) => center ? 'center' : right ? 'flex-end' : 'flex-start'};
-  align-items: ${({ vertical }) => vertical ? 'flex-start' : 'center'};
+  align-items: ${({ vertical }) => (vertical ? 'flex-start' : 'center')};
   ${({ wrap }) => wrap && css`flex-wrap: wrap;`}
   ${({ margin }) => margin && css`margin: ${margin};`}
   ${({ padding }) => padding && css`padding: ${padding};`}

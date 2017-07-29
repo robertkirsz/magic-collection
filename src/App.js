@@ -38,7 +38,7 @@ class App extends Component {
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
     if (debug && this.state.fetchingData) {
-      log(`allCardsFetching: ${allCardsFetching} myCardsLoading: ${myCardsLoading} userAuthPending ${userAuthPending}`)
+      log(`All cards: ${allCardsFetching}, My cards: ${myCardsLoading}, Auth: ${userAuthPending}`)
     }
 
     if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.fetchingData) {
@@ -50,10 +50,11 @@ class App extends Component {
     const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
 
     return (
-      <StyledApp>
+      <StyledApp className="App">
         <Header />
         <Routes />
-        {onCardsPage && !this.state.fetchingData &&
+        {onCardsPage &&
+          !this.state.fetchingData &&
           <AppButtons>
             <SearchModule pathname={this.props.location.pathname} />
           </AppButtons>}
@@ -66,20 +67,26 @@ class App extends Component {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
-const StyledApp = styled.div`
+const StyledApp = styled.main.attrs({
+  className: 'App'
+})`
   flex: 1;
   display: flex;
   flex-direction: column;
   padding-top: var(--navbarHeight);
 `
 
-const AppButtons = styled.div`
+const AppButtons = styled.div.attrs({
+  className: 'AppButtons'
+})`
   flex: none;
   display: flex;
   justify-content: space-around;
   align-content: flex-end;
   position: fixed;
-  right: 0; bottom: 20px; left: 0;
+  right: 0;
+  bottom: 20px;
+  left: 0;
   padding: 0 1rem;
   z-index: 5;
   pointer-events: none;

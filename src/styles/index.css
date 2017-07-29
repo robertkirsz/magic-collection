@@ -6,19 +6,14 @@ html {
 body {
   height: 100%;
   color: var(--text-color);
-  font: 16px sans-serif;
+  font: var(--fontSize) sans-serif;
 }
 
 *,
-*::before, *::after {
+*::before,
+*::after {
   box-sizing: inherit;
   outline: none;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 a {
@@ -27,8 +22,21 @@ a {
   cursor: pointer;
 }
 
-button, .clickable { cursor: pointer; }
+button,
+.clickable {
+  cursor: pointer;
+}
 
-.no-scroll { overflow-y: hidden; }
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-.ms-cost { font-size: 1em; }
+.no-scroll {
+  overflow-y: hidden;
+}
+
+.ms-cost {
+  font-size: 1em;
+}
