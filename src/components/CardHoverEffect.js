@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
@@ -9,22 +8,18 @@ import _includes from 'lodash/includes'
 let bd
 let htm
 
-const mapStateToProps = ({ settings }) => ({
-  cardHoverAnimation: settings.cardHoverAnimation
-})
-
-class CardHoverEffect extends Component {
+export default class CardHoverEffect extends Component {
   static propTypes = {
     children: PropTypes.element,
     onClick: PropTypes.func,
-    hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
-    cardHoverAnimation: PropTypes.bool.isRequired, // TODO: Refactor this - This is from settings
+    hoverAnimation: PropTypes.bool,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
     onMouseMove: PropTypes.func
   }
 
   static defaultProps = {
+    onClick: () => {},
     onMouseEnter: () => {},
     onMouseLeave: () => {},
     onMouseMove: () => {}
@@ -44,12 +39,14 @@ class CardHoverEffect extends Component {
     htm = document.getElementsByTagName('html')[0]
 
     const w =
-      this.containerElement.clientWidth || this.containerElement.offsetWidth || this.containerElement.scrollWidth
+      this.containerElement.clientWidth ||
+      this.containerElement.offsetWidth ||
+      this.containerElement.scrollWidth
     this.containerElement.style.transform = 'perspective(' + w * 3 + 'px)'
   }
 
   handleMouseMove = e => {
-    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
+    if (!this.props.hoverAnimation) return
     // This covers situation where "mouseMove" happens without "mouseEnter"
     if (!_includes(this.contentElement.className, ' over')) this.handleMouseEnter()
 
@@ -60,9 +57,13 @@ class CardHoverEffect extends Component {
     const pageY = touchEnabled ? e.touches[0].pageY : e.pageY
     const offsets = this.containerElement.getBoundingClientRect()
     const w =
-      this.containerElement.clientWidth || this.containerElement.offsetWidth || this.containerElement.scrollWidth
+      this.containerElement.clientWidth ||
+      this.containerElement.offsetWidth ||
+      this.containerElement.scrollWidth
     const h =
-      this.containerElement.clientHeight || this.containerElement.offsetHeight || this.containerElement.scrollHeight
+      this.containerElement.clientHeight ||
+      this.containerElement.offsetHeight ||
+      this.containerElement.scrollHeight
     const wMultiple = 320 / w
     const offsetX = 0.52 - (pageX - offsets.left - bdsl) / w
     const offsetY = 0.52 - (pageY - offsets.top - bdst) / h
@@ -88,19 +89,20 @@ class CardHoverEffect extends Component {
       'deg, rgba(255, 255, 255, ' +
       (pageY - offsets.top - bdst) / h * 0.4 +
       ') 0%,rgba(255, 255, 255, 0) 80%)'
-    this.shineElement.style.transform = 'translateX(' + offsetX + 'px) translateY(' + offsetY + 'px)'
+    this.shineElement.style.transform =
+      'translateX(' + offsetX + 'px) translateY(' + offsetY + 'px)'
   }
 
   handleMouseEnter = () => {
     this.props.onMouseEnter()
-    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
+    if (!this.props.hoverAnimation) return
 
     this.contentElement.className += ' over'
   }
 
   handleMouseLeave = () => {
     this.props.onMouseLeave()
-    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
+    if (!this.props.hoverAnimation) return
 
     this.contentElement.className = this.contentElement.className.replace(' over', '')
     this.contentElement.style.transform = ''
@@ -110,7 +112,9 @@ class CardHoverEffect extends Component {
   render () {
     return (
       <StyledCardHoverEffect
-        innerRef={o => { this.containerElement = o }}
+        innerRef={o => {
+          this.containerElement = o
+        }}
         className={cn('card-hover-effect', { clickable: !!this.props.onClick })}
         onClick={this.handleClick}
         onMouseMove={this.handleMouseMove}
@@ -120,7 +124,9 @@ class CardHoverEffect extends Component {
       >
         <div
           className="container"
-          ref={o => { this.contentElement = o }}
+          ref={o => {
+            this.contentElement = o
+          }}
         >
           <div className="shadow" />
           <div className="content">
@@ -128,15 +134,15 @@ class CardHoverEffect extends Component {
           </div>
           <div
             className="shine"
-            ref={o => { this.shineElement = o }}
+            ref={o => {
+              this.shineElement = o
+            }}
           />
         </div>
       </StyledCardHoverEffect>
     )
   }
 }
-
-export default connect(mapStateToProps)(CardHoverEffect)
 
 const StyledCardHoverEffect = styled.div`
   border-radius: 4%;
@@ -185,5 +191,4 @@ const StyledCardHoverEffect = styled.div`
       pointer-events: none;
     }
   }
-
 `

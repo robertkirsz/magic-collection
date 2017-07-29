@@ -1,22 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _findIndex from 'lodash/findIndex'
-// --- Actions ---
-import { addCard, removeCard } from '../store/myCards'
 // --- Components ---
 import { CardDetailsPopup, CardHoverEffect } from './'
 // --- Assets ---
 import cardBack from './assets/card_back.jpg'
 
-const mapStateToProps = () => ({})
-
-const mapDispatchToProps = { addCard, removeCard }
-
-class Card extends Component {
+export default class Card extends Component {
   static propTypes = {
     mainCard: PropTypes.object,
     variantCard: PropTypes.object,
@@ -27,7 +20,7 @@ class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    detailsPopup: PropTypes.bool,
+    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]).isRequired,
     hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
     showContent: PropTypes.bool
   }
@@ -99,7 +92,7 @@ class Card extends Component {
       numberOfCards,
       showAdd,
       showRemove,
-      detailsPopup,
+      cardDetailsPopupDelay,
       hoverAnimation
     } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
@@ -131,37 +124,42 @@ class Card extends Component {
     )
 
     return (
-      <CardHoverEffect
-        onClick={this.onCardClick}
-        hoverAnimation={hoverAnimation}
-        onMouseEnter={this.showDetailsPopup}
-        onMouseLeave={this.hideDetailsPopup}
-        onMouseMove={this.updateDetailsPopupPosition}
-      >
-        <StyledCard className="card" tabIndex="1">
-          {this.props.showContent &&
-            <div className="content">
-              {setIcon && <span className={cn('set-icon', cardData.setIcon)} />}
-              {numberOfCards > 0 &&
-                <span className="count">
-                  {numberOfCards}
-                </span>}
-              {(showAdd || showRemove) && addRemoveControls}
-              {countAnimations}
-            </div>}
-          <div className="images">
-            <img src={cardData.image} className="artwork" alt="Card artwork" />
-            <img src={cardBack} className="background" alt="Card background" />
-          </div>
-          {detailsPopup &&
-            <CardDetailsPopup cardData={cardData} show={detailsPopupShow} coordinates={detailsPopupCoordinates} />}
-        </StyledCard>
-      </CardHoverEffect>
+      <div>
+        <CardHoverEffect
+          onClick={this.onCardClick}
+          hoverAnimation={hoverAnimation}
+          onMouseEnter={this.showDetailsPopup}
+          onMouseLeave={this.hideDetailsPopup}
+          onMouseMove={this.updateDetailsPopupPosition}
+        >
+          <StyledCard className="card" tabIndex="1">
+            {this.props.showContent &&
+              <div className="content">
+                {setIcon && <span className={cn('set-icon', cardData.setIcon)} />}
+                {numberOfCards > 0 &&
+                  <span className="count">
+                    {numberOfCards}
+                  </span>}
+                {(showAdd || showRemove) && addRemoveControls}
+                {countAnimations}
+              </div>}
+            <div className="images">
+              <img src={cardData.image} className="artwork" alt="Card artwork" />
+              <img src={cardBack} className="background" alt="Card background" />
+            </div>
+          </StyledCard>
+        </CardHoverEffect>
+        {cardDetailsPopupDelay !== false &&
+          <CardDetailsPopup
+            cardData={cardData}
+            show={detailsPopupShow}
+            coordinates={detailsPopupCoordinates}
+            cardDetailsPopupDelay={cardDetailsPopupDelay}
+          />}
+      </div>
     )
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Card)
 
 const StyledCard = styled.div`
   position: relative;

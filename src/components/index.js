@@ -16,7 +16,6 @@ import LoadingScreen from './LoadingScreen'
 import ShowMoreButton from './ShowMoreButton'
 import CardsSearchList from './CardsSearchList'
 import CardHoverEffect from './CardHoverEffect'
-import CollectionStats from './CollectionStats'
 import MonoMultiToggle from './MonoMultiToggle'
 import KeyboardHandler from './KeyboardHandler'
 import UserDropdownMenu from './UserDropdownMenu'
@@ -41,7 +40,6 @@ export {
   ShowMoreButton,
   CardsSearchList,
   CardHoverEffect,
-  CollectionStats,
   MonoMultiToggle,
   KeyboardHandler,
   UserDropdownMenu,

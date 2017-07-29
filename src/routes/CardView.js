@@ -10,18 +10,27 @@ import { getLocation } from '../utils'
 import { Card, CardDetails } from '../components'
 import { cardsDatabase } from '../database'
 import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
+import { addCard, removeCard } from '../store/myCards'
 import { ModalContent } from '../styled'
 import { Fade, Scale } from '../transitions'
 import key from 'keyboardjs'
 
-const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
+const mapDispatchToProps = {
+  resetVariantCardFocus,
+  setVariantCardFocus,
+  addCard,
+  removeCard
+}
 
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
-  card: _find(_startsWith(ownProps.match.params.path, '/my-cards') ? myCards.cards : cardsDatabase, {
-    cardUrl: ownProps.match.params.cardUrl
-  }),
+  card: _find(
+    _startsWith(ownProps.match.params.path, '/my-cards') ? myCards.cards : cardsDatabase,
+    {
+      cardUrl: ownProps.match.params.cardUrl
+    }
+  ),
   myCards: myCards.cards,
   myCardsLocked: settings.myCardsLocked
 })
@@ -34,7 +43,9 @@ class CardView extends Component {
     myCardsLocked: PropTypes.bool,
     myCards: PropTypes.array,
     resetVariantCardFocus: PropTypes.func.isRequired,
-    setVariantCardFocus: PropTypes.func.isRequired
+    setVariantCardFocus: PropTypes.func.isRequired,
+    addCard: PropTypes.func.isRequired,
+    removeCard: PropTypes.func.isRequired
   }
 
   state = { modalOpened: false }
@@ -95,7 +106,9 @@ class CardView extends Component {
     // If there is no such card in the collection, return 0
     if (!mainCardFromCollection) return 0
     // Second, look for a particular variant
-    const variantCardFromTheCollection = _find(mainCardFromCollection.variants, { id: variantCard.id })
+    const variantCardFromTheCollection = _find(mainCardFromCollection.variants, {
+      id: variantCard.id
+    })
     // If there is no such card in the collection, return 0
     if (!variantCardFromTheCollection) return 0
     // If we found that card, return its count
@@ -119,7 +132,8 @@ class CardView extends Component {
                 <Card mainCard={card} hoverAnimation />
                 {getLocation(location).onMyCardsPage &&
                   <span>
-                    {/* TODO: this doesn't work, 'cardsInCollection' in not added to the Card object */}
+                    {/* TODO: this doesn't work, 'cardsInCollection' in
+                    not added to the Card object */}
                     &nbsp;(Total: {card.cardsInCollection})
                   </span>}
               </CardArea>
@@ -139,6 +153,8 @@ class CardView extends Component {
                       numberOfCards={numberOfCards}
                       showAdd={!myCardsLocked}
                       showRemove={!myCardsLocked && numberOfCards > 0}
+                      addCard={this.props.addCard}
+                      removeCard={this.props.removeCard}
                       showContent
                     />
                   )
@@ -154,6 +170,7 @@ class CardView extends Component {
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView)
 
+// TODO: duplicated with 'modals/index.js'
 const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
@@ -173,10 +190,7 @@ const StyledCardView = ModalContent.extend`
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 1fr auto auto;
-  grid-template-areas:
-    "title title"
-    "card details"
-    "variants variants";
+  grid-template-areas: "title title" "card details" "variants variants";
   grid-gap: 1rem;
 
   width: 100%;

@@ -25,11 +25,14 @@ storiesOf('Button').add('default', () =>
 )
 
 storiesOf('Card').add('on search list', () =>
-  <Provider store={createStore()}>
-    <CenteringWrapper>
-      <Card mainCard={mainCard} hoverAnimation detailsPopup onClick={action('clicked')} />
-    </CenteringWrapper>
-  </Provider>
+  <CenteringWrapper>
+    <Card
+      mainCard={mainCard}
+      hoverAnimation
+      cardDetailsPopupDelay={1000}
+      onClick={action('clicked')}
+    />
+  </CenteringWrapper>
 )
 
 storiesOf('ColorFilter').add('default', () =>

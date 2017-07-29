@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { FormGroup, Radio, ControlLabel, Checkbox, Button } from 'react-bootstrap'
-import { toggleSetting, changeCardDetailsPopupDelay, restoreDefaultSettings } from '../store/settings'
+import {
+  toggleSetting,
+  changeCardDetailsPopupDelay,
+  restoreDefaultSettings
+} from '../store/settings'
 import { Flex } from '../styled'
 
 const mapStateToProps = ({ settings }) => ({ settings })
@@ -31,19 +35,17 @@ class SettingsView extends Component {
     return (
       <FormGroup>
         <ControlLabel>Collection lock status</ControlLabel>
-        {
-          options.map(({ id, value, title }) => (
-            <Radio
-              key={id}
-              name="collectionLockBehaviour"
-              value={value}
-              checked={this.props.settings.collectionLockBehaviour === value}
-              onChange={() => this.props.toggleSetting('collectionLockBehaviour', value)}
-            >
-              {title}
-            </Radio>
-          ))
-        }
+        {options.map(({ id, value, title }) =>
+          <Radio
+            key={id}
+            name="collectionLockBehaviour"
+            value={value}
+            checked={this.props.settings.collectionLockBehaviour === value}
+            onChange={() => this.props.toggleSetting('collectionLockBehaviour', value)}
+          >
+            {title}
+          </Radio>
+        )}
       </FormGroup>
     )
   }
@@ -60,19 +62,19 @@ class SettingsView extends Component {
     return (
       <FormGroup>
         <ControlLabel>Card details popup delay</ControlLabel>
-        {
-          options.map(({ id, value, title }) => (
-            <Radio
-              key={id}
-              name="cardDetailsPopupDelay"
-              value={value}
-              checked={this.props.settings.cardDetailsPopupDelay === value}
-              onChange={e => { this.props.changeCardDetailsPopupDelay(e.target.value) }}
-            >
-              {title}
-            </Radio>
-          ))
-        }
+        {options.map(({ id, value, title }) =>
+          <Radio
+            key={id}
+            name="cardDetailsPopupDelay"
+            value={value}
+            checked={this.props.settings.cardDetailsPopupDelay === value}
+            onChange={e => {
+              this.props.changeCardDetailsPopupDelay(e.target.value)
+            }}
+          >
+            {title}
+          </Radio>
+        )}
       </FormGroup>
     )
   }
@@ -95,9 +97,7 @@ class SettingsView extends Component {
           {this.renderCollectionLockBehaviourSettings()}
           {this.renderCardDetailsPopupDelaySettings()}
           <Flex justifyContent="flex-end">
-            <Button onClick={restoreDefaultSettings}>
-              Default settings
-            </Button>
+            <Button onClick={restoreDefaultSettings}>Default settings</Button>
           </Flex>
         </Flex>
       </Flex>

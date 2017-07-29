@@ -16,7 +16,7 @@
   "rules": {
     "key-spacing"          : "off",
     "jsx-quotes"           : [1, "prefer-double"],
-    "max-len"              : [2, 120, 2],
+    "max-len"              : [2, 100, 2],
     "object-curly-spacing" : [2, "always"],
     "comma-dangle"         : "off",
     "prefer-const"         : 1,

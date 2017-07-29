@@ -1,21 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 // --- Components ---
 import { CardDetails } from './'
 
-const mapStateToProps = ({ settings }) => ({
-  cardDetailsPopupDelay: settings.cardDetailsPopupDelay
-})
-
 // TODO: popup is not positioned properly on lower cards when window is scolled down
-class CardDetailsPopup extends Component {
+export default class CardDetailsPopup extends Component {
   static propTypes = {
     cardData: PropTypes.object,
     show: PropTypes.bool,
     coordinates: PropTypes.object,
-    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
+    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]).isRequired
   }
 
   state = {
@@ -96,8 +91,6 @@ class CardDetailsPopup extends Component {
     )
   }
 }
-
-export default connect(mapStateToProps)(CardDetailsPopup)
 
 const Container = styled.div`
   position: absolute;
