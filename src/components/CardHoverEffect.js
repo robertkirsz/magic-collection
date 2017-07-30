@@ -36,6 +36,10 @@ export default class CardHoverEffect extends Component {
     this.containerElement.style.transform = 'perspective(' + w * 3 + 'px)'
   }
 
+  shouldComponentUpdate () {
+    return false
+  }
+
   handleMouseMove = e => {
     if (!this.props.hoverAnimation) return
     // This covers situation where "mouseMove" happens without "mouseEnter"

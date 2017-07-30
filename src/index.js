@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import ReactDOM from 'react-dom'
 // --- Store ---
@@ -12,6 +13,17 @@ import App from './App'
 import './styles/variables.css'
 import './styles/animations.css'
 import './styles/index.css'
+
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update')
+  let createClass = React.createClass
+  Object.defineProperty(React, 'createClass', {
+    set: nextCreateClass => {
+      createClass = nextCreateClass
+    }
+  })
+  whyDidYouUpdate(React)
+}
 
 ReactDOM.render(
   <StoreProvider store={createStore()}>

@@ -51,6 +51,19 @@ export default class CardDetailsPopup extends Component {
     clearTimeout(this.timeout)
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    if (nextProps.coordinates !== this.props.coordinates) {
+      // console.log(nextProps.coordinates, this.props.coordinates, nextProps.coordinates === this.props.coordinates)
+      return true
+    }
+    if (nextProps.show === this.props.show && nextState.popupVisible === this.state.popupVisible) {
+      // console.warn('prevent')
+      return false
+    } else {
+      return true
+    }
+  }
+
   showDetailsPopup () {
     this.setState({ popupVisible: true })
     this.updateDetailsPopupPosition(this.props.coordinates)
@@ -85,14 +98,14 @@ export default class CardDetailsPopup extends Component {
     if (cardDetailsPopupDelay === false || !popupVisible) return null
 
     return (
-      <Container style={popupPosition} ref="detailsPopup">
+      <StyledCardDetailsPopup style={popupPosition} ref="detailsPopup">
         <CardDetails card={cardData} />
-      </Container>
+      </StyledCardDetailsPopup>
     )
   }
 }
 
-const Container = styled.div`
+const StyledCardDetailsPopup = styled.div`
   position: absolute;
   width: 250px;
   padding: 5px 8px;

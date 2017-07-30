@@ -67,6 +67,7 @@ export default class Card extends Component {
   }
 
   updateDetailsPopupPosition = detailsPopupCoordinates => {
+    // TODO: debounce it
     this.setState({ detailsPopupCoordinates })
   }
 
