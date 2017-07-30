@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
   toggleSetting,
-  changeCardDetailsPopupDelay,
   restoreDefaultSettings
 } from '../store/settings'
 import { Flex, Button } from '../styled'
@@ -12,7 +11,6 @@ const mapStateToProps = ({ settings }) => ({ settings })
 
 const mapDispatchToProps = {
   toggleSetting,
-  changeCardDetailsPopupDelay,
   restoreDefaultSettings
 }
 
@@ -20,7 +18,6 @@ class SettingsView extends Component {
   static propTypes = {
     settings: PropTypes.object.isRequired,
     toggleSetting: PropTypes.func.isRequired,
-    changeCardDetailsPopupDelay: PropTypes.func.isRequired,
     restoreDefaultSettings: PropTypes.func.isRequired
   }
 
@@ -51,31 +48,16 @@ class SettingsView extends Component {
   }
 
   renderCardDetailsPopupDelaySettings = () => {
-    const options = [
-      { id: 0, value: 0, title: 'No delay' },
-      { id: 1, value: 1000, title: '1 second' },
-      { id: 2, value: 1500, title: '1.5 second' },
-      { id: 3, value: 2000, title: '2 seconds' },
-      { id: 4, value: false, title: 'Disabled' }
-    ]
-
     return (
       <div>
-        <h4>Card details popup delay</h4>
-        {options.map(({ id, value, title }) =>
-          <label key={id}>
-            <input
-              type="radio"
-              name="cardDetailsPopupDelay"
-              value={value}
-              checked={this.props.settings.cardDetailsPopupDelay === value}
-              onChange={e => {
-                this.props.changeCardDetailsPopupDelay(e.target.value)
-              }}
-            />
-            {title}
-          </label>
-        )}
+        <h4>Card details popup</h4>
+        <Button
+          onClick={() =>
+            this.props.toggleSetting('cardDetailsPopup')
+          }
+        >
+          {this.props.settings.cardDetailsPopup ? 'Enabled' : 'Disabled'}
+        </Button>
       </div>
     )
   }

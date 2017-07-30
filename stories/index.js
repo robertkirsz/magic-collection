@@ -29,7 +29,6 @@ storiesOf('Card').add('on search list', () =>
     <Card
       mainCard={mainCard}
       hoverAnimation
-      cardDetailsPopupDelay={1000}
       onClick={action('clicked')}
     />
   </CenteringWrapper>

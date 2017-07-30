@@ -12,7 +12,7 @@ import { Card, ShowMoreButton } from './'
 
 const mapStateToProps = ({ settings }) => ({
   cardHoverAnimation: settings.cardHoverAnimation,
-  cardDetailsPopupDelay: settings.cardDetailsPopupDelay
+  cardDetailsPopup: settings.cardDetailsPopup
 })
 
 const mapDispatchToProps = { setMainCardFocus, resetMainCardFocus }
@@ -27,7 +27,7 @@ class CardsSearchList extends Component {
     setMainCardFocus: PropTypes.func.isRequired,
     resetMainCardFocus: PropTypes.func.isRequired,
     cardHoverAnimation: PropTypes.bool.isRequired,
-    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]).isRequired
+    cardDetailsPopup: PropTypes.bool
   }
 
   state = { cardsLimit: initialCardsNumber }
@@ -52,7 +52,7 @@ class CardsSearchList extends Component {
           key={card.id}
           mainCard={card}
           hoverAnimation={this.props.cardHoverAnimation}
-          cardDetailsPopupDelay={this.props.cardDetailsPopupDelay}
+          cardDetailsPopup={this.props.cardDetailsPopup}
           onClick={this.onCardClick(index)}
         />
       )}

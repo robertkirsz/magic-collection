@@ -8,10 +8,6 @@ export const toggleSetting = (property, value) => ({
   property,
   value
 })
-export const changeCardDetailsPopupDelay = delayValue => ({
-  type: 'CARD_DETAILS_POPUP_DELAY',
-  delayValue
-})
 export const loadInitialSettings = settings => ({
   type: 'LOAD_INITIAL_SETTINGS',
   settings
@@ -29,10 +25,6 @@ const ACTION_HANDLERS = {
       ...state,
       [property]: value !== undefined ? value : !state[property]
     }),
-  CARD_DETAILS_POPUP_DELAY: (state, { delayValue }) => {
-    const _delayValue = delayValue === 'false' ? false : parseInt(delayValue, 10)
-    return updateAndReturnUserSettings({ ...state, cardDetailsPopupDelay: _delayValue })
-  },
   LOAD_INITIAL_SETTINGS: (state, { settings }) => {
     const newState = {
       ...state,
@@ -53,7 +45,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   myCardsLocked: true,
-  cardDetailsPopupDelay: 1000,
+  cardDetailsPopup: true,
   cardHoverAnimation: true,
   collectionLockBehaviour: 'lockedAtStart' // 'unlockedAtStart' || 'asLeft'
 }

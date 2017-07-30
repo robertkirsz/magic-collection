@@ -16,12 +16,7 @@ export default class CardDetailsPopup extends Component {
     // True when "onMouseEnter" is triggered on the card
     show: PropTypes.bool.isRequired,
     // Cursor positions (relative to the card and to the window)
-    coordinates: PropTypes.object.isRequired,
-    // Value in milliseconds or "false" if popup shouldn't be displayed
-    delay: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number
-    ]).isRequired
+    coordinates: PropTypes.object.isRequired
   }
 
   state = {
@@ -33,8 +28,6 @@ export default class CardDetailsPopup extends Component {
   popup = null
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.delay === false) return
-
     if (this.props.show && !nextProps.show) {
       this.hideDetailsPopup()
       return
@@ -44,16 +37,14 @@ export default class CardDetailsPopup extends Component {
     clearTimeout(this.timeout)
     // If popup is visible
     if (this.state.isVisible) {
-      if (this.props.delay > 0) {
-        // Hide it
-        this.hideDetailsPopup()
-      }
+      // Hide it
+      this.hideDetailsPopup()
       // If popup is hidden
     } else if (nextProps.show) {
       // Show it
       this.timeout = setTimeout(() => {
         this.showDetailsPopup()
-      }, this.props.delay)
+      }, 500)
     }
   }
 
@@ -90,7 +81,7 @@ export default class CardDetailsPopup extends Component {
   }
 
   render = () =>
-    <FadeScale in={this.props.delay !== false && this.state.isVisible}>
+    <FadeScale in={this.state.isVisible}>
       <StyledCardDetailsPopup
         style={this.state.popupStyle}
         innerRef={o => { this.popup = o }}

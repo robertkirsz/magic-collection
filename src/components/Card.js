@@ -20,13 +20,9 @@ export default class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+    cardDetailsPopup: PropTypes.bool,
     hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
     showContent: PropTypes.bool
-  }
-
-  static defaultProps = {
-    cardDetailsPopupDelay: false
   }
 
   state = {
@@ -97,7 +93,7 @@ export default class Card extends Component {
       numberOfCards,
       showAdd,
       showRemove,
-      cardDetailsPopupDelay,
+      cardDetailsPopup,
       hoverAnimation
     } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
@@ -137,7 +133,6 @@ export default class Card extends Component {
           onMouseLeave={this.hideDetailsPopup}
           onMouseMove={this.updateDetailsPopupPosition}
         >
-          {/* <div style={{ position: 'relative' }}> */}
           <div>
             {this.props.showContent &&
               <div className="content">
@@ -155,12 +150,11 @@ export default class Card extends Component {
             </div>
           </div>
         </CardHoverEffect>
-        {cardDetailsPopupDelay !== false &&
+        {cardDetailsPopup &&
           <CardDetailsPopup
             card={cardData}
             show={detailsPopupShow}
             coordinates={detailsPopupCoordinates}
-            delay={cardDetailsPopupDelay}
           />}
       </StyledCard>
     )
