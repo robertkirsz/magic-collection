@@ -31,7 +31,7 @@ export default class Card extends Component {
 
   state = {
     animations: [],
-    detailsPopupShow: null,
+    detailsPopupShow: false,
     detailsPopupCoordinates: {}
   }
 
@@ -157,10 +157,10 @@ export default class Card extends Component {
         </CardHoverEffect>
         {cardDetailsPopupDelay !== false &&
           <CardDetailsPopup
-            cardData={cardData}
+            card={cardData}
             show={detailsPopupShow}
             coordinates={detailsPopupCoordinates}
-            cardDetailsPopupDelay={cardDetailsPopupDelay}
+            delay={cardDetailsPopupDelay}
           />}
       </StyledCard>
     )

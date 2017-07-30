@@ -25,3 +25,4 @@ Transition.defaultProps = defaultProps
 
 export const Fade = props => <Transition classNames="fade" {...props} />
 export const Scale = props => <Transition classNames="scale" {...props} />
+export const FadeScale = props => <Transition classNames="fade-scale" {...props} />

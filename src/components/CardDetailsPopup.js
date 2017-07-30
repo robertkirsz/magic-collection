@@ -1,27 +1,39 @@
+// ------------------------------------------------
+// Popup with card details displayed on card hover
+// ------------------------------------------------
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // --- Components ---
 import { CardDetails } from './'
+import { FadeScale } from '../transitions'
 
-// TODO: popup is not positioned properly on lower cards when window is scolled down
 export default class CardDetailsPopup extends Component {
   static propTypes = {
-    cardData: PropTypes.object,
-    show: PropTypes.bool,
-    coordinates: PropTypes.object,
-    cardDetailsPopupDelay: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]).isRequired
+    // Card data to be displayed
+    card: PropTypes.object.isRequired,
+    // True when "onMouseEnter" is triggered on the card
+    show: PropTypes.bool.isRequired,
+    // Cursor positions (relative to the card and to the window)
+    coordinates: PropTypes.object.isRequired,
+    // Value in milliseconds or "false" if popup shouldn't be displayed
+    delay: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ]).isRequired
   }
 
   state = {
-    popupVisible: false,
-    popupPosition: {}
+    isVisible: false,
+    popupStyle: {}
   }
 
   timeout = null
+  popup = null
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.cardDetailsPopupDelay === false) return
+    if (nextProps.delay === false) return
 
     if (this.props.show && !nextProps.show) {
       this.hideDetailsPopup()
@@ -29,21 +41,19 @@ export default class CardDetailsPopup extends Component {
     }
 
     // On mouse move...
-    if (nextProps.coordinates.pageX !== undefined && nextProps.coordinates.pageY !== undefined) {
-      clearTimeout(this.timeout)
-      // If popup is visible
-      if (this.state.popupVisible) {
-        if (this.props.cardDetailsPopupDelay > 0) {
-          // Hide it
-          this.hideDetailsPopup()
-        }
-        // If popup is hidden
-      } else if (nextProps.show) {
-        // Show it
-        this.timeout = setTimeout(() => {
-          this.showDetailsPopup()
-        }, this.props.cardDetailsPopupDelay)
+    clearTimeout(this.timeout)
+    // If popup is visible
+    if (this.state.isVisible) {
+      if (this.props.delay > 0) {
+        // Hide it
+        this.hideDetailsPopup()
       }
+      // If popup is hidden
+    } else if (nextProps.show) {
+      // Show it
+      this.timeout = setTimeout(() => {
+        this.showDetailsPopup()
+      }, this.props.delay)
     }
   }
 
@@ -51,67 +61,54 @@ export default class CardDetailsPopup extends Component {
     clearTimeout(this.timeout)
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.coordinates !== this.props.coordinates) {
-      // console.log(nextProps.coordinates, this.props.coordinates, nextProps.coordinates === this.props.coordinates)
-      return true
-    }
-    if (nextProps.show === this.props.show && nextState.popupVisible === this.state.popupVisible) {
-      // console.warn('prevent')
-      return false
-    } else {
-      return true
-    }
-  }
-
   showDetailsPopup () {
-    this.setState({ popupVisible: true })
+    this.setState({ isVisible: true })
     this.updateDetailsPopupPosition(this.props.coordinates)
   }
 
   hideDetailsPopup () {
     clearTimeout(this.timeout)
-    this.setState({ popupVisible: false })
+    this.setState({ isVisible: false })
   }
 
-  updateDetailsPopupPosition = ({ pageX, pageY }) => {
-    if (!this.state.popupVisible) return
+  updateDetailsPopupPosition = ({ pageX, pageY, cardX, cardY }) => {
+    if (!this.state.isVisible) return
 
     const offset = 10
-    const popupWidth = this.refs.detailsPopup.clientWidth
-    const popupHeight = this.refs.detailsPopup.clientHeight
-    const windowWidth = window.innerWidth
-    const windowHeight = window.innerHeight
-    let top = pageY + offset
-    let left = pageX + offset
+    const popup = this.popup.getBoundingClientRect()
+    const left =
+      pageX + popup.width + offset > window.innerWidth
+        ? cardX - (popup.width + offset * 3)
+        : cardX + offset
+    const top =
+      pageY + popup.height + offset > window.innerHeight
+        ? cardY - (popup.height + offset)
+        : cardY + offset
+    const popupStyle = { top, left }
 
-    if (pageY + popupHeight > windowHeight) top = top - popupHeight
-    if (pageX + popupWidth > windowWidth) left = left - popupWidth
-
-    this.setState({ popupPosition: { top, left } })
+    this.setState({ popupStyle })
   }
 
-  render () {
-    const { cardData, cardDetailsPopupDelay } = this.props
-    const { popupPosition, popupVisible } = this.state
-
-    if (cardDetailsPopupDelay === false || !popupVisible) return null
-
-    return (
-      <StyledCardDetailsPopup style={popupPosition} ref="detailsPopup">
-        <CardDetails card={cardData} />
+  render = () =>
+    <FadeScale in={this.props.delay !== false && this.state.isVisible}>
+      <StyledCardDetailsPopup
+        style={this.state.popupStyle}
+        innerRef={o => { this.popup = o }}
+      >
+        <CardDetails card={this.props.card} />
       </StyledCardDetailsPopup>
-    )
-  }
+    </FadeScale>
 }
 
-const StyledCardDetailsPopup = styled.div`
+const StyledCardDetailsPopup = styled.div.attrs({
+  className: 'CardDetailsPopup'
+})`
   position: absolute;
   width: 250px;
-  padding: 5px 8px;
+  padding: 0.3rem 0.5rem;
   background: white;
-  border-radius: 5px;
-  font-size: 12px;
+  border-radius: var(--borderRadius);
+  font-size: 0.7rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   pointer-events: none;
   z-index: 1000;

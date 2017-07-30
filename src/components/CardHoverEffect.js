@@ -45,8 +45,7 @@ export default class CardHoverEffect extends Component {
     // This covers situation where "mouseMove" happens without "mouseEnter"
     if (!_includes(this.contentElement.className, ' over')) this.handleMouseEnter()
 
-    const pageX = e.pageX
-    const pageY = e.pageY
+    const { pageX, pageY } = e
     const offsets = this.containerElement.getBoundingClientRect()
     const w = this.containerElement.clientWidth
     const h = this.containerElement.clientHeight
@@ -61,7 +60,11 @@ export default class CardHoverEffect extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
-    this.props.onMouseMove({ pageX, pageY })
+    const rect = offsets
+    const cardX = pageX - rect.left // x position within the element
+    const cardY = pageY - rect.top // y position within the element
+
+    this.props.onMouseMove({ pageX, pageY, cardX, cardY })
 
     if (angle < 0) angle = angle + 360
 
