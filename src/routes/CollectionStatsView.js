@@ -26,7 +26,7 @@ const mapStateToProps = ({ myCards, allCards }) => ({
   collectionLoaded: myCards.loaded
 })
 
-class CollectionStats extends Component {
+class CollectionStatsView extends Component {
   static propTypes = {
     collection: PropTypes.array.isRequired,
     emptyCollection: PropTypes.bool.isRequired,
@@ -54,7 +54,9 @@ class CollectionStats extends Component {
   // 1. Colors pie chart
   createColorsChartData = collection => {
     // Create an array of colors for each individual card from the collection
-    const colorsOfEachCard = _flatMap(collection, card => _times(card.cardsInCollection, () => card.colors))
+    const colorsOfEachCard = _flatMap(collection, card =>
+      _times(card.cardsInCollection, () => card.colors)
+    )
     // Put them in an object and count by color
     const { White, Blue, Black, Red, Green, undefined } = _countBy(colorsOfEachCard)
     // Render a chart
@@ -273,9 +275,9 @@ class CollectionStats extends Component {
 
   render () {
     return (
-      <Container flex column alignSelf="center">
-        <LoadingScreen in={this.props.loadingCollection} />
-        <StyledCollectionStats>
+      <StyledCollectionStatsView>
+        <LoadingScreen show={this.props.loadingCollection} />
+        <Container flex column flexVal={1}>
           <h3>Collection Stats</h3>
 
           {this.props.emptyCollection &&
@@ -284,50 +286,68 @@ class CollectionStats extends Component {
             </Div>}
 
           <Grid>
-            <figure>
+            <figure className="cardColorsChart">
+              <h4>Colors</h4>
               <canvas id="cardColorsChart" />
-              {/* <figcaption>
-              Multicolored cards will make total number of above data bigger then the total number of cards
-            </figcaption> */}
             </figure>
-            <figure>
+            <figure className="cardSetsChart">
+              <h4>Sets</h4>
               <canvas id="cardSetsChart" />
             </figure>
-            <figure>
+            <figure className="cardTypesChart">
+              <h4>Card types</h4>
               <canvas id="cardTypesChart" />
             </figure>
-            <figure>
-              <canvas id="rarityChart" />
-            </figure>
-            <figure>
+            <figure className="creatureTypesChart">
+              <h4>Creature types</h4>
               <canvas id="creatureTypesChart" />
             </figure>
+            <figure className="rarityChart">
+              <h4>Rarity</h4>
+              <canvas id="rarityChart" />
+            </figure>
           </Grid>
-        </StyledCollectionStats>
-      </Container>
+        </Container>
+      </StyledCollectionStatsView>
     )
   }
 }
 
-export default connect(mapStateToProps)(CollectionStats)
+export default connect(mapStateToProps)(CollectionStatsView)
 
-const StyledCollectionStats = styled.div`
-  h2 {
-    margin: 8px 0;
-  }
-
-  figure {
-    display: inline-block;
-    border: 1px solid;
-    padding: 8px;
-    &:not(:last-child) {
-      margin-bottom: 8px;
-    }
-  }
+const StyledCollectionStatsView = styled.main.attrs({
+  className: 'CollectionStatsView'
+})`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 `
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr;
+  grid-template-rows: auto;
+  grid-gap: 1rem;
+  grid-template-areas:
+    "cardColorsChart cardTypesChart cardTypesChart"
+    "cardSetsChart cardSetsChart cardSetsChart"
+    "creatureTypesChart creatureTypesChart creatureTypesChart"
+    "rarityChart rarityChart rarityChart";
+
+  .cardColorsChart {
+    grid-area: cardColorsChart;
+  }
+  .cardSetsChart {
+    grid-area: cardSetsChart;
+  }
+  .cardTypesChart {
+    grid-area: cardTypesChart;
+  }
+  .rarityChart {
+    grid-area: rarityChart;
+  }
+  .creatureTypesChart {
+    grid-area: creatureTypesChart;
+  }
 `

@@ -7,7 +7,6 @@ import Container from './Container'
 import DropdownMenu from './DropdownMenu'
 import ModalContent from './ModalContent'
 import ColumnCenter from './ColumnCenter'
-import AbsoluteCenter from './AbsoluteCenter'
 import CenteringWrapper from './CenteringWrapper'
 import AbsoluteFullSize from './AbsoluteFullSize'
 import BottomRoundButton from './BottomRoundButton'
@@ -22,7 +21,6 @@ export {
   DropdownMenu,
   ModalContent,
   ColumnCenter,
-  AbsoluteCenter,
   CenteringWrapper,
   AbsoluteFullSize,
   BottomRoundButton

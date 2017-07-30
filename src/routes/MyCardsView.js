@@ -33,7 +33,7 @@ const MyCardsView = ({ match, cards, filteredCards, myCardsLoading }) => {
   return (
     <StyledMyCardsView>
       <Route path={`${match.url}/:cardUrl`} component={CardView} />
-      <LoadingScreen in={myCardsLoading} />
+      <LoadingScreen show={myCardsLoading} />
       {!myCardsLoading && <CardsSearchList cards={filteredCards || cards} />}
     </StyledMyCardsView>
   )

@@ -23,7 +23,7 @@ const propTypes = {
 const AllCardsView = ({ match, filteredCards, allCardsFetching }) =>
   <StyledAllCardsView>
     <Route path={`${match.url}/:cardUrl`} component={CardView} />
-    <LoadingScreen in={allCardsFetching} />
+    <LoadingScreen show={allCardsFetching} />
     {!allCardsFetching && <CardsSearchList cards={filteredCards || cardsDatabase} />}
   </StyledAllCardsView>
 

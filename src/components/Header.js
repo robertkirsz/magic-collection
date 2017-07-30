@@ -81,7 +81,7 @@ const StyledHeader = styled.nav.attrs({
   background: white;
   text-align: center;
   box-shadow: var(--shadow);
-  z-index: 10;
+  z-index: 10000;
 
   * {
     user-select: none;

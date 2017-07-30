@@ -88,6 +88,6 @@ const AppButtons = styled.div.attrs({
   bottom: 20px;
   left: 0;
   padding: 0 1rem;
-  z-index: 5;
+  z-index: 15;
   pointer-events: none;
 `
