@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _findIndex from 'lodash/findIndex'
@@ -125,9 +125,8 @@ export default class Card extends Component {
     )
 
     return (
-      <StyledCard className="card" tabIndex="1">
+      <StyledCard className="card" tabIndex="1" onClick={this.onCardClick}>
         <CardHoverEffect
-          onClick={this.onCardClick}
           hoverAnimation={hoverAnimation}
           onMouseEnter={this.showDetailsPopup}
           onMouseLeave={this.hideDetailsPopup}
@@ -164,11 +163,16 @@ export default class Card extends Component {
 const StyledCard = styled.div`
   position: relative;
   transition: transform 0.1s;
-  &:hover {
+  ${props => props.onClick && css`cursor: pointer;`} &:hover {
     z-index: 10;
   }
   &:focus {
     transform: scale(1.05);
+  }
+  &:hover {
+    .add-remove-buttons {
+      opacity: 1;
+    }
   }
 
   .content {
@@ -176,11 +180,6 @@ const StyledCard = styled.div`
     width: 100%;
     height: 100%;
     z-index: 2;
-    &:hover {
-      .add-remove-buttons {
-        opacity: 1;
-      }
-    }
   }
 
   .images {

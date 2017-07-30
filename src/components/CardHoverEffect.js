@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // --- Helpers ---
-import cn from 'classnames'
 import _includes from 'lodash/includes'
 
 export default class CardHoverEffect extends Component {
   static propTypes = {
     children: PropTypes.element,
-    onClick: PropTypes.func,
     hoverAnimation: PropTypes.bool,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,
@@ -16,7 +14,6 @@ export default class CardHoverEffect extends Component {
   }
 
   static defaultProps = {
-    onClick: () => {},
     onMouseEnter: () => {},
     onMouseLeave: () => {},
     onMouseMove: () => {}
@@ -25,11 +22,6 @@ export default class CardHoverEffect extends Component {
   containerElement = null
   contentElement = null
   shineElement = null
-
-  handleClick = () => {
-    this.handleMouseLeave()
-    this.props.onClick()
-  }
 
   componentDidMount () {
     const w = this.containerElement.clientWidth
@@ -104,12 +96,11 @@ export default class CardHoverEffect extends Component {
         innerRef={o => {
           this.containerElement = o
         }}
-        className={cn('card-hover-effect', { clickable: !!this.props.onClick })}
-        onClick={this.handleClick}
+        className="card-hover-effect"
+        onClick={this.handleMouseLeave}
         onMouseMove={this.handleMouseMove}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
-        tabIndex="1"
       >
         <div
           className="container"

@@ -41,12 +41,20 @@ class KeyboardHandler extends Component {
 
   componentDidUpdate (prevProps, prevState) {
     // Blur active card if 'mainCardIndex' got nullified
-    if (this.props.onCardsListPage && this.state.mainCardIndex === null && prevState.mainCardIndex !== null) {
+    if (
+      this.props.onCardsListPage &&
+      this.state.mainCardIndex === null &&
+      prevState.mainCardIndex !== null
+    ) {
       this.blurActiveCard()
     }
 
     // Blur active card if 'variantCardIndex' got nullified
-    if (this.props.onCardDetailsPage && this.state.variantCardIndex === null && prevState.variantCardIndex !== null) {
+    if (
+      this.props.onCardDetailsPage &&
+      this.state.variantCardIndex === null &&
+      prevState.variantCardIndex !== null
+    ) {
       this.blurActiveCard()
     }
 
@@ -57,7 +65,10 @@ class KeyboardHandler extends Component {
     }
 
     // Update focus state on card details page cards
-    if (this.props.onCardDetailsPage && this.state.variantCardIndex !== prevState.variantCardIndex) {
+    if (
+      this.props.onCardDetailsPage &&
+      this.state.variantCardIndex !== prevState.variantCardIndex
+    ) {
       const variants = this.getVariants()
       variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
     }
@@ -87,7 +98,8 @@ class KeyboardHandler extends Component {
 
         if (singleCard) {
           const cardWidth = singleCard.getBoundingClientRect().width
-          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+          const windowWidth =
+            window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
           const ratio = Math.floor(windowWidth / cardWidth)
 
           if (this.state.mainCardIndex + 1 > ratio) {
@@ -107,7 +119,8 @@ class KeyboardHandler extends Component {
 
         if (singleVariant) {
           const variantCardWidth = singleVariant.getBoundingClientRect().width
-          const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
+          const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect()
+            .width
           const ratio = Math.floor(parentWidth / variantCardWidth)
 
           if (this.state.variantCardIndex + 1 > ratio) {
@@ -131,11 +144,13 @@ class KeyboardHandler extends Component {
 
         if (singleCard) {
           const cardWidth = singleCard.getBoundingClientRect().width
-          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+          const windowWidth =
+            window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
           const ratio = Math.floor(windowWidth / cardWidth)
 
-          if (this.state.mainCardIndex >= cards.length - ratio) this.setState({ mainCardIndex: cards.length - 1 })
-          else this.setState({ mainCardIndex: this.state.mainCardIndex + ratio })
+          if (this.state.mainCardIndex >= cards.length - ratio) {
+            this.setState({ mainCardIndex: cards.length - 1 })
+          } else this.setState({ mainCardIndex: this.state.mainCardIndex + ratio })
         }
       }
 
@@ -150,7 +165,8 @@ class KeyboardHandler extends Component {
 
         if (singleVariant) {
           const variantCardWidth = singleVariant.getBoundingClientRect().width
-          const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
+          const parentWidth =
+            document.querySelector('.card-variants-list').getBoundingClientRect().width
           const ratio = Math.floor(parentWidth / variantCardWidth)
 
           if (this.state.variantCardIndex >= variants.length - ratio) {
