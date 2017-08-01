@@ -1,10 +1,8 @@
 html {
-  height: 100%;
   box-sizing: border-box;
 }
 
 body {
-  height: 100%;
   color: var(--text-color);
   font: var(--fontSize) sans-serif;
 }
@@ -31,7 +29,8 @@ button,
 #root {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100vh;
+  overflow: auto;
 }
 
 .no-scroll {

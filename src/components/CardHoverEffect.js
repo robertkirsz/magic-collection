@@ -23,21 +23,12 @@ export default class CardHoverEffect extends Component {
   contentElement = null
   shineElement = null
 
-  componentDidMount () {
-    const w = this.containerElement.clientWidth
-    this.containerElement.style.transform = 'perspective(' + w * 3 + 'px)'
-  }
+  shouldComponentUpdate = () => false
 
-  shouldComponentUpdate () {
-    return false
-  }
-
-  handleMouseMove = e => {
+  handleMouseMove = ({ pageX, pageY }) => {
     if (!this.props.hoverAnimation) return
     // This covers situation where "mouseMove" happens without "mouseEnter"
     if (!_includes(this.contentElement.className, ' over')) this.handleMouseEnter()
-
-    const { pageX, pageY } = e
     const offsets = this.containerElement.getBoundingClientRect()
     const w = this.containerElement.clientWidth
     const h = this.containerElement.clientHeight
@@ -93,9 +84,7 @@ export default class CardHoverEffect extends Component {
   render () {
     return (
       <StyledCardHoverEffect
-        innerRef={o => {
-          this.containerElement = o
-        }}
+        innerRef={o => { this.containerElement = o }}
         className="card-hover-effect"
         onClick={this.handleMouseLeave}
         onMouseMove={this.handleMouseMove}
@@ -104,15 +93,11 @@ export default class CardHoverEffect extends Component {
       >
         <div
           className="container"
-          ref={o => {
-            this.contentElement = o
-          }}
+          ref={o => { this.contentElement = o }}
         >
           <div
             className="shine"
-            ref={o => {
-              this.shineElement = o
-            }}
+            ref={o => { this.shineElement = o }}
           />
           <div className="content">
             {this.props.children}
@@ -127,6 +112,7 @@ export default class CardHoverEffect extends Component {
 const StyledCardHoverEffect = styled.div`
   border-radius: 4%;
   transform-style: preserve-3d;
+  perspective: 1000px;
 
   > .container {
     position: relative;
