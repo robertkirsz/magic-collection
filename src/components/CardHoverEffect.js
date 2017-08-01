@@ -23,8 +23,6 @@ export default class CardHoverEffect extends Component {
   contentElement = null
   shineElement = null
 
-  shouldComponentUpdate = () => false
-
   handleMouseMove = ({ pageX, pageY }) => {
     if (!this.props.hoverAnimation) return
     // This covers situation where "mouseMove" happens without "mouseEnter"
