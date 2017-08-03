@@ -5,7 +5,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // --- Helpers ---
 import cn from 'classnames'
 import _get from 'lodash/get'
@@ -59,7 +59,8 @@ class SearchModule extends Component {
 
   state = {
     ...initialState(),
-    showSearchForm: false
+    showSearchForm: false,
+    queryPresent: false
   }
 
   debouncedFilter = _debounce(state => {
@@ -68,6 +69,16 @@ class SearchModule extends Component {
 
   componentDidMount () {
     window.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (
+      this.state.queryPresent &&
+      ((this.props.pathname === '/all-cards' && prevProps.pathname === '/my-cards') ||
+        (this.props.pathname === '/my-cards' && prevProps.pathname === '/all-cards'))
+    ) {
+      this.debouncedFilter(this.state)
+    }
   }
 
   componentWillUnmount () {
@@ -92,7 +103,7 @@ class SearchModule extends Component {
 
   // Reverts to the initial state
   resetState = () => {
-    const newState = { ...initialState() }
+    const newState = { ...initialState(), queryPresent: false }
     this.setState(newState)
     this.filter(newState)
   }
@@ -101,7 +112,8 @@ class SearchModule extends Component {
   handleChange = property => value => {
     const newState = {
       ...this.state,
-      [property]: _get(value, 'target.value', value)
+      [property]: _get(value, 'target.value', value),
+      queryPresent: true
     }
     this.setState(newState)
     this.debouncedFilter(newState)
@@ -109,14 +121,20 @@ class SearchModule extends Component {
 
   // Updates card color query
   handleChangeColor = (color, state) => e => {
-    const newState = { ...this.state }
+    const newState = {
+      ...this.state,
+      queryPresent: true
+    }
     newState.colors[color] = state
     this.setState(newState)
     this.debouncedFilter(newState)
   }
 
   handleChangeMonocolored = () => {
-    const newState = { ...this.state }
+    const newState = {
+      ...this.state,
+      queryPresent: true
+    }
     newState.monocoloredOnly = !this.state.monocoloredOnly
     newState.multicoloredOnly = false
     this.setState(newState)
@@ -124,7 +142,10 @@ class SearchModule extends Component {
   }
 
   handleChangeMulticolored = () => {
-    const newState = { ...this.state }
+    const newState = {
+      ...this.state,
+      queryPresent: true
+    }
     newState.multicoloredOnly = !this.state.multicoloredOnly
     newState.monocoloredOnly = false
     this.setState(newState)
@@ -135,6 +156,7 @@ class SearchModule extends Component {
   toggleColors = state => {
     const newState = {
       ...this.state,
+      queryPresent: true,
       colors: {
         White: state,
         Blue: state,
@@ -173,9 +195,12 @@ class SearchModule extends Component {
       // Checking text
       const textOk = card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true
       // Checking set
-      const setOK = state.cardSet !== 'all-sets' ? _find(card.variants, { setCode: state.cardSet }) : true
+      const setOK =
+        state.cardSet !== 'all-sets' ? _find(card.variants, { setCode: state.cardSet }) : true
       // Checking card colors
-      const colorsOk = card.colors ? _find(card.colors, color => state.colors[color]) : state.colors.Colorless
+      const colorsOk = card.colors
+        ? _find(card.colors, color => state.colors[color])
+        : state.colors.Colorless
       // Monocolored only test
       let monoOk = true
       if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
@@ -229,11 +254,18 @@ class SearchModule extends Component {
         className={cn('search-module', { 'form-visible': this.state.showSearchForm })}
         onMouseLeave={this.searchModuleMouseLeave}
       >
-        <button className="search-button fa fa-search" aria-hidden="true" onMouseEnter={this.focusNameInput} />
+        <SearchButton
+          queryPresent={this.state.queryPresent}
+          className="search-button fa fa-search"
+          aria-hidden="true"
+          onMouseEnter={this.focusNameInput}
+        />
 
         <SearchForm className="search-form">
           <NameInput
-            innerRef={o => { this.nameInput = o }}
+            innerRef={o => {
+              this.nameInput = o
+            }}
             placeholder="Name"
             value={this.state.queryName}
             onChange={this.handleChange('queryName')}
@@ -313,13 +345,13 @@ const StyledSearchModule = styled.div`
   box-shadow: var(--shadow);
   pointer-events: auto;
   transition: all var(--transitionTime);
-  overflow: hidden;
 
   &.form-visible,
   &:hover {
     width: 90vw;
     height: 420px;
     border-radius: 10px;
+
     @media (min-width: 401px) {
       width: 415px;
       height: 220px;
@@ -335,36 +367,42 @@ const StyledSearchModule = styled.div`
       opacity: 1;
     }
   }
+`
 
-  .search-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    opacity: 1;
-    transition: all var(--transitionTime);
-  }
+const SearchButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  opacity: 1;
+  transition: all var(--transitionTime);
+  ${props => props.queryPresent && css`
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 12px; height: 12px;
+      background: lime;
+      border: 4px solid white;
+      border-radius: 50%;
+      box-sizing: content-box;
+    }
+  `}
 `
 
 const SearchForm = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  grid-template-areas:
-    "name-input"
-    "type-input"
-    "text-input"
-    "sets-area"
-    "cmc-area"
-    "colors-area"
-    "color-buttons-area"
-    "buttons-area";
+  grid-template-areas: "name-input" "type-input" "text-input" "sets-area" "cmc-area" "colors-area"
+    "color-buttons-area" "buttons-area";
   grid-gap: 0.5rem;
 
   position: absolute;
@@ -380,11 +418,8 @@ const SearchForm = styled.div`
   @media (min-width: 401px) {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto 1fr auto;
-    grid-template-areas:
-      "name-input type-input text-input"
-      "sets-area cmc-area cmc-area"
-      "colors-area colors-area color-buttons-area"
-      "buttons-area buttons-area buttons-area";
+    grid-template-areas: "name-input type-input text-input" "sets-area cmc-area cmc-area"
+      "colors-area colors-area color-buttons-area" "buttons-area buttons-area buttons-area";
   }
 `
 
@@ -407,9 +442,7 @@ const SetsArea = styled.div`
   }
 `
 
-const CmcArea = styled.div`
-  grid-area: cmc-area;
-`
+const CmcArea = styled.div`grid-area: cmc-area;`
 
 const ButtonsArea = styled.div`
   grid-area: buttons-area;
