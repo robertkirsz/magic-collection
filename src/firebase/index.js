@@ -56,7 +56,12 @@ export const firebaseSetData = (table, id, data) =>
 
 // Generic 'push' function
 export const firebasePushData = (table, data) =>
-  database.ref(table).push().set(data).then(() => ({ success: true })).catch(response => ({ error: response.message }))
+  database
+    .ref(table)
+    .push()
+    .set(data)
+    .then(() => ({ success: true }))
+    .catch(response => ({ error: response.message }))
 
 // Generic 'update' function
 export const firebaseUpdateData = (table, id, data) =>
@@ -143,9 +148,13 @@ export const saveCollection = collection => {
 }
 
 export const updateCardInDatabase = _debounce(card => {
-  // Update card it total numer is more then 0
+  // Update the card if total number is more than 0
   if (card.cardsInCollection > 0) {
-    return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.name}`, card.formatForFirebase())
+    return firebaseUpdateData(
+      'Collections',
+      `${auth.currentUser.uid}/${card.name}`,
+      card.formatForFirebase()
+    )
   }
   // In other case, remove the card completelly
   return firebaseSetData('Collections', `${auth.currentUser.uid}/${card.name}`, null)

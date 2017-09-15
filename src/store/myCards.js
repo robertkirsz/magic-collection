@@ -13,33 +13,31 @@ import { debug } from '../utils'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const loadMyCards = () => {
-  return async (dispatch, getState) => {
-    if (!cardsDatabase.length) return
+export const loadMyCards = () => async (dispatch, getState) => {
+  if (!cardsDatabase.length) return
 
-    dispatch(loadMyCardsRequest())
+  dispatch(loadMyCardsRequest())
 
-    let retrievedCollection = []
+  let retrievedCollection = []
 
-    await loadCollection().then(response => {
-      if (response.success) {
-        const collection = response.data
+  await loadCollection().then(response => {
+    if (response.success) {
+      const collection = response.data
 
-        retrievedCollection = _map(collection, (value, key) => {
-          const mainCard = new Card(_find(cardsDatabase, { name: key }))
-          mainCard.cardsInCollection = value.cardsInCollection
-          mainCard.variants = _map(value.variants, (value, key) => {
-            const variant = new Card(_find(mainCard.variants, { id: key }))
-            variant.cardsInCollection = value.cardsInCollection
-            return variant
-          })
-          return mainCard
+      retrievedCollection = _map(collection, (value, key) => {
+        const mainCard = new Card(_find(cardsDatabase, { name: key }))
+        mainCard.cardsInCollection = value.cardsInCollection
+        mainCard.variants = _map(value.variants, (value, key) => {
+          const variant = new Card(_find(mainCard.variants, { id: key }))
+          variant.cardsInCollection = value.cardsInCollection
+          return variant
         })
-      }
-    })
+        return mainCard
+      })
+    }
+  })
 
-    dispatch(loadMyCardsSuccess(retrievedCollection))
-  }
+  dispatch(loadMyCardsSuccess(retrievedCollection))
 }
 export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST' })
 export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards })
@@ -203,7 +201,10 @@ const ACTION_HANDLERS = {
   CLEAR_MY_CARDS: () => initialState,
   LOAD_MY_CARDS_REQUEST: state => ({ ...state, loading: true }),
   LOAD_MY_CARDS_SUCCESS: (state, { cards }) => ({ ...state, cards, loading: false, loaded: true }),
-  FILTER_MY_CARDS: (state, { filterFunction }) => ({ ...state, filteredCards: state.cards.filter(filterFunction) }),
+  FILTER_MY_CARDS: (state, { filterFunction }) => ({
+    ...state,
+    filteredCards: state.cards.filter(filterFunction)
+  }),
   // TODO: check why these action handlers are used here
   SIGN_OUT_SUCCESS: () => ({ ...initialState, loading: false }),
   NO_USER: () => ({ ...initialState, loading: false })
