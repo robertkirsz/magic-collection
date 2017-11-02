@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// --- Actions ---
-import { signIn, signUp, signInWithProvider, clearAuthErrors } from '../store/user'
+import { dispatch } from '../store/actions'
 // --- Components ---
 import { Input, Button, ModalContent } from '../styled'
 // --- Assets ---
@@ -16,16 +15,10 @@ const mapStateToProps = ({ user, modal }) => ({
   modalName: modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithProvider, clearAuthErrors }
-
 class AuthModal extends Component {
   static propTypes = {
     modalName: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
-    signIn: PropTypes.func.isRequired,
-    signUp: PropTypes.func.isRequired,
-    signInWithProvider: PropTypes.func.isRequired,
-    clearAuthErrors: PropTypes.func.isRequired,
     onContentClick: PropTypes.func.isRequired
   }
 
@@ -36,7 +29,7 @@ class AuthModal extends Component {
   }
 
   componentWillUnmount = () => {
-    if (this.props.user.error) this.props.clearAuthErrors()
+    if (this.props.user.error) dispatch.clearAuthErrors()
   }
 
   togglePassword = () => {
@@ -50,14 +43,14 @@ class AuthModal extends Component {
   submitForm = e => {
     e.preventDefault()
 
-    const { modalName, signIn, signUp } = this.props
+    const { modalName } = this.props
 
-    if (modalName === 'sign in') signIn(this.state)
-    if (modalName === 'sign up') signUp(this.state)
+    if (modalName === 'sign in') dispatch.signIn(this.state)
+    if (modalName === 'sign up') dispatch.signUp(this.state)
   }
 
   signInWithProvider = provider => () => {
-    this.props.signInWithProvider(provider)
+    dispatch.signInWithProvider(provider)
   }
 
   render () {
@@ -115,7 +108,7 @@ class AuthModal extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthModal)
+export default connect(mapStateToProps)(AuthModal)
 
 const StyledAuthModal = ModalContent.withComponent('form').extend`
   .input-wrapper {

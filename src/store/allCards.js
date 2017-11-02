@@ -1,9 +1,7 @@
 // --- Database ---
-import { cardsDatabase, saveCardsDatabase, fetchCards } from '../database'
+import { cardsDatabase, saveCardsDatabase } from '../database'
 // --- Classes ---
 import { Card } from '../classes'
-// --- Actions ---
-import { openModal } from './modal'
 // --- Helpers ---
 import _reduce from 'lodash/reduce'
 import _forEach from 'lodash/forEach'
@@ -13,29 +11,6 @@ import _filter from 'lodash/filter'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import isAfter from 'date-fns/is_after'
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-// Indicates that there is "allCards" request pending
-export const sendRequest = () => ({ type: 'ALL_CARDS_REQUEST' })
-export const responseSuccess = allSets => ({ type: 'ALL_CARDS_SUCCESS', allSets })
-export const responseError = error => ({ type: 'ALL_CARDS_ERROR', error })
-// Fetches all cards and passes them further
-export const getCards = () => {
-  return (dispatch, getState) => {
-    // Dispatch action so we can show spinner
-    dispatch(sendRequest())
-    // Send API request
-    fetchCards()
-      .then(response => dispatch(responseSuccess(response)))
-      .catch(error => {
-        dispatch(responseError(error))
-        dispatch(openModal('error', { message: typeof error === 'string' ? error : error.message }))
-      })
-  }
-}
-export const filterAllCards = filterFunction => ({ type: 'FILTER_ALL_CARDS', filterFunction })
 
 // ------------------------------------
 // Action Handlers

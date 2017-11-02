@@ -11,9 +11,10 @@ import keyboard from './keyboard'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 // Store
-export default (initialState = {}) =>
-  createStore(
-    combineReducers({ user, allCards, myCards, modal, settings, keyboard }),
-    initialState,
-    composeEnhancers(applyMiddleware(thunk))
-  )
+const store = createStore(
+  combineReducers({ user, allCards, myCards, modal, settings, keyboard }),
+  {},
+  composeEnhancers(applyMiddleware(thunk))
+)
+
+export default store

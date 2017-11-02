@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _reduce from 'lodash/reduce'
-// --- Actions ---
-import { openModal } from '../store/modal'
 // --- Components ---
 import { NavLink, Link } from 'react-router-dom'
 import { List, Container } from '../styled'
 import { LockButton, UserMenu } from './'
 import { Fade } from '../transitions'
+
+import { dispatch } from '../store/actions'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   loading: user.authPending,
@@ -20,22 +20,15 @@ const mapStateToProps = ({ user, location, myCards }) => ({
   numberOfUniqueCards: myCards.cards.length
 })
 
-const mapDispatchToProps = { openModal }
-
 const propTypes = {
   loading: PropTypes.bool.isRequired,
   collectionLoaded: PropTypes.bool.isRequired,
   userSignedIn: PropTypes.bool.isRequired,
-  openModal: PropTypes.func.isRequired,
   numberOfTotalCards: PropTypes.number,
   numberOfUniqueCards: PropTypes.number
 }
 
 class Header extends Component {
-  openModal = modalName => e => {
-    this.props.openModal(modalName)
-  }
-
   render = () =>
     <StyledHeader>
       <Container flex justifyContent="space-between" alignItems="center">
@@ -54,8 +47,8 @@ class Header extends Component {
         {!this.props.loading &&
           !this.props.userSignedIn &&
           <List right space="1.5vw">
-            <a onClick={this.openModal('sign in')}>Sign In</a>
-            <a onClick={this.openModal('sign up')}>Sign Up</a>
+            <a onClick={() => dispatch.openModal('sign in')}>Sign In</a>
+            <a onClick={() => dispatch.openModal('sign up')}>Sign Up</a>
           </List>}
 
         {(this.props.loading || this.props.userSignedIn) &&
@@ -66,11 +59,9 @@ class Header extends Component {
 
 Header.propTypes = propTypes
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps)(Header)
 
-const StyledHeader = styled.nav.attrs({
-  className: 'Header'
-})`
+const StyledHeader = styled.nav`
   display: flex;
   justify-content: center;
   position: fixed;

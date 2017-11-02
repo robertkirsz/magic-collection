@@ -13,9 +13,7 @@ import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
 // --- Store ---
-import { filterAllCards } from '../store/allCards'
-import { filterMyCards } from '../store/myCards'
-import { resetMainCardFocus } from '../store/keyboard'
+import { dispatch } from '../store/actions'
 // --- Components ---
 import { ColorFilter, CmcFilter, ColorButtons } from './'
 import { Button, Input } from '../styled'
@@ -24,8 +22,6 @@ import { Button, Input } from '../styled'
 // TODO: show idicator that a query is on (a dot in the search icon)
 
 const mapStateToProps = ({ allCards }) => ({ cardSets: allCards.cardSets })
-
-const mapDispatchToProps = { filterAllCards, filterMyCards, resetMainCardFocus }
 
 const initialState = () => ({
   queryName: '',
@@ -49,10 +45,7 @@ const initialState = () => ({
 class SearchModule extends Component {
   static propTypes = {
     pathname: PropTypes.string.isRequired,
-    cardSets: PropTypes.array.isRequired,
-    filterAllCards: PropTypes.func.isRequired,
-    filterMyCards: PropTypes.func.isRequired,
-    resetMainCardFocus: PropTypes.func.isRequired
+    cardSets: PropTypes.array.isRequired
   }
 
   nameInput = null
@@ -221,9 +214,9 @@ class SearchModule extends Component {
 
   // Passes filtering function to a particular reducer
   filter = state => {
-    this.props.resetMainCardFocus()
-    if (this.props.pathname === '/all-cards') this.props.filterAllCards(this.search(state))
-    if (this.props.pathname === '/my-cards') this.props.filterMyCards(this.search(state))
+    dispatch.resetMainCardFocus()
+    if (this.props.pathname === '/all-cards') dispatch.filterAllCards(this.search(state))
+    if (this.props.pathname === '/my-cards') dispatch.filterMyCards(this.search(state))
   }
 
   focusNameInput = () => {
@@ -333,7 +326,7 @@ class SearchModule extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)
+export default connect(mapStateToProps)(SearchModule)
 
 const StyledSearchModule = styled.div`
   flex: none;

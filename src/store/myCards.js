@@ -1,51 +1,9 @@
 // --- Firebase ---
-import { updateCardInDatabase, loadCollection } from '../firebase'
-// --- Database ---
-import { cardsDatabase } from '../database'
-// --- Classes ---
-import { Card } from '../classes'
+import { updateCardInDatabase } from '../firebase'
 // --- Helpers ---
-import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import { debug } from '../utils'
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-export const loadMyCards = () => async (dispatch, getState) => {
-  if (!cardsDatabase.length) return
-
-  dispatch(loadMyCardsRequest())
-
-  let retrievedCollection = []
-
-  await loadCollection().then(response => {
-    if (response.success) {
-      const collection = response.data
-
-      retrievedCollection = _map(collection, (value, key) => {
-        const mainCard = new Card(_find(cardsDatabase, { name: key }))
-        mainCard.cardsInCollection = value.cardsInCollection
-        mainCard.variants = _map(value.variants, (value, key) => {
-          const variant = new Card(_find(mainCard.variants, { id: key }))
-          variant.cardsInCollection = value.cardsInCollection
-          return variant
-        })
-        return mainCard
-      })
-    }
-  })
-
-  dispatch(loadMyCardsSuccess(retrievedCollection))
-}
-export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST' })
-export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards })
-export const addCard = (card, variant) => ({ type: 'ADD_CARD', card, variant })
-export const removeCard = (card, variant) => ({ type: 'REMOVE_CARD', card, variant })
-export const clearMyCards = () => ({ type: 'CLEAR_MY_CARDS' })
-export const filterMyCards = filterFunction => ({ type: 'FILTER_MY_CARDS', filterFunction })
-export const noCards = () => ({ type: 'NO_CARDS' })
 
 // ------------------------------------
 // Action Handlers

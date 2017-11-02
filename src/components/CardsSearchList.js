@@ -5,8 +5,8 @@ import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 // --- Helpers ---
 import _slice from 'lodash/slice'
-// --- Actions ---
-import { setMainCardFocus, resetMainCardFocus } from '../store/keyboard'
+// --- Store ---
+import { dispatch } from '../store/actions'
 // --- Components ---
 import { Card, ShowMoreButton } from './'
 
@@ -15,8 +15,6 @@ const mapStateToProps = ({ settings }) => ({
   cardDetailsPopup: settings.cardDetailsPopup
 })
 
-const mapDispatchToProps = { setMainCardFocus, resetMainCardFocus }
-
 const initialCardsNumber = 20
 
 class CardsSearchList extends Component {
@@ -24,8 +22,6 @@ class CardsSearchList extends Component {
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     cards: PropTypes.array.isRequired,
-    setMainCardFocus: PropTypes.func.isRequired,
-    resetMainCardFocus: PropTypes.func.isRequired,
     cardHoverAnimation: PropTypes.bool.isRequired,
     cardDetailsPopup: PropTypes.bool
   }
@@ -33,7 +29,7 @@ class CardsSearchList extends Component {
   state = { cardsLimit: initialCardsNumber }
 
   componentWillUnmount () {
-    this.props.resetMainCardFocus()
+    dispatch.resetMainCardFocus()
   }
 
   shouldShowButton = () => this.props.cards.length > this.state.cardsLimit
@@ -41,7 +37,7 @@ class CardsSearchList extends Component {
   showMoreCards = () => this.setState({ cardsLimit: this.state.cardsLimit + initialCardsNumber })
 
   onCardClick = index => card => {
-    this.props.setMainCardFocus(index)
+    dispatch.setMainCardFocus(index)
     this.props.history.push(`${this.props.match.path}/${card.cardUrl}`)
   }
 
@@ -65,7 +61,7 @@ class CardsSearchList extends Component {
     </StyledCardsSearchList>
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CardsSearchList))
+export default withRouter(connect(mapStateToProps)(CardsSearchList))
 
 const StyledCardsSearchList = styled.div`
   display: grid;

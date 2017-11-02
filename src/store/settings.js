@@ -1,22 +1,6 @@
 import { updateAndReturnUserSettings } from '../firebase'
 
 // ------------------------------------
-// Actions
-// ------------------------------------
-export const toggleSetting = (property, value) => ({
-  type: 'TOGGLE_SETTING',
-  property,
-  value
-})
-export const loadInitialSettings = settings => ({
-  type: 'LOAD_INITIAL_SETTINGS',
-  settings
-})
-export const restoreDefaultSettings = () => ({
-  type: 'RESTORE_DEFAULT_SETTINGS'
-})
-
-// ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {

@@ -1,12 +1,4 @@
 // ------------------------------------
-// Actions
-// ------------------------------------
-export const setMainCardFocus = index => ({ type: 'SET_MAIN_CARD_FOCUS', index })
-export const resetMainCardFocus = () => ({ type: 'RESET_MAIN_CARD_FOCUS' })
-export const setVariantCardFocus = index => ({ type: 'SET_VARIANT_CARD_FOCUS', index })
-export const resetVariantCardFocus = () => ({ type: 'RESET_VARIANT_CARD_FOCUS' })
-
-// ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {

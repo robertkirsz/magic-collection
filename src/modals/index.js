@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-// --- Actions ---
-import { closeModal } from '../store/modal'
+
+import { dispatch } from '../store/actions'
 // --- Animations ---
 import { Fade, Scale } from '../transitions'
 // --- Components ---
@@ -16,14 +16,11 @@ const mapStateToProps = ({ modal }) => ({
   modalProps: modal.props
 })
 
-const mapDispatchToProps = { closeModal }
-
 class ModalsHandler extends Component {
   static propTypes = {
     modalOpened: PropTypes.bool.isRequired,
     modalName: PropTypes.string,
-    modalProps: PropTypes.object,
-    closeModal: PropTypes.func.isRequired
+    modalProps: PropTypes.object
   }
 
   static defaultTypes = {
@@ -51,7 +48,7 @@ class ModalsHandler extends Component {
 
     return (
       <Fade in={this.props.modalOpened}>
-        <StyledModal error={this.props.modalName === 'error'} onClick={this.props.closeModal}>
+        <StyledModal error={this.props.modalName === 'error'} onClick={dispatch.closeModal}>
           <Scale in={this.props.modalOpened}>
             {modal}
           </Scale>
@@ -61,7 +58,7 @@ class ModalsHandler extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalsHandler)
+export default connect(mapStateToProps)(ModalsHandler)
 
 const StyledModal = styled.div`
   display: flex;

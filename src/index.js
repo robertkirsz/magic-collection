@@ -1,8 +1,7 @@
-/* eslint-disable */
 import React from 'react'
 import ReactDOM from 'react-dom'
 // --- Store ---
-import createStore from './store'
+import store from './store'
 // --- Service worker ---
 import registerServiceWorker from './registerServiceWorker'
 // --- Components ---
@@ -26,7 +25,7 @@ import './styles/index.css'
 // }
 
 ReactDOM.render(
-  <StoreProvider store={createStore()}>
+  <StoreProvider store={store}>
     <Router>
       <Route path="/" component={App} />
     </Router>

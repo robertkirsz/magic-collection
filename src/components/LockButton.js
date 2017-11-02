@@ -3,32 +3,25 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import cn from 'classnames'
-// --- Actions ---
-import { toggleSetting } from '../store/settings'
-// --- Components ---
+import { dispatch } from '../store/actions'
 
 const mapStateToProps = ({ settings }) => ({ myCardsLocked: settings.myCardsLocked })
 
-const mapDispatchToProps = { toggleSetting }
-
 const propTypes = {
-  myCardsLocked: PropTypes.bool.isRequired,
-  toggleSetting: PropTypes.func.isRequired
+  myCardsLocked: PropTypes.bool.isRequired
 }
 
-const LockButton = ({ myCardsLocked, toggleSetting }) =>
+const LockButton = ({ myCardsLocked }) =>
   <StyledLockButton
     type="button"
-    onClick={() => {
-      toggleSetting('myCardsLocked')
-    }}
+    onClick={() => dispatch.toggleSetting('myCardsLocked')}
   >
     <i className={cn('fa', { 'fa-lock': myCardsLocked, 'fa-unlock-alt': !myCardsLocked })} />
   </StyledLockButton>
 
 LockButton.propTypes = propTypes
 
-export default connect(mapStateToProps, mapDispatchToProps)(LockButton)
+export default connect(mapStateToProps)(LockButton)
 
 const StyledLockButton = styled.button`
   border: none;

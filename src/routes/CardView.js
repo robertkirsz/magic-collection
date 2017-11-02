@@ -9,18 +9,11 @@ import _startsWith from 'lodash/startsWith'
 import { getLocation } from '../utils'
 import { Card, CardDetails } from '../components'
 import { cardsDatabase } from '../database'
-import { resetVariantCardFocus, setVariantCardFocus } from '../store/keyboard'
-import { addCard, removeCard } from '../store/myCards'
+// Store
+import { dispatch } from '../store/actions'
 import { ModalContent } from '../styled'
 import { Fade, Scale } from '../transitions'
 import key from 'keyboardjs'
-
-const mapDispatchToProps = {
-  resetVariantCardFocus,
-  setVariantCardFocus,
-  addCard,
-  removeCard
-}
 
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
   // Find card by its name from the URL in all the cards or cards
@@ -41,11 +34,7 @@ class CardView extends Component {
     location: PropTypes.object.isRequired,
     card: PropTypes.object,
     myCardsLocked: PropTypes.bool,
-    myCards: PropTypes.array,
-    resetVariantCardFocus: PropTypes.func.isRequired,
-    setVariantCardFocus: PropTypes.func.isRequired,
-    addCard: PropTypes.func.isRequired,
-    removeCard: PropTypes.func.isRequired
+    myCards: PropTypes.array
   }
 
   state = { modalOpened: false }
@@ -54,7 +43,7 @@ class CardView extends Component {
     if (this.props.card) {
       setTimeout(() => {
         this.setState({ modalOpened: true })
-        this.props.setVariantCardFocus(0)
+        dispatch.setVariantCardFocus(0)
       }, 80)
     }
 
@@ -76,7 +65,7 @@ class CardView extends Component {
 
     if (!this.props.card && nextProps.card) {
       this.setState({ modalOpened: true })
-      this.props.setVariantCardFocus(0)
+      dispatch.setVariantCardFocus(0)
     }
   }
 
@@ -86,7 +75,7 @@ class CardView extends Component {
 
   closeModal = () => {
     this.setState({ modalOpened: false })
-    this.props.resetVariantCardFocus()
+    dispatch.resetVariantCardFocus()
   }
 
   goBack = () => {
@@ -153,8 +142,8 @@ class CardView extends Component {
                       numberOfCards={numberOfCards}
                       showAdd={!myCardsLocked}
                       showRemove={!myCardsLocked && numberOfCards > 0}
-                      addCard={this.props.addCard}
-                      removeCard={this.props.removeCard}
+                      addCard={dispatch.addCard}
+                      removeCard={dispatch.removeCard}
                       showContent
                     />
                   )
@@ -168,7 +157,7 @@ class CardView extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardView)
+export default connect(mapStateToProps)(CardView)
 
 // TODO: duplicated with 'modals/index.js'
 const StyledModal = styled.div`

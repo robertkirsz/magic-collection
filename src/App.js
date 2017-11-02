@@ -5,8 +5,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { log, debug, getLocation } from './utils'
 // --- Actions ---
-import { getCards } from './store/allCards'
-import { addAuthListener } from './store/user'
+import { dispatch } from './store/actions'
 // --- Components ---
 import { Header, SearchModule, KeyboardHandler } from './components'
 import ModalsHandler from './modals'
@@ -19,21 +18,17 @@ const mapStateToProps = ({ modal, allCards, myCards, user }) => ({
   modalName: modal.name
 })
 
-const mapDispatchToProps = { getCards, addAuthListener }
-
 class App extends Component {
   static propTypes = {
-    location: PropTypes.object.isRequired,
-    getCards: PropTypes.func.isRequired,
-    addAuthListener: PropTypes.func.isRequired
+    location: PropTypes.object.isRequired
   }
 
   state = { fetchingData: false }
 
   componentWillMount () {
     this.setState({ fetchingData: true })
-    this.props.getCards()
-    this.props.addAuthListener()
+    dispatch.getCards()
+    dispatch.addAuthListener()
   }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
@@ -65,7 +60,7 @@ class App extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps)(App)
 
 const StyledApp = styled.main.attrs({
   className: 'App'
