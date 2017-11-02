@@ -10,7 +10,7 @@ import { List, Container } from '../styled'
 import { LockButton, UserMenu } from './'
 import { Fade } from '../transitions'
 
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 
 const mapStateToProps = ({ user, location, myCards }) => ({
   loading: user.authPending,

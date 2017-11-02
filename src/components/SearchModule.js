@@ -13,7 +13,7 @@ import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
 // --- Store ---
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 // --- Components ---
 import { ColorFilter, CmcFilter, ColorButtons } from './'
 import { Button, Input } from '../styled'

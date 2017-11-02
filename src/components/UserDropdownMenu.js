@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { DropdownMenu } from '../styled'
 
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 // --- Transitions ---
 import { Fade } from '../transitions'
 

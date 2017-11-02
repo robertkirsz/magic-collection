@@ -10,7 +10,7 @@ import { getLocation } from '../utils'
 import { Card, CardDetails } from '../components'
 import { cardsDatabase } from '../database'
 // Store
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 import { ModalContent } from '../styled'
 import { Fade, Scale } from '../transitions'
 import key from 'keyboardjs'

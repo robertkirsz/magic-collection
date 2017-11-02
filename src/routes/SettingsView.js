@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 
 import { Flex, Button } from '../styled'
 

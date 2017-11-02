@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import cn from 'classnames'
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 
 const mapStateToProps = ({ settings }) => ({ myCardsLocked: settings.myCardsLocked })
 

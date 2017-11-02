@@ -6,7 +6,7 @@ import styled from 'styled-components'
 // --- Helpers ---
 import _slice from 'lodash/slice'
 // --- Store ---
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 // --- Components ---
 import { Card, ShowMoreButton } from './'
 

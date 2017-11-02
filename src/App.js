@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { log, debug, getLocation } from './utils'
 // --- Actions ---
-import { dispatch } from './store/actions'
+import { dispatch } from './redux'
 // --- Components ---
 import { Header, SearchModule, KeyboardHandler } from './components'
 import ModalsHandler from './modals'

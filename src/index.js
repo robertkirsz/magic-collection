@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 // --- Store ---
-import store from './store'
+import { store } from './redux'
 // --- Service worker ---
 import registerServiceWorker from './registerServiceWorker'
 // --- Components ---

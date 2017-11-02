@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { dispatch } from '../store/actions'
+import { dispatch } from '../redux'
 // --- Animations ---
 import { Fade, Scale } from '../transitions'
 // --- Components ---
