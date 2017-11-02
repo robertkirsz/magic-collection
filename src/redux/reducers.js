@@ -1,4 +1,5 @@
 // TODO: redirect user on logout
+// TODO: fox usage of 'initialState'
 
 import { combineReducers } from 'redux'
 // --- Firebase ---
@@ -14,7 +15,6 @@ import _reduce from 'lodash/reduce'
 import _forEach from 'lodash/forEach'
 import _map from 'lodash/map'
 import _reject from 'lodash/reject'
-import _filter from 'lodash/filter'
 import _get from 'lodash/get'
 import _sortBy from 'lodash/sortBy'
 import isAfter from 'date-fns/is_after'
@@ -105,7 +105,7 @@ const reducers = {
           return card
         })
         // Remove cards that don't have Multiverse ID
-        const cardWithMultiverseId = _filter(cardsFromThisSet, 'multiverseid')
+        const cardWithMultiverseId = cardsFromThisSet.filter(o => !!o.multiverseid)
         // Add set to sets array if it has any valid vards
         if (cardWithMultiverseId.length) {
           cardSets.push({ name: set.name, code: set.code.toLowerCase() })
@@ -168,9 +168,9 @@ const reducers = {
       if (cardsInCollection) {
         // Reassign it as a 'cardCopy'
         cardCopy = cardsInCollection.copy()
+        console.warn('cardCopy', cardCopy)
         // Check if it contains chosen variant
-        const variantToUpdate = cardCopy.variants(variant => variant.id === variantCopy.id)
-        // const variantToUpdate = _find(cardCopy.variants, { id: variantCopy.id })
+        const variantToUpdate = cardCopy.variants.find(variant => variant.id === variantCopy.id)
         // If it does...
         if (variantToUpdate) {
           if (debug) {
