@@ -12,7 +12,7 @@ import { Fade } from '../transitions'
 
 import { dispatch } from '../redux'
 
-const mapStateToProps = ({ user, location, myCards }) => ({
+const mapStateToProps = ({ user, myCards }) => ({
   loading: user.authPending,
   collectionLoaded: myCards.loaded,
   userSignedIn: user.signedIn,

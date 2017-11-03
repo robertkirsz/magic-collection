@@ -8,13 +8,18 @@ import SettingsView from './SettingsView'
 import CollectionStatsView from './CollectionStatsView'
 import NotFoundView from './NotFoundView'
 
+import { PrivateRoute } from '../helpers'
+
 const Routes = () =>
   <Switch>
     <Route path="/" exact component={HomeView} />
     <Route path="/all-cards" component={AllCardsView} />
     <Route path="/my-cards" component={MyCardsView} />
-    <Route path="/settings" component={SettingsView} />
     <Route path="/collection-stats" component={CollectionStatsView} />
+
+    {/* <PublicOnlyRoute path="/login" exact component={LoginPage} /> */}
+    <PrivateRoute path="/settings" exact component={SettingsView} />
+
     <Route component={NotFoundView} />
   </Switch>
 

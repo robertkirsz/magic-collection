@@ -79,8 +79,8 @@ const reducers = {
     },
     AUTH_ERROR: (state, { error }) => ({ ...state, authPending: false, error }),
     CLEAR_AUTH_ERROR: state => ({ ...state, error: null }),
-    SIGN_OUT_SUCCESS: () => ({ ...initialState, authPending: false }),
-    NO_USER: () => ({ ...initialState, authPending: false })
+    SIGN_OUT_SUCCESS: () => ({ ...initialState.user, authPending: false }),
+    NO_USER: () => ({ ...initialState.user, authPending: false })
   },
   allCards: {
     ALL_CARDS_REQUEST: state => (state.fetching ? state : { ...state, fetching: true, error: null }),
@@ -280,7 +280,7 @@ const reducers = {
         cards: cardsCollection
       }
     },
-    CLEAR_MY_CARDS: () => initialState,
+    CLEAR_MY_CARDS: () => initialState.myCards,
     LOAD_MY_CARDS_REQUEST: state => ({ ...state, loading: true }),
     LOAD_MY_CARDS_SUCCESS: (state, { cards }) => ({ ...state, cards, loading: false, loaded: true }),
     FILTER_MY_CARDS: (state, { filterFunction }) => ({
@@ -288,8 +288,8 @@ const reducers = {
       filteredCards: state.cards.filter(filterFunction)
     }),
     // TODO: check why these action handlers are used here
-    SIGN_OUT_SUCCESS: () => ({ ...initialState, loading: false }),
-    NO_USER: () => ({ ...initialState, loading: false })
+    SIGN_OUT_SUCCESS: () => ({ ...initialState.myCards, loading: false }),
+    NO_USER: () => ({ ...initialState.myCards, loading: false })
   },
   modal: {
     OPEN_MODAL: (state, { name, props = {} }) => ({ ...state, opened: true, name, props }),
@@ -330,13 +330,13 @@ const reducers = {
 
       return newState
     },
-    SIGN_OUT_SUCCESS: () => initialState,
-    RESTORE_DEFAULT_SETTINGS: () => updateAndReturnUserSettings(initialState)
+    SIGN_OUT_SUCCESS: () => initialState.settings,
+    RESTORE_DEFAULT_SETTINGS: () => updateAndReturnUserSettings(initialState.settings)
   },
 }
 
 const createReducer = (name, initialState) => (state = initialState, action) => {
-  if (action.type === 'LOGOUT') return initialState
+  // if (action.type === 'LOGOUT') return initialState
 
   return reducers[name][action.type] ? reducers[name][action.type](state, action) : state
 }

@@ -11,11 +11,10 @@ import { Header, SearchModule, KeyboardHandler } from './components'
 import ModalsHandler from './modals'
 import Routes from './routes'
 
-const mapStateToProps = ({ modal, allCards, myCards, user }) => ({
+const mapStateToProps = ({ allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
   myCardsLoading: myCards.loading,
-  userAuthPending: user.authPending,
-  modalName: modal.name
+  userAuthPending: user.authPending
 })
 
 class App extends Component {
@@ -26,9 +25,10 @@ class App extends Component {
   state = { fetchingData: false }
 
   componentWillMount () {
-    this.setState({ fetchingData: true })
-    dispatch.getCards()
-    dispatch.addAuthListener()
+    this.setState({ fetchingData: true }, () => {
+      dispatch.getCards()
+      dispatch.addAuthListener()
+    })
   }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
@@ -45,14 +45,15 @@ class App extends Component {
     const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
 
     return (
-      <StyledApp className="App">
+      <StyledApp>
         <Header />
         <Routes />
         {onCardsPage &&
-          !this.state.fetchingData &&
-          <AppButtons>
-            <SearchModule pathname={this.props.location.pathname} />
-          </AppButtons>}
+          !this.state.fetchingData && (
+            <AppButtons>
+              <SearchModule pathname={this.props.location.pathname} />
+            </AppButtons>
+          )}
         <ModalsHandler />
         <KeyboardHandler onCardsListPage={onListPage} onCardDetailsPage={onDetailsPage} />
       </StyledApp>
