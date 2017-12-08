@@ -19,39 +19,34 @@ const mapStateToProps = ({ allCards, myCards, user }) => ({
 
 class App extends Component {
   static propTypes = {
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    allCardsFetching: PropTypes.bool.isRequired,
+    myCardsLoading: PropTypes.bool.isRequired,
+    userAuthPending: PropTypes.bool.isRequired
   }
 
-  state = { fetchingData: false }
-
-  componentWillMount () {
-    this.setState({ fetchingData: true }, () => {
-      dispatch.getCards()
-      dispatch.addAuthListener()
-    })
+  componentDidMount () {
+    dispatch.getCards()
+    dispatch.addAuthListener()
   }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
-    if (debug && this.state.fetchingData) {
-      log(`All cards: ${allCardsFetching}, My cards: ${myCardsLoading}, Auth: ${userAuthPending}`)
-    }
-
-    if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.fetchingData) {
-      this.setState({ fetchingData: false })
-    }
+    if (debug) log(`All cards: ${allCardsFetching}, My cards: ${myCardsLoading}, Auth: ${userAuthPending}`)
   }
 
   render () {
-    const { onCardsPage, onListPage, onDetailsPage } = getLocation(this.props.location)
+    const { allCardsFetching, myCardsLoading, userAuthPending, location } = this.props
+    const { onCardsPage, onListPage, onDetailsPage } = getLocation(location)
+    const fetchingData = allCardsFetching || myCardsLoading || userAuthPending
 
     return (
       <StyledApp>
         <Header />
         <Routes />
         {onCardsPage &&
-          !this.state.fetchingData && (
+          fetchingData && (
             <AppButtons>
-              <SearchModule pathname={this.props.location.pathname} />
+              <SearchModule pathname={location.pathname} />
             </AppButtons>
           )}
         <ModalsHandler />

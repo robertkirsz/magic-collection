@@ -14,12 +14,9 @@ const Routes = () =>
   <Switch>
     <Route path="/" exact component={HomeView} />
     <Route path="/all-cards" component={AllCardsView} />
-    <Route path="/my-cards" component={MyCardsView} />
     <Route path="/collection-stats" component={CollectionStatsView} />
-
-    {/* <PublicOnlyRoute path="/login" exact component={LoginPage} /> */}
-    <PrivateRoute path="/settings" exact component={SettingsView} />
-
+    <PrivateRoute path="/my-cards" component={MyCardsView} />
+    <PrivateRoute path="/settings" component={SettingsView} />
     <Route component={NotFoundView} />
   </Switch>
 
